@@ -47,12 +47,13 @@ fun FeatOutlinedTextField(
     onValueChange: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 5.dp),
     ) {
         OutlinedTextField(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 5.dp),
+                .fillMaxWidth(),
             value = text,
             onValueChange = { onValueChange(it) },
             shape = shape,
@@ -86,7 +87,7 @@ fun FeatOutlinedTextField(
                                 Icons.Filled.VisibilityOff
 
                             },
-                            tint = if (isPasswordVisible) focusedColor else unFocusedColor ,
+                            tint = if (isPasswordVisible) focusedColor else unFocusedColor,
                             contentDescription = if (isPasswordVisible) {
                                 stringResource(id = R.string.text_password_visible_content_description)
                             } else {
@@ -107,6 +108,7 @@ fun FeatOutlinedTextField(
                 textAlign = TextAlign.End,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(end = 15.dp)
             )
         }
     }
