@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.unlam.feat.ui.theme.FeatTheme
+import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.view.FeatApp
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +28,16 @@ class MainActivity : ComponentActivity() {
                 FeatTheme {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
                     FeatApp(
-                        navController = navController
+                        navController = navController,
+                        showBottomBar = navBackStackEntry?.destination?.route in listOf(
+                            Screen.Profile.route,
+                            Screen.Events.route,
+                            Screen.Search.route,
+                            Screen.Invite.route,
+                            Screen.Home.route,
+                        ),
                     )
                 }
             }
