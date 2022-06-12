@@ -21,6 +21,7 @@ import com.unlam.feat.ui.component.FeatOutlinedTextField
 import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.util.TypeValueChange
 
 @Composable
 fun RegisterScreen(

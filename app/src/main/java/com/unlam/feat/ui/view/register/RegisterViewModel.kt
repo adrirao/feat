@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.util.TypeValueChange
 
 class RegisterViewModel : ViewModel() {
     private val _state = mutableStateOf(RegisterState())

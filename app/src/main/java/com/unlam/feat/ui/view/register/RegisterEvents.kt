@@ -1,6 +1,7 @@
 package com.unlam.feat.ui.view.register
 
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.util.TypeValueChange
 
 sealed class RegisterEvents {
     data class onClick(val typeClick: TypeClick) : RegisterEvents()
@@ -8,9 +9,3 @@ sealed class RegisterEvents {
         RegisterEvents()
 }
 
-sealed class TypeValueChange {
-    object onValueChangeEmail : TypeValueChange()
-    object onValueChangeReEmail : TypeValueChange()
-    object onValueChangeRePassword : TypeValueChange()
-    object onValueChangePassword : TypeValueChange()
-}
