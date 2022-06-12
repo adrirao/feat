@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unlam.feat.R
 import com.unlam.feat.ui.theme.GreenLight
@@ -31,6 +33,7 @@ fun FeatOutlinedTextField(
     modifier: Modifier = Modifier,
     text: String,
     textLabel: String,
+    error: String = "",
     focusedColor: Color = GreenLight,
     unFocusedColor: Color = PurpleMedium,
     shape: Shape = CircleShape,
@@ -43,53 +46,68 @@ fun FeatOutlinedTextField(
     onPasswordToggleClick: (Boolean) -> Unit = {},
     onValueChange: (String) -> Unit
 ) {
-    OutlinedTextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 5.dp),
-        value = text,
-        onValueChange = { onValueChange(it) },
-        shape = shape,
-        label = label,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = unFocusedColor,
-            unfocusedLabelColor = unFocusedColor,
-            focusedBorderColor = focusedColor,
-            focusedLabelColor = focusedColor
-        ),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType,
-            imeAction = imeAction
-        ),
-        visualTransformation = if (!isPasswordVisible && isPasswordToggleDisplayed) {
-            PasswordVisualTransformation()
-        } else {
-            VisualTransformation.None
-        },
-        trailingIcon = if (isPasswordToggleDisplayed) {
-            val icon: @Composable () -> Unit = {
-                IconButton(
-                    onClick = {
-                        onPasswordToggleClick(!isPasswordVisible)
-                    },
-                ) {
-                    Icon(
-                        imageVector = if (isPasswordVisible) {
-                            Icons.Filled.Visibility
-                        } else {
-                            Icons.Filled.VisibilityOff
-
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        OutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 5.dp),
+            value = text,
+            onValueChange = { onValueChange(it) },
+            shape = shape,
+            label = label,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = unFocusedColor,
+                unfocusedLabelColor = unFocusedColor,
+                focusedBorderColor = focusedColor,
+                focusedLabelColor = focusedColor
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = imeAction
+            ),
+            visualTransformation = if (!isPasswordVisible && isPasswordToggleDisplayed) {
+                PasswordVisualTransformation()
+            } else {
+                VisualTransformation.None
+            },
+            trailingIcon = if (isPasswordToggleDisplayed) {
+                val icon: @Composable () -> Unit = {
+                    IconButton(
+                        onClick = {
+                            onPasswordToggleClick(!isPasswordVisible)
                         },
-                        tint = if (isPasswordVisible) focusedColor else unFocusedColor ,
-                        contentDescription = if (isPasswordVisible) {
-                            stringResource(id = R.string.text_password_visible_content_description)
-                        } else {
-                            stringResource(id = R.string.text_password_hidden_content_description)
-                        }
-                    )
+                    ) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) {
+                                Icons.Filled.Visibility
+                            } else {
+                                Icons.Filled.VisibilityOff
+
+                            },
+                            tint = if (isPasswordVisible) focusedColor else unFocusedColor ,
+                            contentDescription = if (isPasswordVisible) {
+                                stringResource(id = R.string.text_password_visible_content_description)
+                            } else {
+                                stringResource(id = R.string.text_password_hidden_content_description)
+                            }
+                        )
+                    }
                 }
-            }
-            icon
-        } else trailingIcon,
-    )
+                icon
+            } else trailingIcon,
+            isError = error != "",
+        )
+        if (error.isNotEmpty()) {
+            Text(
+                text = error,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.error,
+                textAlign = TextAlign.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+    }
 }

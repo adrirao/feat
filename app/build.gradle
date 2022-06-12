@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdk 32
@@ -20,6 +26,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField("String","HOST_DIR","\"" + localProperties['host.dir'] + "\"")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -73,4 +82,45 @@ dependencies {
 
     //coil
     implementation("io.coil-kt:coil-compose:2.0.0-rc01")
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:30.0.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    //dagger and hilt
+    implementation "com.google.dagger:hilt-android:2.38.1"
+    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.38.1'
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
+
+    //MockWebserver
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.1'
+
+    // Accompaniest Swipe Refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
+
+    //Gmap
+    implementation "com.google.maps.android:maps-compose:1.0.0"
+    implementation "com.google.android.gms:play-services-maps:18.0.2"
+
+    //DatePicker
+    implementation "io.github.vanpra.compose-material-dialogs:datetime:0.7.2"
+
+    //Permission
+    implementation "com.google.accompanist:accompanist-permissions:0.20.2"
+
+    //Location
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+
+    //Moshi
+    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
 }
