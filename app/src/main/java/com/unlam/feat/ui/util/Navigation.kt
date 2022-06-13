@@ -6,7 +6,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,6 +18,7 @@ import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
 import com.unlam.feat.ui.view.login.LoginScreen
+import com.unlam.feat.ui.view.login.LoginState
 import com.unlam.feat.ui.view.login.LoginViewModel
 import com.unlam.feat.ui.view.main.MainEvents
 import com.unlam.feat.ui.view.main.MainScreen
@@ -53,9 +53,11 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
             onClick = { event ->
                 when (event) {
                     MainEvents.onClick(TypeClick.goToLogin) -> {
+                        navController.popBackStack()
                         navController.navigate(Screen.Login.route)
                     }
                     MainEvents.onClick(TypeClick.goToRegister) -> {
+                        navController.popBackStack()
                         navController.navigate(Screen.Register.route)
                     }
                 }
@@ -76,8 +78,42 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
     composable(Screen.Login.route) {
-        val loginViewModel: LoginViewModel = viewModel()
-        val state = loginViewModel.state.value
+        val loginViewModel: LoginViewModel = hiltViewModel()
+        val state by remember {
+            loginViewModel.state
+        }
+
+        when (state.loginMessage) {
+            LoginState.LoginMessage.UserNotExist -> {
+                ErrorDialog(
+                    title = stringResource(R.string.text_user_not_exist),
+                    desc = stringResource(R.string.desc_user_not_exist)
+                ) {
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                }
+            }
+            LoginState.LoginMessage.InvalidCredentials -> {
+                ErrorDialog(
+                    title = stringResource(R.string.text_invalid_credential),
+                    desc = stringResource(R.string.desc_invalid_credential)
+                ) {
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                }
+            }
+            LoginState.LoginMessage.VerifyEmail -> {
+                InfoDialog(
+                    title = stringResource(R.string.text_verify_email),
+                    desc = stringResource(R.string.desc_verify_email)
+                ) {
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                }
+            }
+            LoginState.LoginMessage.LoginSuccess -> {
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                    navController.popBackStack(Screen.Login.route, inclusive = true)
+                    navController.navigate(Screen.Home.route)
+            }
+        }
 
         LoginScreen(
             state = state,
@@ -88,9 +124,6 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                 when (event) {
                     LoginEvents.onClick(TypeClick.goToRegister) -> {
                         navController.navigate(Screen.Register.route)
-                    }
-                    LoginEvents.onClick(TypeClick.goToHome) -> {
-                        navController.navigate(Screen.Home.route)
                     }
                     else -> loginViewModel.onEvent(event)
                 }
@@ -144,6 +177,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
             onClick = { event ->
                 when (event) {
                     RegisterEvents.onClick(TypeClick.goToLogin) -> {
+                        navController.popBackStack()
                         navController.navigate(Screen.Login.route)
                     }
                     else -> {

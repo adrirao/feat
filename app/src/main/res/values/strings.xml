@@ -15,5 +15,17 @@
     <string name="desc_user_created">El usuario fue creado con exito. Por favor verificar cuenta de mail.</string>
     <string name="text_error">Error</string>
     <string name="desc_error">Ocurrio un error, por favor contactarse con el administrador.</string>
+    <string name="text_field_empty">Campo vacio</string>
+    <string name="text_ivalid_email">Formato de email invalido</string>
+    <string name="text_diff_email">Emails diferentes.</string>
+    <string name="text_invalid_password">Formato de email invalido</string>
+    <string name="text_input_too_short">Campo demasiado corto.</string>
+    <string name="text_diff_password">Contrasenas diferentes.</string>
+    <string name="text_user_not_exist">Usuario inexistente</string>
+    <string name="desc_user_not_exist">Por favor registrarse.</string>
+    <string name="text_invalid_credential">Credenciales Invalidas</string>
+    <string name="desc_invalid_credential">Por favor verificar el email o la contrasena.</string>
+    <string name="text_verify_email">Verificar Email</string>
+    <string name="desc_verify_email">Por favor verificar el email para poder ingresar.</string>
 
 </resources>

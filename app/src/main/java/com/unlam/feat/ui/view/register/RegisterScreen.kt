@@ -50,10 +50,10 @@ fun RegisterScreen(
                     },
                     error = when (state.emailError) {
                         RegisterState.EmailError.FieldEmpty -> {
-                            "This field cant be empty"
+                            stringResource(R.string.text_field_empty)
                         }
                         RegisterState.EmailError.InvalidEmail -> {
-                            "Not a valid password"
+                            stringResource(R.string.text_ivalid_email)
                         }
                         else -> ""
                     }
@@ -72,13 +72,13 @@ fun RegisterScreen(
                     },
                     error = when (state.reEmailError) {
                         RegisterState.EmailError.FieldEmpty -> {
-                            "This field cant be empty"
+                            stringResource(R.string.text_field_empty)
                         }
                         RegisterState.EmailError.InvalidEmail -> {
-                            "Not a valid password"
+                            stringResource(R.string.text_ivalid_email)
                         }
                         RegisterState.EmailError.DiffEmail -> {
-                            "Difference email"
+                            stringResource(R.string.text_diff_email)
                         }
                         else -> ""
                     }
@@ -101,9 +101,9 @@ fun RegisterScreen(
                         onClick(RegisterEvents.onClick(TypeClick.toggledPassword))
                     },
                     error = when (state.passwordError) {
-                        RegisterState.PasswordError.InvalidPassword -> "Not a valid password"
-                        RegisterState.PasswordError.FieldEmpty -> "This field cant be empty"
-                        RegisterState.PasswordError.InputTooShort -> "This field is short"
+                        RegisterState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
+                        RegisterState.PasswordError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                        RegisterState.PasswordError.InputTooShort -> stringResource(R.string.text_input_too_short)
                         else -> ""
                     }
                 )
@@ -126,10 +126,10 @@ fun RegisterScreen(
                         onClick(RegisterEvents.onClick(TypeClick.toggledRePassword))
                     },
                     error = when (state.rePasswordError) {
-                        RegisterState.PasswordError.InvalidPassword -> "Not a valid password"
-                        RegisterState.PasswordError.FieldEmpty -> "This field cant be empty"
-                        RegisterState.PasswordError.InputTooShort -> "This field is short"
-                        RegisterState.PasswordError.DiffPassword -> "Difference password"
+                        RegisterState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
+                        RegisterState.PasswordError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                        RegisterState.PasswordError.InputTooShort -> stringResource(R.string.text_input_too_short)
+                        RegisterState.PasswordError.DiffPassword -> stringResource(R.string.text_diff_password)
                         else -> ""
                     }
                 )
