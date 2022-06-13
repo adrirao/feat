@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.magnifier
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -13,38 +14,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unlam.feat.R
 import com.unlam.feat.ui.component.FeatCard
 import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.component.FeatOutlinedButton
 import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.blackTransparent
+import com.unlam.feat.ui.util.TypeClick
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @ExperimentalFoundationApi
-@Preview
 @Composable
 fun HomeScreen(
-
+    state: HomeState,
+    onClick: (HomeEvents) -> Unit
 ) {
+    val eventsConfirmed = state.eventsConfirmedForMy
     Column {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(50.dp)
-//                .background(PurpleMedium)
-//                .shadow(elevation = 3.dp),
-//        ){
-//            IconButton(
-//                onClick = {  },
-//                modifier = Modifier.align(Alignment.TopStart)
-//            ) {
-//                Icon(painter = painterResource(id = R.drawable.ic_back_arrow), contentDescription = "")
-//            }
-//        }
         FeatContent {
             Column {
                 Text(
@@ -108,7 +101,53 @@ fun HomeScreen(
                     fontSize = 18.sp
                 )
                 LazyVerticalGrid(cells = GridCells.Fixed(2), content = {
-                    items(20) {
+//                    items(eventsConfirmed) { event ->
+//                        val date = LocalDate.parse(event.date.substring(0, 10)).format(
+//                            DateTimeFormatter.ofPattern("dd/MM/yyyy")
+//                        )
+//                        FeatCard(
+//                            modifier = Modifier.padding(10.dp)
+//                        ) {
+//                            Column(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(20.dp),
+//                                horizontalAlignment = Alignment.Start
+//                            ) {
+//                                Text(
+//                                    text = event.name,
+//                                    color = Color.White,
+//                                )
+//                                Text(
+//                                    text = "$date ${
+//                                        event.startTime.substring(
+//                                            0,
+//                                            5
+//                                        )
+//                                    } - ${event.endTime.substring(0, 5)}",
+//                                    color = Color.White,
+//                                )
+//                            }
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .background(blackTransparent)
+//                                    .align(Alignment.BottomCenter)
+//                            ) {
+//                                FeatOutlinedButton(
+//                                    textContent = "Info",
+//                                    contentColor = GreenLight,
+//                                    modifier = Modifier.align(Alignment.BottomEnd),
+//                                    height = 30.dp,
+//                                    width = 100.dp
+//                                ) {
+//                                    onClick(HomeEvents.onClick(TypeClick.goToInfoEvent))
+//                                }
+//                            }
+//                        }
+//                    }
+
+                    items(30) {
                         FeatCard(
                             modifier = Modifier.padding(10.dp)
                         ) {
