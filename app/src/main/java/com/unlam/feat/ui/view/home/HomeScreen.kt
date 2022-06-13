@@ -101,53 +101,10 @@ fun HomeScreen(
                     fontSize = 18.sp
                 )
                 LazyVerticalGrid(cells = GridCells.Fixed(2), content = {
-//                    items(eventsConfirmed) { event ->
-//                        val date = LocalDate.parse(event.date.substring(0, 10)).format(
-//                            DateTimeFormatter.ofPattern("dd/MM/yyyy")
-//                        )
-//                        FeatCard(
-//                            modifier = Modifier.padding(10.dp)
-//                        ) {
-//                            Column(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(20.dp),
-//                                horizontalAlignment = Alignment.Start
-//                            ) {
-//                                Text(
-//                                    text = event.name,
-//                                    color = Color.White,
-//                                )
-//                                Text(
-//                                    text = "$date ${
-//                                        event.startTime.substring(
-//                                            0,
-//                                            5
-//                                        )
-//                                    } - ${event.endTime.substring(0, 5)}",
-//                                    color = Color.White,
-//                                )
-//                            }
-//                            Box(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .background(blackTransparent)
-//                                    .align(Alignment.BottomCenter)
-//                            ) {
-//                                FeatOutlinedButton(
-//                                    textContent = "Info",
-//                                    contentColor = GreenLight,
-//                                    modifier = Modifier.align(Alignment.BottomEnd),
-//                                    height = 30.dp,
-//                                    width = 100.dp
-//                                ) {
-//                                    onClick(HomeEvents.onClick(TypeClick.goToInfoEvent))
-//                                }
-//                            }
-//                        }
-//                    }
-
-                    items(30) {
+                    items(eventsConfirmed) { event ->
+                        val date = LocalDate.parse(event.date.substring(0, 10)).format(
+                            DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                        )
                         FeatCard(
                             modifier = Modifier.padding(10.dp)
                         ) {
@@ -158,11 +115,16 @@ fun HomeScreen(
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(
-                                    text = "Nombre evento",
+                                    text = event.name,
                                     color = Color.White,
                                 )
                                 Text(
-                                    text = "Horario",
+                                    text = "$date ${
+                                        event.startTime.substring(
+                                            0,
+                                            5
+                                        )
+                                    } - ${event.endTime.substring(0, 5)}",
                                     color = Color.White,
                                 )
                             }
@@ -179,7 +141,7 @@ fun HomeScreen(
                                     height = 30.dp,
                                     width = 100.dp
                                 ) {
-
+                                    onClick(HomeEvents.onClick(TypeClick.goToInfoEvent))
                                 }
                             }
                         }

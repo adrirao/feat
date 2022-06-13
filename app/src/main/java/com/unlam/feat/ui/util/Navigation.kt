@@ -26,10 +26,11 @@ import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
+import com.unlam.feat.ui.view.splash.SplashScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Main.route) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
         //init app
         addRouteSplash(navController)
         addRouteLogin(navController)
@@ -42,8 +43,8 @@ fun Navigation(navController: NavHostController) {
 }
 
 private fun NavGraphBuilder.addRouteSplash(navController: NavHostController) {
-    composable(Screen.Main.route) {
-
+    composable(Screen.Splash.route) {
+        SplashScreen(navController)
     }
 }
 

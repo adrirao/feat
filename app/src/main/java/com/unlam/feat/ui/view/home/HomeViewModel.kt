@@ -27,8 +27,7 @@ constructor(
     }
 
     private fun getEvents() {
-//        val uId = firebaseAuthRepository.getUserId()
-        val uId  = "drrpPOji0qX9VuBnElFsvTXr3cx2"
+        val uId = firebaseAuthRepository.getUserId()
         featRepository.getEventsSuggestedAndConfirmedByUser(uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
