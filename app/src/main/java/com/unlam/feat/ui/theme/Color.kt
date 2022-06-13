@@ -14,3 +14,7 @@ val PurpleLight = Color(0xFF7861cf)
 
 val GreenLight = Color(0xFF9BC96E)
 val blackTransparent = Color(0x80000000)
+
+val SuccessColor = Color(0xFF02CB6F)
+val ErrorColor = Color(0xFFEE4435)
+val InfoColor = Color(0xFF234F9D)

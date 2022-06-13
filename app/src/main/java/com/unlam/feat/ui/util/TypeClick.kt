@@ -5,6 +5,11 @@ sealed class TypeClick {
     object goToLogin : TypeClick()
     object goToHome : TypeClick()
     object goToInfoEvent : TypeClick()
+
+    object register : TypeClick()
+
+    object dismissDialog : TypeClick()
+
     object toggledPassword : TypeClick()
     object toggledRePassword : TypeClick()
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,10 +47,19 @@ fun RegisterScreen(
                                 it
                             )
                         )
+                    },
+                    error = when (state.emailError) {
+                        RegisterState.EmailError.FieldEmpty -> {
+                            "This field cant be empty"
+                        }
+                        RegisterState.EmailError.InvalidEmail -> {
+                            "Not a valid password"
+                        }
+                        else -> ""
                     }
                 )
                 FeatOutlinedTextField(
-                    text = state.textVerifyEmail,
+                    text = state.textReEmail,
                     unFocusedColor = PurpleLight,
                     textLabel = stringResource(id = R.string.text_re_email),
                     onValueChange = {
@@ -59,6 +69,18 @@ fun RegisterScreen(
                                 it
                             )
                         )
+                    },
+                    error = when (state.reEmailError) {
+                        RegisterState.EmailError.FieldEmpty -> {
+                            "This field cant be empty"
+                        }
+                        RegisterState.EmailError.InvalidEmail -> {
+                            "Not a valid password"
+                        }
+                        RegisterState.EmailError.DiffEmail -> {
+                            "Difference email"
+                        }
+                        else -> ""
                     }
                 )
                 FeatOutlinedTextField(
@@ -77,10 +99,16 @@ fun RegisterScreen(
                     isPasswordVisible = state.isVisiblePassword,
                     onPasswordToggleClick = {
                         onClick(RegisterEvents.onClick(TypeClick.toggledPassword))
+                    },
+                    error = when (state.passwordError) {
+                        RegisterState.PasswordError.InvalidPassword -> "Not a valid password"
+                        RegisterState.PasswordError.FieldEmpty -> "This field cant be empty"
+                        RegisterState.PasswordError.InputTooShort -> "This field is short"
+                        else -> ""
                     }
                 )
                 FeatOutlinedTextField(
-                    text = state.textVerifyPassword,
+                    text = state.textRePassword,
                     unFocusedColor = PurpleLight,
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.None,
@@ -97,11 +125,20 @@ fun RegisterScreen(
                     onPasswordToggleClick = {
                         onClick(RegisterEvents.onClick(TypeClick.toggledRePassword))
                     },
+                    error = when (state.rePasswordError) {
+                        RegisterState.PasswordError.InvalidPassword -> "Not a valid password"
+                        RegisterState.PasswordError.FieldEmpty -> "This field cant be empty"
+                        RegisterState.PasswordError.InputTooShort -> "This field is short"
+                        RegisterState.PasswordError.DiffPassword -> "Difference password"
+                        else -> ""
+                    }
                 )
                 FeatOutlinedButton(
                     modifier = Modifier.padding(horizontal = 100.dp),
                     textContent = stringResource(id = R.string.text_register),
-                    onClick = {}
+                    onClick = {
+                        onClick(RegisterEvents.onClick(TypeClick.register))
+                    }
                 )
             }
             ClickableText(

@@ -2,18 +2,19 @@
 
 package com.unlam.feat.ui.util
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.unlam.feat.R
+import com.unlam.feat.ui.component.ErrorDialog
+import com.unlam.feat.ui.component.InfoDialog
+import com.unlam.feat.ui.component.SuccessDialog
 import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
@@ -23,6 +24,7 @@ import com.unlam.feat.ui.view.main.MainEvents
 import com.unlam.feat.ui.view.main.MainScreen
 import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
+import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 
 @Composable
@@ -99,8 +101,41 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
     composable(Screen.Register.route) {
-        val registerViewModel: RegisterViewModel = viewModel()
-        val state = registerViewModel.state.value
+        val registerViewModel: RegisterViewModel = hiltViewModel()
+        val state by remember {
+            registerViewModel.state
+        }
+
+        when (state.registrationMessage) {
+            RegisterState.RegistrationMessage.UserAlreadyExist -> {
+                InfoDialog(
+                    title = stringResource(R.string.text_user_already_exist),
+                    desc = stringResource(R.string.desc_user_already_exist)
+                ) {
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                }
+            }
+            RegisterState.RegistrationMessage.RegistrationSuccess -> {
+                SuccessDialog(
+                    title = stringResource(R.string.text_user_created),
+                    desc = stringResource(R.string.desc_user_created)
+                ) {
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                    navController.popBackStack()
+                    navController.navigate(Screen.Login.route)
+                }
+            }
+            RegisterState.RegistrationMessage.RegistrationError -> {
+                ErrorDialog(
+                    title = stringResource(R.string.text_error),
+                    desc = stringResource(R.string.desc_error)
+                ) {
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                }
+            }
+            else -> {}
+        }
+
         RegisterScreen(
             state = state,
             onValueChange = { event ->

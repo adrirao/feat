@@ -9,5 +9,11 @@
     <string name="text_re_password">Verify Password</string>
     <string name="text_password_visible_content_description">Password Visible</string>
     <string name="text_password_hidden_content_description">Password Hidden</string>
+    <string name="text_user_already_exist">Usuario Existente</string>
+    <string name="desc_user_already_exist">El usuario ya existe, por favor ingresar un email nuevo.</string>
+    <string name="text_user_created">Usuario Creado</string>
+    <string name="desc_user_created">El usuario fue creado con exito. Por favor verificar cuenta de mail.</string>
+    <string name="text_error">Error</string>
+    <string name="desc_error">Ocurrio un error, por favor contactarse con el administrador.</string>
 
 </resources>
