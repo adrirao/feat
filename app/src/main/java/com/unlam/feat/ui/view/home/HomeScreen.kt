@@ -14,16 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unlam.feat.ui.component.FeatCard
 import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.component.FeatOutlinedButton
-import com.unlam.feat.ui.theme.InfoColor
-import com.unlam.feat.ui.theme.PurpleDark
-import com.unlam.feat.ui.theme.BlackTransparent
+import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.util.Constants
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -47,7 +47,8 @@ fun HomeScreen(
                 LazyRow(content = {
                     items(10) {
                         FeatCard(
-                            modifier = Modifier.padding(10.dp)
+                            modifier = Modifier.padding(10.dp),
+                            urlImage = Constants.ImageSport.PADEL
                         ) {
                             Column(
                                 modifier = Modifier
@@ -58,10 +59,12 @@ fun HomeScreen(
                                 Text(
                                     text = "Nombre evento",
                                     color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
                                 Text(
                                     text = "Horario",
                                     color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
                             }
                             Box(
@@ -72,7 +75,7 @@ fun HomeScreen(
                             ) {
                                 FeatOutlinedButton(
                                     textContent = "Info",
-                                    contentColor = InfoColor,
+                                    contentColor = GreenLight,
                                     modifier = Modifier.align(Alignment.BottomEnd),
                                     height = 30.dp,
                                     width = 100.dp
@@ -103,17 +106,20 @@ fun HomeScreen(
                             DateTimeFormatter.ofPattern("dd/MM/yyyy")
                         )
                         FeatCard(
-                            modifier = Modifier.padding(10.dp)
+                            modifier = Modifier.padding(10.dp),
+                            urlImage = Constants.ImageSport.FUTBOL
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
+                                    .background(BlackTransparent30)
                                     .padding(20.dp),
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(
                                     text = event.name,
                                     color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
                                 Text(
                                     text = "$date ${
@@ -123,6 +129,7 @@ fun HomeScreen(
                                         )
                                     } - ${event.endTime.substring(0, 5)}",
                                     color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
                             }
                             Box(
@@ -133,7 +140,7 @@ fun HomeScreen(
                             ) {
                                 FeatOutlinedButton(
                                     textContent = "Info",
-                                    contentColor = InfoColor,
+                                    contentColor = GreenLight,
                                     modifier = Modifier.align(Alignment.BottomEnd),
                                     height = 30.dp,
                                     width = 100.dp

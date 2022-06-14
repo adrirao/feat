@@ -15,4 +15,11 @@ object Constants {
         const val BASKETBALL = "Basketball"
         const val PADDLE = "Paddle"
     }
+
+    object ImageSport{
+        const val FUTBOL = "https://img.freepik.com/vector-gratis/coleccion-futbolistas-planos_23-2149002218.jpg"
+        const val BASQUET = "https://img.freepik.com/vector-gratis/adolescentes-jugando-baloncesto-calle-bola-nino-amigo-ilustracion-vectorial-plana-juego-deportivo-concepto-actividad-verano_74855-10164.jpg"
+        const val TENIS = "https://png.pngtree.com/illustration/20190226/ourlarge/pngtree-national-fitness-playing-tennis-double-tennis-tennis-court-image_6423.jpg"
+        const val PADEL = "https://www.empadelados.com/wp-content/uploads/tipos_jugadores_2.jpg"
+    }
 }
