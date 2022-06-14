@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unlam.feat.ui.component.FeatCard
+import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.component.FeatOutlinedButton
 import com.unlam.feat.ui.theme.InfoColor
@@ -145,5 +146,8 @@ fun HomeScreen(
                 })
             }
         }
+    }
+    if (state.isLoading) {
+        FeatCircularProgress()
     }
 }

@@ -128,7 +128,7 @@ fun MainScreenWithAnimation() {
                             }
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_close),
+                                painter = painterResource(id = R.drawable.ic_add),
                                 contentDescription = "",
                                 tint = PurpleMedium,
                                 modifier = Modifier.size(30.dp)

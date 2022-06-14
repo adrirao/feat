@@ -505,7 +505,7 @@ constructor(
     fun getEventsSuggestedAndConfirmedByUser(uId: String): Flow<Result<ResponseHomeEvents>> = flow {
         try {
             emit(Result.Loading())
-            val response =  featProvider.getEventsSuggestedForUser(uId)
+            delay(600)
             val eventsSuggested = featProvider.getEventsSuggestedForUser(uId).body()
             val eventsConfirmed = featProvider.getEventsCreatedByUser(uId).body()
             emit(
