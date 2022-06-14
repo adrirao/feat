@@ -39,7 +39,7 @@ fun MainScreen(
         FeatOutlinedButton(
             textContent = stringResource(id = R.string.text_login),
             onClick = {
-                onClick(MainEvents.onClick(TypeClick.goToLogin))
+                onClick(MainEvents.onClick(TypeClick.GoToLogin))
             }
         )
         FeatOutlinedButton(
@@ -47,7 +47,7 @@ fun MainScreen(
             contentColor = Color.Transparent,
             textColor = PurpleLight,
             onClick = {
-                onClick(MainEvents.onClick(TypeClick.goToRegister))
+                onClick(MainEvents.onClick(TypeClick.GoToRegister))
             }
         )
     }

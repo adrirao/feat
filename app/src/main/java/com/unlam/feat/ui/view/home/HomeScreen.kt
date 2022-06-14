@@ -7,25 +7,21 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.magnifier
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unlam.feat.R
 import com.unlam.feat.ui.component.FeatCard
 import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.component.FeatOutlinedButton
-import com.unlam.feat.ui.theme.GreenLight
+import com.unlam.feat.ui.theme.InfoColor
 import com.unlam.feat.ui.theme.PurpleDark
-import com.unlam.feat.ui.theme.blackTransparent
+import com.unlam.feat.ui.theme.BlackTransparent
 import com.unlam.feat.ui.util.TypeClick
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -70,12 +66,12 @@ fun HomeScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(blackTransparent)
+                                    .background(BlackTransparent)
                                     .align(Alignment.BottomCenter)
                             ) {
                                 FeatOutlinedButton(
                                     textContent = "Info",
-                                    contentColor = GreenLight,
+                                    contentColor = InfoColor,
                                     modifier = Modifier.align(Alignment.BottomEnd),
                                     height = 30.dp,
                                     width = 100.dp
@@ -131,17 +127,17 @@ fun HomeScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(blackTransparent)
+                                    .background(BlackTransparent)
                                     .align(Alignment.BottomCenter)
                             ) {
                                 FeatOutlinedButton(
                                     textContent = "Info",
-                                    contentColor = GreenLight,
+                                    contentColor = InfoColor,
                                     modifier = Modifier.align(Alignment.BottomEnd),
                                     height = 30.dp,
                                     width = 100.dp
                                 ) {
-                                    onClick(HomeEvents.onClick(TypeClick.goToInfoEvent))
+                                    onClick(HomeEvents.onClick(TypeClick.GoToInfoEvent))
                                 }
                             }
                         }

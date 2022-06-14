@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +42,7 @@ fun RegisterScreen(
                     onValueChange = {
                         onValueChange(
                             RegisterEvents.onValueChange(
-                                TypeValueChange.onValueChangeEmail,
+                                TypeValueChange.OnValueChangeEmail,
                                 it
                             )
                         )
@@ -65,7 +64,7 @@ fun RegisterScreen(
                     onValueChange = {
                         onValueChange(
                             RegisterEvents.onValueChange(
-                                TypeValueChange.onValueChangeReEmail,
+                                TypeValueChange.OnValueChangeReEmail,
                                 it
                             )
                         )
@@ -91,14 +90,14 @@ fun RegisterScreen(
                     onValueChange = {
                         onValueChange(
                             RegisterEvents.onValueChange(
-                                TypeValueChange.onValueChangePassword,
+                                TypeValueChange.OnValueChangePassword,
                                 it
                             )
                         )
                     },
                     isPasswordVisible = state.isVisiblePassword,
                     onPasswordToggleClick = {
-                        onClick(RegisterEvents.onClick(TypeClick.toggledPassword))
+                        onClick(RegisterEvents.onClick(TypeClick.ToggledPassword))
                     },
                     error = when (state.passwordError) {
                         RegisterState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
@@ -116,14 +115,14 @@ fun RegisterScreen(
                     onValueChange = {
                         onValueChange(
                             RegisterEvents.onValueChange(
-                                TypeValueChange.onValueChangeRePassword,
+                                TypeValueChange.OnValueChangeRePassword,
                                 it
                             )
                         )
                     },
                     isPasswordVisible = state.isVisibleRePassword,
                     onPasswordToggleClick = {
-                        onClick(RegisterEvents.onClick(TypeClick.toggledRePassword))
+                        onClick(RegisterEvents.onClick(TypeClick.ToggledRePassword))
                     },
                     error = when (state.rePasswordError) {
                         RegisterState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
@@ -137,8 +136,9 @@ fun RegisterScreen(
                     modifier = Modifier.padding(horizontal = 100.dp),
                     textContent = stringResource(id = R.string.text_register),
                     onClick = {
-                        onClick(RegisterEvents.onClick(TypeClick.register))
-                    }
+                        onClick(RegisterEvents.onClick(TypeClick.Register))
+                    },
+                    enabled = !state.isLoading
                 )
             }
             ClickableText(
@@ -146,7 +146,7 @@ fun RegisterScreen(
                 text = AnnotatedString("Ya tienes cuenta? Clickeame."),
                 style = TextStyle(color = GreenLight),
                 onClick = {
-                    onClick(RegisterEvents.onClick(TypeClick.goToLogin))
+                    onClick(RegisterEvents.onClick(TypeClick.GoToLogin))
                 }
             )
         }

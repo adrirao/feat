@@ -5,13 +5,16 @@ data class RegisterState(
     val textPassword: String = "",
     val textReEmail: String = "",
     val textRePassword: String = "",
+
     val isVisiblePassword: Boolean = false,
     val isVisibleRePassword: Boolean = false,
+    val isLoading : Boolean = false,
+
     val emailError: EmailError? = null,
     val reEmailError: EmailError? = null,
     val passwordError: PasswordError? = null,
     val rePasswordError: PasswordError? = null,
-    val registrationMessage: RegistrationMessage? = null
+    val registrationMessage: RegistrationMessage? = null,
 ) {
     sealed class EmailError {
         object FieldEmpty : EmailError()

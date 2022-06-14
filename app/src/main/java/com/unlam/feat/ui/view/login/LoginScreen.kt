@@ -17,7 +17,6 @@ import com.unlam.feat.ui.component.FeatOutlinedTextField
 import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.register.RegisterState
 
 @Composable
 fun LoginScreen(
@@ -39,7 +38,7 @@ fun LoginScreen(
                     onValueChange = {
                         onValueChange(
                             LoginEvents.onValueChange(
-                                TypeValueChange.onValueChangeEmail,
+                                TypeValueChange.OnValueChangeEmail,
                                 it
                             )
                         )
@@ -62,14 +61,14 @@ fun LoginScreen(
                     onValueChange = {
                         onValueChange(
                             LoginEvents.onValueChange(
-                                TypeValueChange.onValueChangePassword,
+                                TypeValueChange.OnValueChangePassword,
                                 it
                             )
                         )
                     },
                     isPasswordVisible = state.isVisiblePassword,
                     onPasswordToggleClick = {
-                        onClick(LoginEvents.onClick(TypeClick.toggledPassword))
+                        onClick(LoginEvents.onClick(TypeClick.ToggledPassword))
                     },
                     error = when (state.passwordError) {
                         LoginState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
@@ -82,8 +81,9 @@ fun LoginScreen(
                     modifier = Modifier.padding(horizontal = 100.dp),
                     textContent = "Ingresar",
                     onClick = {
-                        onClick(LoginEvents.onClick(TypeClick.login))
-                    }
+                        onClick(LoginEvents.onClick(TypeClick.Login))
+                    },
+                    enabled = !state.isLoading
                 )
 
             }
@@ -92,7 +92,7 @@ fun LoginScreen(
                 style = TextStyle(color = PurpleLight),
                 text = AnnotatedString("No tienes una cuenta?"),
                 onClick = {
-                    onClick(LoginEvents.onClick(TypeClick.goToRegister))
+                    onClick(LoginEvents.onClick(TypeClick.GoToRegister))
                 }
             )
         }

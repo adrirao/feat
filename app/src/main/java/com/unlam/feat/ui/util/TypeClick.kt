@@ -1,16 +1,17 @@
 package com.unlam.feat.ui.util
 
 sealed class TypeClick {
-    object goToRegister : TypeClick()
-    object goToLogin : TypeClick()
-    object goToHome : TypeClick()
-    object goToInfoEvent : TypeClick()
+    object GoToRegister : TypeClick()
+    object GoToLogin : TypeClick()
+    object GoToHome : TypeClick()
+    object GoToInfoEvent : TypeClick()
+    object GoToNewEvent : TypeClick()
 
-    object login : TypeClick()
-    object register : TypeClick()
+    object Login : TypeClick()
+    object Register : TypeClick()
 
-    object dismissDialog : TypeClick()
+    object DismissDialog : TypeClick()
 
-    object toggledPassword : TypeClick()
-    object toggledRePassword : TypeClick()
+    object ToggledPassword : TypeClick()
+    object ToggledRePassword : TypeClick()
 }

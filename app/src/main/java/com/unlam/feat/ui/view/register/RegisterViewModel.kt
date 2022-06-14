@@ -1,9 +1,9 @@
 package com.unlam.feat.ui.view.register
 
-import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -13,6 +13,7 @@ import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.util.Constants
+import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,44 +33,47 @@ constructor(
         when (event) {
             is RegisterEvents.onValueChange -> {
                 when (event.typeValueChange) {
-                    TypeValueChange.onValueChangeEmail -> {
+                    TypeValueChange.OnValueChangeEmail -> {
                         _state.value = _state.value.copy(
                             textEmail = event.value
                         )
                     }
-                    TypeValueChange.onValueChangeReEmail -> {
+                    TypeValueChange.OnValueChangeReEmail -> {
                         _state.value = _state.value.copy(
                             textReEmail = event.value
                         )
                     }
-                    TypeValueChange.onValueChangePassword -> {
+                    TypeValueChange.OnValueChangePassword -> {
                         _state.value = _state.value.copy(
                             textPassword = event.value
                         )
                     }
-                    TypeValueChange.onValueChangeRePassword -> {
+                    TypeValueChange.OnValueChangeRePassword -> {
                         _state.value = _state.value.copy(
                             textRePassword = event.value
                         )
                     }
                 }
             }
-             RegisterEvents.onClick(TypeClick.toggledPassword) -> {
+             RegisterEvents.onClick(TypeClick.ToggledPassword) -> {
                 _state.value = _state.value.copy(
                     isVisiblePassword = !_state.value.isVisiblePassword
                 )
             }
-            RegisterEvents.onClick(TypeClick.toggledRePassword) -> {
+            RegisterEvents.onClick(TypeClick.ToggledRePassword) -> {
                 _state.value = _state.value.copy(
                     isVisibleRePassword = !_state.value.isVisibleRePassword
                 )
             }
-            RegisterEvents.onClick(TypeClick.dismissDialog) -> {
+            RegisterEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
                     registrationMessage = null
                 )
             }
-            RegisterEvents.onClick(TypeClick.register) -> {
+            RegisterEvents.onClick(TypeClick.Register) -> {
+                _state.value = _state.value.copy(
+                    isLoading = true
+                )
                 validateEmail(_state.value.textEmail)
                 validateReEmail(_state.value.textReEmail)
                 validatePassword(_state.value.textPassword)
@@ -83,13 +87,15 @@ constructor(
         val trimmedEmail = email.trim()
         if(trimmedEmail.isBlank()){
             _state.value = _state.value.copy(
-                emailError = RegisterState.EmailError.FieldEmpty
+                emailError = RegisterState.EmailError.FieldEmpty,
+                isLoading = false
             )
             return
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _state.value = _state.value.copy(
-                emailError = RegisterState.EmailError.InvalidEmail
+                emailError = RegisterState.EmailError.InvalidEmail,
+                isLoading = false
             )
             return
         }
@@ -101,20 +107,23 @@ constructor(
 
         if(reEmail != _state.value.textEmail){
             _state.value = _state.value.copy(
-                reEmailError = RegisterState.EmailError.DiffEmail
+                reEmailError = RegisterState.EmailError.DiffEmail,
+                isLoading = false
             )
             return
         }
 
         if(trimmedEmail.isBlank()){
             _state.value = _state.value.copy(
-                reEmailError = RegisterState.EmailError.FieldEmpty
+                reEmailError = RegisterState.EmailError.FieldEmpty,
+                isLoading = false
             )
             return
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(reEmail).matches()) {
             _state.value = _state.value.copy(
-                reEmailError = RegisterState.EmailError.InvalidEmail
+                reEmailError = RegisterState.EmailError.InvalidEmail,
+                isLoading = false
             )
             return
         }
@@ -124,13 +133,15 @@ constructor(
     private fun validatePassword(password: String) {
         if(password.isBlank()) {
             _state.value = _state.value.copy(
-                passwordError = RegisterState.PasswordError.FieldEmpty
+                passwordError = RegisterState.PasswordError.FieldEmpty,
+                isLoading = false
             )
             return
         }
         if(password.length < Constants.MIN_PASSWORD_LENGTH) {
             _state.value = _state.value.copy(
-                passwordError = RegisterState.PasswordError.InputTooShort
+                passwordError = RegisterState.PasswordError.InputTooShort,
+                isLoading = false
             )
             return
         }
@@ -138,7 +149,8 @@ constructor(
         val numberInPassword = password.any { it.isDigit() }
         if(!capitalLettersInPassword || !numberInPassword) {
             _state.value = _state.value.copy(
-                passwordError = RegisterState.PasswordError.InvalidPassword
+                passwordError = RegisterState.PasswordError.InvalidPassword,
+                isLoading = false
             )
             return
         }
@@ -148,19 +160,22 @@ constructor(
     private fun validateRePassword(rePassword: String) {
         if(rePassword.isBlank()) {
             _state.value = _state.value.copy(
-                rePasswordError = RegisterState.PasswordError.FieldEmpty
+                rePasswordError = RegisterState.PasswordError.FieldEmpty,
+                isLoading = false
             )
             return
         }
         if(rePassword != _state.value.textPassword){
             _state.value = _state.value.copy(
-                rePasswordError = RegisterState.PasswordError.DiffPassword
+                rePasswordError = RegisterState.PasswordError.DiffPassword,
+                isLoading = false
             )
             return
         }
         if(rePassword.length < Constants.MIN_PASSWORD_LENGTH) {
             _state.value = _state.value.copy(
-                rePasswordError = RegisterState.PasswordError.InputTooShort
+                rePasswordError = RegisterState.PasswordError.InputTooShort,
+                isLoading = false
             )
             return
         }
@@ -168,7 +183,8 @@ constructor(
         val numberInPassword = rePassword.any { it.isDigit() }
         if(!capitalLettersInPassword || !numberInPassword) {
             _state.value = _state.value.copy(
-                rePasswordError = RegisterState.PasswordError.InvalidPassword
+                rePasswordError = RegisterState.PasswordError.InvalidPassword,
+                isLoading = false
             )
             return
         }
@@ -187,22 +203,29 @@ constructor(
                 val request = RequestUser(uid = uid, email = email, "2")
                 featRepository.createUser(request).onEach { result ->
                     when (result) {
-                        is com.unlam.feat.util.Result.Success -> {
+                        is Result.Loading -> {
                             _state.value = _state.value.copy(
-                                registrationMessage = RegisterState.RegistrationMessage.RegistrationSuccess
+                                isLoading = true
                             )
                         }
-                        is com.unlam.feat.util.Result.Error -> {
-                            Log.e("Rao", result.message.toString())
+                        is Result.Success -> {
                             _state.value = _state.value.copy(
-                                registrationMessage = RegisterState.RegistrationMessage.RegistrationError
+                                registrationMessage = RegisterState.RegistrationMessage.RegistrationSuccess,
+                                isLoading = false
+                            )
+                        }
+                        is Result.Error -> {
+                            _state.value = _state.value.copy(
+                                registrationMessage = RegisterState.RegistrationMessage.RegistrationError,
+                                isLoading = false
                             )
                         }
                     }
                 }.launchIn(viewModelScope)
             } else if (error is FirebaseAuthUserCollisionException) {
                 _state.value = _state.value.copy(
-                    registrationMessage = RegisterState.RegistrationMessage.UserAlreadyExist
+                    registrationMessage = RegisterState.RegistrationMessage.UserAlreadyExist,
+                    isLoading = false
                 )
             }
         }

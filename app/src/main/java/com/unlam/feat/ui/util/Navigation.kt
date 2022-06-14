@@ -3,6 +3,7 @@
 package com.unlam.feat.ui.util
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -10,10 +11,16 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.ErrorDialog
 import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
+import com.unlam.feat.ui.view.event.EventEvents
+import com.unlam.feat.ui.view.event.EventScreen
+import com.unlam.feat.ui.view.event.new_event.NewEventScreen
+import com.unlam.feat.ui.view.event.new_event.NewEventViewModel
 import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
@@ -39,6 +46,8 @@ fun Navigation(navController: NavHostController) {
         addRouteMain(navController)
         addRouteHome(navController)
         addRouteEvent(navController)
+        addRouteNewEvent(navController)
+        addRouteSearch(navController)
     }
 }
 
@@ -53,11 +62,11 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
         MainScreen(
             onClick = { event ->
                 when (event) {
-                    MainEvents.onClick(TypeClick.goToLogin) -> {
+                    MainEvents.onClick(TypeClick.GoToLogin) -> {
                         navController.popBackStack()
                         navController.navigate(Screen.Login.route)
                     }
-                    MainEvents.onClick(TypeClick.goToRegister) -> {
+                    MainEvents.onClick(TypeClick.GoToRegister) -> {
                         navController.popBackStack()
                         navController.navigate(Screen.Register.route)
                     }
@@ -90,7 +99,7 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                     title = stringResource(R.string.text_user_not_exist),
                     desc = stringResource(R.string.desc_user_not_exist)
                 ) {
-                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
             }
             LoginState.LoginMessage.InvalidCredentials -> {
@@ -98,7 +107,7 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                     title = stringResource(R.string.text_invalid_credential),
                     desc = stringResource(R.string.desc_invalid_credential)
                 ) {
-                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
             }
             LoginState.LoginMessage.VerifyEmail -> {
@@ -106,11 +115,11 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                     title = stringResource(R.string.text_verify_email),
                     desc = stringResource(R.string.desc_verify_email)
                 ) {
-                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
             }
             LoginState.LoginMessage.LoginSuccess -> {
-                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.dismissDialog))
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                     navController.popBackStack(Screen.Login.route, inclusive = true)
                     navController.navigate(Screen.Home.route)
             }
@@ -123,7 +132,7 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             },
             onClick = { event ->
                 when (event) {
-                    LoginEvents.onClick(TypeClick.goToRegister) -> {
+                    LoginEvents.onClick(TypeClick.GoToRegister) -> {
                         navController.navigate(Screen.Register.route)
                     }
                     else -> loginViewModel.onEvent(event)
@@ -146,7 +155,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
                     title = stringResource(R.string.text_user_already_exist),
                     desc = stringResource(R.string.desc_user_already_exist)
                 ) {
-                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                 }
             }
             RegisterState.RegistrationMessage.RegistrationSuccess -> {
@@ -154,7 +163,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
                     title = stringResource(R.string.text_user_created),
                     desc = stringResource(R.string.desc_user_created)
                 ) {
-                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                     navController.popBackStack()
                     navController.navigate(Screen.Login.route)
                 }
@@ -164,7 +173,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
                     title = stringResource(R.string.text_error),
                     desc = stringResource(R.string.desc_error)
                 ) {
-                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.dismissDialog))
+                    registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                 }
             }
             else -> {}
@@ -177,7 +186,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
             },
             onClick = { event ->
                 when (event) {
-                    RegisterEvents.onClick(TypeClick.goToLogin) -> {
+                    RegisterEvents.onClick(TypeClick.GoToLogin) -> {
                         navController.popBackStack()
                         navController.navigate(Screen.Login.route)
                     }
@@ -192,6 +201,42 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     composable(Screen.Events.route) {
+        EventScreen(
+            onClick = { event ->
+                when(event){
+                    EventEvents.onClick(TypeClick.GoToNewEvent) -> {
+                        navController.navigate(Screen.NewEvent.route)
+                    }
+                }
+            }
+        )
+    }
+}
 
+private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
+    composable(Screen.NewEvent.route) {
+        val newEventViewModel : NewEventViewModel = hiltViewModel()
+        val state by remember {
+            newEventViewModel.state
+        }
+
+        NewEventScreen(
+            state = state,
+            onValueChange = {event ->
+                newEventViewModel.onEvent(event)
+            }
+        )
+    }
+}
+
+private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
+    composable(Screen.Search.route) {
+        Button(onClick = {
+            Firebase.auth.signOut()
+            navController.popBackStack(Screen.Home.route, inclusive = true)
+            navController.navigate(Screen.Login.route)
+        }) {
+
+        }
     }
 }

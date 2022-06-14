@@ -18,6 +18,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unlam.feat.ui.theme.LightTransparent
 import com.unlam.feat.ui.theme.PurpleLight
 import java.util.*
 
@@ -30,6 +31,7 @@ fun FeatOutlinedButton(
     border: BorderStroke = BorderStroke(2.dp, contentColor),
     height: Dp = 50.dp,
     width: Dp? = null,
+    enabled: Boolean = true,
     textContent: String,
     textColor: Color = contentColor,
     textAlign: TextAlign = TextAlign.Center,
@@ -54,9 +56,10 @@ fun FeatOutlinedButton(
         shape = shape,
         border = border,
         colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = backgroundColor,
+            backgroundColor = if(enabled) backgroundColor else LightTransparent,
             contentColor = contentColor,
-        )
+        ),
+        enabled = enabled
     ) {
         Text(
             text = textContent.uppercase(),

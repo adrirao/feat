@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -29,29 +28,32 @@ constructor(
         when (event) {
             is LoginEvents.onValueChange -> {
                 when (event.typeValueChange) {
-                    TypeValueChange.onValueChangeEmail -> {
+                    TypeValueChange.OnValueChangeEmail -> {
                         _state.value = _state.value.copy(
                             textEmail = event.value
                         )
                     }
-                    TypeValueChange.onValueChangePassword -> {
+                    TypeValueChange.OnValueChangePassword -> {
                         _state.value = _state.value.copy(
                             textPassword = event.value
                         )
                     }
                 }
             }
-            LoginEvents.onClick(TypeClick.toggledPassword) -> {
+            LoginEvents.onClick(TypeClick.ToggledPassword) -> {
                 _state.value = _state.value.copy(
                     isVisiblePassword = !_state.value.isVisiblePassword
                 )
             }
-            LoginEvents.onClick(TypeClick.dismissDialog) -> {
+            LoginEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
                     loginMessage = null
                 )
             }
-            LoginEvents.onClick(TypeClick.login) -> {
+            LoginEvents.onClick(TypeClick.Login) -> {
+                _state.value = _state.value.copy(
+                    isLoading = true
+                )
                 validateEmail(_state.value.textEmail)
                 validatePassword(_state.value.textPassword)
                 loginUser()
@@ -63,17 +65,22 @@ constructor(
         val trimmedEmail = email.trim()
         if (trimmedEmail.isBlank()) {
             _state.value = _state.value.copy(
-                emailError = LoginState.EmailError.FieldEmpty
+                emailError = LoginState.EmailError.FieldEmpty,
+                isLoading = false
             )
             return
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _state.value = _state.value.copy(
-                emailError = LoginState.EmailError.InvalidEmail
+                emailError = LoginState.EmailError.InvalidEmail,
+                isLoading = false
             )
             return
         }
-        _state.value = _state.value.copy(emailError = null)
+        _state.value = _state.value.copy(
+            emailError = null,
+            isLoading = false
+        )
     }
 
     private fun validatePassword(password: String) {
@@ -85,7 +92,8 @@ constructor(
         }
         if (password.length < Constants.MIN_PASSWORD_LENGTH) {
             _state.value = _state.value.copy(
-                passwordError = LoginState.PasswordError.InputTooShort
+                passwordError = LoginState.PasswordError.InputTooShort,
+                isLoading = false
             )
             return
         }
@@ -93,37 +101,45 @@ constructor(
         val numberInPassword = password.any { it.isDigit() }
         if (!capitalLettersInPassword || !numberInPassword) {
             _state.value = _state.value.copy(
-                passwordError = LoginState.PasswordError.InvalidPassword
+                passwordError = LoginState.PasswordError.InvalidPassword,
+                isLoading = false
             )
             return
         }
-        _state.value = _state.value.copy(passwordError = null)
+        _state.value = _state.value.copy(
+            passwordError = null,
+            isLoading = false
+        )
     }
 
     private fun loginUser() {
         var email = if (_state.value.emailError == null) _state.value.textEmail else return
         var password = if (_state.value.passwordError == null) _state.value.textPassword else return
         viewModelScope.launch {
-            firebaseAuthRepository.authenticate(email, password) { isLoged, error ->
-                if (isLoged) {
+            firebaseAuthRepository.authenticate(email, password) { isLogged, error ->
+                if (isLogged) {
                     _state.value = _state.value.copy(
-                        loginMessage = LoginState.LoginMessage.LoginSuccess
+                        loginMessage = LoginState.LoginMessage.LoginSuccess,
+                        isLoading = false
                     )
                 } else {
                     when (error) {
                         is FirebaseAuthInvalidUserException -> {
                             _state.value = _state.value.copy(
-                                loginMessage = LoginState.LoginMessage.UserNotExist
+                                loginMessage = LoginState.LoginMessage.UserNotExist,
+                                isLoading = false
                             )
                         }
                         is FirebaseAuthInvalidCredentialsException -> {
                             _state.value = _state.value.copy(
-                                loginMessage = LoginState.LoginMessage.InvalidCredentials
+                                loginMessage = LoginState.LoginMessage.InvalidCredentials,
+                                isLoading = false
                             )
                         }
                         else -> {
                             _state.value = _state.value.copy(
-                                loginMessage = LoginState.LoginMessage.VerifyEmail
+                                loginMessage = LoginState.LoginMessage.VerifyEmail,
+                                isLoading = false
                             )
                         }
                     }

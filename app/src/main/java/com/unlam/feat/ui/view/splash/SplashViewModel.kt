@@ -6,6 +6,7 @@ import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,15 +24,27 @@ constructor(
         when (event) {
             is SplashEvent.Authenticate -> {
                 authenticateUser()
-                checkIsFirstLogin()
+//                checkIsFirstLogin()
             }
         }
     }
 
     private fun authenticateUser() {
         val isAuthenticate: Boolean = firebaseAuthRepository.isLogged()
-        if(isAuthenticate){
-            checkIsFirstLogin()
+        if (isAuthenticate) {
+            viewModelScope.launch {
+                _state.emit(
+                    SplashState(isAuthenticate = true)
+                )
+            }
+//            checkIsFirstLogin()
+        } else {
+            viewModelScope.launch {
+
+                _state.emit(
+                    SplashState(isAuthenticate = false)
+                )
+            }
         }
     }
 
@@ -42,7 +55,7 @@ constructor(
                 is com.unlam.feat.util.Result.Success -> {
                     if (result.data == null) {
                         _state.emit(
-                        SplashState(isAuthenticate = true, isFirstLogin = true)
+                            SplashState(isAuthenticate = true, isFirstLogin = true)
                         )
                     } else {
                         _state.emit(

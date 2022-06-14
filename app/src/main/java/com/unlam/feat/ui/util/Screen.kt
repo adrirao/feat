@@ -30,7 +30,7 @@ sealed class Screen(
 
     object ConfigSport : Screen("config_sport_screen")
     object SportData : Screen("sport_data_screen")
-    object AddEvent : Screen("event_add_screen")
+    object NewEvent : Screen("event_new_screen")
     object DetailEventHome : Screen("event_detail_home_screen", listOf(
         navArgument("idEvent") { type = NavType.StringType }
     ))
