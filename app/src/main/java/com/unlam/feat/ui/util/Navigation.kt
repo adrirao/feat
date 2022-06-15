@@ -19,7 +19,9 @@ import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
+import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
+import com.unlam.feat.ui.view.event.new_event.NewEventState
 import com.unlam.feat.ui.view.event.new_event.NewEventViewModel
 import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
@@ -119,9 +121,9 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                 }
             }
             LoginState.LoginMessage.LoginSuccess -> {
-                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
-                    navController.popBackStack(Screen.Login.route, inclusive = true)
-                    navController.navigate(Screen.Home.route)
+                loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
+                navController.popBackStack(Screen.Login.route, inclusive = true)
+                navController.navigate(Screen.Home.route)
             }
         }
 
@@ -203,7 +205,7 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     composable(Screen.Events.route) {
         EventScreen(
             onClick = { event ->
-                when(event){
+                when (event) {
                     EventEvents.onClick(TypeClick.GoToNewEvent) -> {
                         navController.navigate(Screen.NewEvent.route)
                     }
@@ -215,15 +217,48 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
     composable(Screen.NewEvent.route) {
-        val newEventViewModel : NewEventViewModel = hiltViewModel()
+        val newEventViewModel: NewEventViewModel = hiltViewModel()
         val state by remember {
             newEventViewModel.state
         }
 
+        when (state.newEventMessage) {
+            NewEventState.NewEventMessage.NewEventError -> {
+                ErrorDialog(
+                    title = stringResource(R.string.text_error),
+                    desc = stringResource(R.string.desc_error)
+                ) {
+                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
+                }
+            }
+            NewEventState.NewEventMessage.NewEventSuccess -> {
+                SuccessDialog(
+                    title = stringResource(R.string.text_event_created),
+                    desc = stringResource(R.string.desc_event_created)
+                ) {
+                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
+                    navController.popBackStack()
+                    navController.navigate(Screen.Events.route)
+                }
+            }
+            else -> {}
+        }
+
         NewEventScreen(
             state = state,
-            onValueChange = {event ->
+            onValueChange = { event ->
                 newEventViewModel.onEvent(event)
+            },
+            onClick = { event ->
+                when (event) {
+                    NewEventEvents.onClick(TypeClick.GoToEvent) -> {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Events.route)
+                    }
+                    NewEventEvents.onClick(TypeClick.Submit) -> {
+                        newEventViewModel.onEvent(event)
+                    }
+                }
             }
         )
     }

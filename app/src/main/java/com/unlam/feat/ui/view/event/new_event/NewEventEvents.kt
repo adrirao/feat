@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.view.event.new_event
 
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
 sealed class NewEventEvents {
@@ -9,4 +10,5 @@ sealed class NewEventEvents {
         val valueOpt: String? = null
     ) :
         NewEventEvents()
+    data class onClick (val typeClick: TypeClick) : NewEventEvents()
 }

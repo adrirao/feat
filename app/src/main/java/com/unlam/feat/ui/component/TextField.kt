@@ -140,8 +140,8 @@ fun FeatOutlinedDatePicker(
     date: LocalDate?,
     onValueChange: (LocalDate) -> Unit,
     textLabel: String = "",
-    titlePicker: String = "Default"
-
+    titlePicker: String = "Default",
+    error: String = ""
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -164,7 +164,8 @@ fun FeatOutlinedDatePicker(
             },
         enabled = false,
         textLabel = textLabel,
-        unFocusedColor = PurpleLight
+        unFocusedColor = PurpleLight,
+        error = error
     )
     MaterialDialog(
         dialogState = dialogState,
@@ -188,8 +189,8 @@ fun FeatOutlinedTimePicker(
     time: LocalTime?,
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
-    titlePicker: String = "Default"
-
+    titlePicker: String = "Default",
+    error:String =""
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -211,8 +212,8 @@ fun FeatOutlinedTimePicker(
                 dialogState.show()
             },
         enabled = false,
-        textLabel = label
-
+        textLabel = label,
+        error = error
     )
     MaterialDialog(
         dialogState = dialogState,
@@ -235,7 +236,8 @@ fun FeatOutlinedTimePicker(
 fun FeatOutlinedDropDown(
     label: String = "FeatDropDown",
     options: List<String> = emptyList(),
-    selectedText: (String) -> Unit
+    selectedText: (String) -> Unit,
+    error: String = ""
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -270,7 +272,8 @@ fun FeatOutlinedDropDown(
                     modifier = Modifier.clickable { expanded = !expanded },
                     tint = if (icon == Icons.Filled.KeyboardArrowDown) PurpleLight else GreenLight
                 )
-            }
+            },
+            error = error
         )
         DropdownMenu(
             expanded = expanded,

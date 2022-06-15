@@ -8,6 +8,7 @@ sealed class TypeValueChange {
     object OnValueChangeName : TypeValueChange()
     object OnValueChangeDate : TypeValueChange()
     object OnValueChangeStartTime : TypeValueChange()
+    object OnValueChangeEndTime : TypeValueChange()
     object OnValueChangePerioridicity : TypeValueChange()
     object OnValueChangeAddress : TypeValueChange()
     object OnValueChangePosition : TypeValueChange()

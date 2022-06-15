@@ -27,5 +27,7 @@
     <string name="desc_invalid_credential">Por favor verificar el email o la contrasena.</string>
     <string name="text_verify_email">Verificar Email</string>
     <string name="desc_verify_email">Por favor verificar el email para poder ingresar.</string>
+    <string name="text_event_created">Evento creado con exito</string>
+    <string name="desc_event_created">El evento ha sido creado con exito, por favor verifique su listado.</string>
 
 </resources>

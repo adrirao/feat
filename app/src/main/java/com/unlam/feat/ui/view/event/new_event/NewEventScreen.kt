@@ -10,17 +10,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.ErrorColor
 import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
 @Composable
 fun NewEventScreen(
     state: NewEventState = NewEventState(),
-    onValueChange: (NewEventEvents.onValueChange) -> Unit
+    onValueChange: (NewEventEvents.onValueChange) -> Unit,
+    onClick: (NewEventEvents.onClick) -> Unit
 ) {
     var openMap by remember {
         mutableStateOf(false)
@@ -44,7 +47,10 @@ fun NewEventScreen(
                             )
                         )
                     },
-                    unFocusedColor = PurpleLight
+                    error = when (state.nameError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    }
                 )
                 FeatOutlinedDatePicker(
                     date = state.date,
@@ -58,6 +64,10 @@ fun NewEventScreen(
                         )
                     },
                     titlePicker = "Seleccione una fecha",
+                    error = when (state.dateError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    }
                 )
                 FeatOutlinedTimePicker(
                     time = state.startTime,
@@ -70,7 +80,29 @@ fun NewEventScreen(
                             )
                         )
                     },
-                    titlePicker = "Seleccione una hora de inicio"
+                    titlePicker = "Seleccione una hora de inicio",
+                    error = when (state.startTimeError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    }
+                )
+
+                FeatOutlinedTimePicker(
+                    time = state.endTime,
+                    label = "Hora Fin",
+                    onValueChange = {
+                        onValueChange(
+                            NewEventEvents.onValueChange(
+                                TypeValueChange.OnValueChangeEndTime,
+                                it.toString()
+                            )
+                        )
+                    },
+                    titlePicker = "Seleccione una hora de inicio",
+                    error = when (state.endTimeError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    }
                 )
 
                 val periodicityList = mutableListOf<String>()
@@ -92,6 +124,10 @@ fun NewEventScreen(
                                 )
                             }
                         }
+                    },
+                    error = when (state.periodicityError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
                     }
                 )
 
@@ -109,7 +145,11 @@ fun NewEventScreen(
                             tint = PurpleLight,
                         )
                     },
-                    onValueChange = {}
+                    onValueChange = {},
+                    error = when (state.addressError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    }
                 )
 
                 FeatOutlinedTextField(
@@ -122,6 +162,10 @@ fun NewEventScreen(
                                 it
                             )
                         )
+                    },
+                    error = when (state.descriptionError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
                     }
                 )
 
@@ -135,6 +179,10 @@ fun NewEventScreen(
                                 it
                             )
                         )
+                    },
+                    error = when (state.organizerError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
                     }
                 )
             }
@@ -147,13 +195,13 @@ fun NewEventScreen(
                     textContent = "Cancelar",
                     contentColor = ErrorColor
                 ) {
-
+                    onClick(NewEventEvents.onClick(TypeClick.GoToEvent))
                 }
                 FeatOutlinedButton(
                     textContent = "Aceptar",
                     contentColor = GreenLight
                 ) {
-
+                    onClick(NewEventEvents.onClick(TypeClick.Submit))
                 }
             }
         }
