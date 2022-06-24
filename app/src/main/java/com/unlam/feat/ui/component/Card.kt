@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.unlam.feat.R
+import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.PurpleMedium
 
@@ -58,4 +59,22 @@ fun FeatCard(
         }
         content()
     }
+}
+
+@Composable
+fun FeatForm(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Card(
+        modifier = modifier,
+        backgroundColor = PurpleDark,
+        elevation = 3.dp,
+        shape = RoundedCornerShape(5),
+        content = {
+            Column(modifier = Modifier.padding(vertical = 40.dp)) {
+                content()
+            }
+        }
+    )
 }

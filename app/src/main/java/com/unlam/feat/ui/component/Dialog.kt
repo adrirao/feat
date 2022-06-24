@@ -40,7 +40,6 @@ fun SuccessDialog(
         Box(
             modifier = Modifier
                 .width(300.dp)
-                .height(400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -50,7 +49,6 @@ fun SuccessDialog(
                 Box(
                     modifier = Modifier
                         .width(300.dp)
-                        .height(164.dp)
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(10.dp)
@@ -140,7 +138,6 @@ fun ErrorDialog(
         Box(
             modifier = Modifier
                 .width(300.dp)
-                .height(400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -150,7 +147,6 @@ fun ErrorDialog(
                 Box(
                     modifier = Modifier
                         .width(300.dp)
-                        .height(164.dp)
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(10.dp)
@@ -240,7 +236,6 @@ fun InfoDialog(
         Box(
             modifier = Modifier
                 .width(300.dp)
-                .height(400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -250,7 +245,6 @@ fun InfoDialog(
                 Box(
                     modifier = Modifier
                         .width(300.dp)
-                        .height(164.dp)
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(10.dp)

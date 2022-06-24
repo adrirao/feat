@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -55,12 +56,13 @@ fun FeatOutlinedTextField(
     focusedColor: Color = GreenLight,
     unFocusedColor: Color = PurpleLight,
     shape: Shape = CircleShape,
+    border: BorderStroke = BorderStroke(2.dp, unFocusedColor),
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     isPasswordVisible: Boolean = false,
     imeAction: ImeAction = ImeAction.Next,
     label: @Composable (() -> Unit)? = { Text(text = textLabel) },
-    trailingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     onValueChange: (String) -> Unit
 ) {

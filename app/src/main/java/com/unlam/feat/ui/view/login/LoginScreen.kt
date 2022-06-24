@@ -11,10 +11,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.unlam.feat.R
-import com.unlam.feat.ui.component.FeatContent
-import com.unlam.feat.ui.component.FeatOutlinedButton
-import com.unlam.feat.ui.component.FeatOutlinedTextField
+import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.theme.GreenColor20
+import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
+import com.unlam.feat.ui.theme.SuccessColor
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
@@ -31,65 +32,72 @@ fun LoginScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                FeatOutlinedTextField(
-                    text = state.textEmail,
-                    textLabel = "Email",
-                    unFocusedColor = PurpleLight,
-                    onValueChange = {
-                        onValueChange(
-                            LoginEvents.onValueChange(
-                                TypeValueChange.OnValueChangeEmail,
-                                it
+                FeatText(text = "Login")
+                FeatSpacerMedium()
+                FeatForm {
+                    FeatOutlinedTextField(
+                        text = state.textEmail,
+                        textLabel = "Email",
+                        unFocusedColor = PurpleLight,
+                        onValueChange = {
+                            onValueChange(
+                                LoginEvents.onValueChange(
+                                    TypeValueChange.OnValueChangeEmail,
+                                    it
+                                )
                             )
-                        )
-                    },
-                    error = when (state.emailError) {
-                        LoginState.EmailError.FieldEmpty -> {
-                            stringResource(R.string.text_field_empty)
+                        },
+                        error = when (state.emailError) {
+                            LoginState.EmailError.FieldEmpty -> {
+                                stringResource(R.string.text_field_empty)
+                            }
+                            LoginState.EmailError.InvalidEmail -> {
+                                stringResource(R.string.text_ivalid_email)
+                            }
+                            else -> ""
                         }
-                        LoginState.EmailError.InvalidEmail -> {
-                            stringResource(R.string.text_ivalid_email)
-                        }
-                        else -> ""
-                    }
-                )
-                FeatOutlinedTextField(
-                    text = state.textPassword,
-                    unFocusedColor = PurpleLight,
-                    keyboardType = KeyboardType.Password,
-                    textLabel = "Password",
-                    onValueChange = {
-                        onValueChange(
-                            LoginEvents.onValueChange(
-                                TypeValueChange.OnValueChangePassword,
-                                it
+                    )
+                    FeatOutlinedTextField(
+                        text = state.textPassword,
+                        unFocusedColor = PurpleLight,
+                        keyboardType = KeyboardType.Password,
+                        textLabel = "Password",
+                        onValueChange = {
+                            onValueChange(
+                                LoginEvents.onValueChange(
+                                    TypeValueChange.OnValueChangePassword,
+                                    it
+                                )
                             )
-                        )
-                    },
-                    isPasswordVisible = state.isVisiblePassword,
-                    onPasswordToggleClick = {
-                        onClick(LoginEvents.onClick(TypeClick.ToggledPassword))
-                    },
-                    error = when (state.passwordError) {
-                        LoginState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
-                        LoginState.PasswordError.FieldEmpty -> stringResource(R.string.text_field_empty)
-                        LoginState.PasswordError.InputTooShort -> stringResource(R.string.text_input_too_short)
-                        else -> ""
-                    }
-                )
-                FeatOutlinedButton(
-                    modifier = Modifier.padding(horizontal = 100.dp),
-                    textContent = "Ingresar",
-                    onClick = {
-                        onClick(LoginEvents.onClick(TypeClick.Login))
-                    },
-                    enabled = !state.isLoading
-                )
-
+                        },
+                        isPasswordVisible = state.isVisiblePassword,
+                        onPasswordToggleClick = {
+                            onClick(LoginEvents.onClick(TypeClick.ToggledPassword))
+                        },
+                        error = when (state.passwordError) {
+                            LoginState.PasswordError.InvalidPassword -> stringResource(R.string.text_invalid_password)
+                            LoginState.PasswordError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                            LoginState.PasswordError.InputTooShort -> stringResource(R.string.text_input_too_short)
+                            else -> ""
+                        }
+                    )
+                    FeatSpacerSmall()
+                    FeatOutlinedButton(
+                        modifier = Modifier.align(Alignment.End),
+                        width = 150.dp,
+                        backgroundColor = GreenColor20,
+                        contentColor = SuccessColor,
+                        textContent = "Ingresar",
+                        onClick = {
+                            onClick(LoginEvents.onClick(TypeClick.Login))
+                        },
+                        enabled = !state.isLoading
+                    )
+                }
             }
             ClickableText(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                style = TextStyle(color = PurpleLight),
+                style = TextStyle(color = GreenLight),
                 text = AnnotatedString("No tienes una cuenta?"),
                 onClick = {
                     onClick(LoginEvents.onClick(TypeClick.GoToRegister))

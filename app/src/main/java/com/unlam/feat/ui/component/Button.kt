@@ -42,17 +42,10 @@ fun FeatOutlinedButton(
         onClick = {
             onClick()
         },
-        modifier = if (width == null) {
+        modifier =
             modifier
-                .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 5.dp)
-                .height(height)
-        } else {
-            modifier
-                .width(width)
-                .padding(horizontal = 20.dp, vertical = 5.dp)
-                .height(height)
-        },
+                .height(height),
         shape = shape,
         border = border,
         colors = ButtonDefaults.outlinedButtonColors(
