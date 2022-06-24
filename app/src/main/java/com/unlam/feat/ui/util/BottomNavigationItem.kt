@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
 
 @Composable
@@ -31,7 +33,7 @@ fun RowScope.BottomNavigationItem(
     contentDescription: String? = null,
     selected: Boolean = false,
     alertCount: Int? = null,
-    selectedColor: Color = MaterialTheme.colors.primary,
+    selectedColor: Color = Color.Black,
     unselectedColor: Color = Color.Gray,
     enabled: Boolean = true,
     onClick: () -> Unit
@@ -59,7 +61,7 @@ fun RowScope.BottomNavigationItem(
                             contentDescription = contentDescription,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(30))
-                                .background(if (selected) PurpleLight else Color.Transparent)
+                                .background(if (selected) GreenColor else Color.Transparent)
                                 .padding(10.dp)
                                 .align(Alignment.Center),
                         )

@@ -37,7 +37,7 @@ fun FeatCard(
     content: @Composable (BoxScope.() -> Unit)
 ) {
         Card(
-            modifier = modifier,
+            modifier = modifier.height(height),
             backgroundColor = colorCard,
             elevation = 3.dp,
             shape = RoundedCornerShape(10)

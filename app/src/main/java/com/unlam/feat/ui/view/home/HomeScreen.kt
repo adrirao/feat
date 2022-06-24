@@ -14,7 +14,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.ui.component.*
-import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.PurpleMedium
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.home.component.FeatEventCard
@@ -62,7 +61,7 @@ fun HomeScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(220.dp)
-                                    .padding(10.dp),
+                                    .padding(horizontal = 10.dp),
                                 event = event,
                                 onClick = {
                                     onClick(HomeEvents.onClick(TypeClick.GoToDetailEvent, event.id))
@@ -90,7 +89,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp)
-                                .padding(10.dp),
+                                .padding(horizontal = 10.dp),
                             event = event,
                             onClick = {
                                 onClick(HomeEvents.onClick(TypeClick.GoToDetailEvent, event.id))

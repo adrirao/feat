@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsWithImePadding
@@ -63,10 +64,11 @@ fun FeatApp(
                 BottomAppBar(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    backgroundColor = PurpleDark,
-                    cutoutShape = CircleShape,
                 ) {
-                    BottomNavigation {
+                    BottomNavigation(
+                        backgroundColor = MaterialTheme.colors.surface,
+                        elevation = 0.dp
+                    ) {
                         navigationItems.forEach { item ->
                             BottomNavigationItem(
                                 icon = item.icon,

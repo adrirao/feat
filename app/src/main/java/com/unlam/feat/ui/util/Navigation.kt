@@ -19,6 +19,7 @@ import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
+import com.unlam.feat.ui.view.event.EventViewModel
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventState
@@ -205,7 +206,13 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     composable(Screen.Events.route) {
+        val eventViewModel:EventViewModel = hiltViewModel()
+        val state by remember {
+            eventViewModel.state
+        }
+
         EventScreen(
+            state = state,
             onClick = { event ->
                 when (event) {
                     EventEvents.onClick(TypeClick.GoToNewEvent) -> {
