@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
+import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.util.BottomNavigationItem
 import com.unlam.feat.ui.util.Navigation
@@ -54,23 +55,18 @@ fun FeatApp(
     )
 ) {
     Scaffold(
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsWithImePadding(),
         bottomBar = {
             if (showBottomBar) {
                 BottomAppBar(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(80.dp),
+                        .fillMaxWidth(),
                     backgroundColor = PurpleDark,
                     cutoutShape = CircleShape,
                 ) {
-                    BottomNavigation(
-                        modifier = Modifier
-                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-                            .clip(RoundedCornerShape(30))
-                            .align(Alignment.Top),
-                        backgroundColor = MaterialTheme.colors.surface,
-                        elevation = 0.dp
-                    ) {
+                    BottomNavigation {
                         navigationItems.forEach { item ->
                             BottomNavigationItem(
                                 icon = item.icon,
@@ -89,28 +85,8 @@ fun FeatApp(
             }
         }
     ) {
-        Box(
-            modifier = if (navController.currentDestination?.route in listOf(
-                    Screen.Profile.route,
-                    Screen.Events.route,
-                    Screen.Search.route,
-                    Screen.Invite.route,
-                    Screen.Home.route,
-                )
-            ) {
-                Modifier
-                    .statusBarsPadding()
-                    .padding(
-                        bottom = it.calculateBottomPadding()
-                    )
-            } else {
-                Modifier
-                    .statusBarsPadding()
-                    .navigationBarsWithImePadding()
-                    .padding(
-                        bottom = it.calculateBottomPadding()
-                    )
-            },
+        FeatContent(
+            modifier = Modifier.padding(bottom = it.calculateBottomPadding()),
             content = {
                 Navigation(
                     navController = navController,
