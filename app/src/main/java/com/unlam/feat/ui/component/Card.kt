@@ -31,34 +31,37 @@ fun FeatCard(
     modifier: Modifier = Modifier,
     width: Dp = 175.dp,
     height: Dp = width,
-    colorCard: Color = PurpleLight,
+    colorCard: Color = PurpleDark,
     urlImage: String = "",
-    @DrawableRes painter: Int = R.drawable.ic_launcher_foreground,
+    @DrawableRes painter: Int? = null,
     content: @Composable (BoxScope.() -> Unit)
 ) {
-    Box(
-        modifier = modifier
-            .width(width)
-            .height(height)
-            .clip(RoundedCornerShape(20))
-            .background(colorCard),
-    ) {
-        if (urlImage.isBlank()) {
-            Image(
-                painter = painterResource(id = painter),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            AsyncImage(
-                model = urlImage,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+        Card(
+            modifier = modifier,
+            backgroundColor = colorCard,
+            elevation = 3.dp,
+            shape = RoundedCornerShape(10)
+        ) {
+            if (urlImage.isBlank() && painter != null) {
+                Image(
+                    painter = painterResource(id = painter),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else if(urlImage.isNotBlank()) {
+                AsyncImage(
+                    model = urlImage,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Box(
+                modifier = Modifier.padding(15.dp)
+            ) {
+                content()
+            }
         }
-        content()
-    }
 }
 
 @Composable

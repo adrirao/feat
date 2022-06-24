@@ -11,11 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.R
+import com.unlam.feat.model.SportGeneric
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
@@ -43,172 +45,10 @@ fun NewEventScreen(
             state = pagerState
         ) { position ->
             when (position) {
-                0 -> {
-                    FeatForm {
-                        Column {
-                            FeatOutlinedTextField(
-                                text = state.name,
-                                textLabel = "Nombre del evento",
-                                onValueChange = {
-                                    onValueChange(
-                                        NewEventEvents.onValueChange(
-                                            TypeValueChange.OnValueChangeName,
-                                            it
-                                        )
-                                    )
-                                },
-                                error = when (state.nameError) {
-                                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                    else -> ""
-                                }
-                            )
-                            FeatOutlinedDatePicker(
-                                date = state.date,
-                                textLabel = "Dia",
-                                onValueChange = {
-                                    onValueChange(
-                                        NewEventEvents.onValueChange(
-                                            TypeValueChange.OnValueChangeDate,
-                                            it.toString()
-                                        )
-                                    )
-                                },
-                                titlePicker = "Seleccione una fecha",
-                                error = when (state.dateError) {
-                                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                    else -> ""
-                                }
-                            )
-                            FeatOutlinedTimePicker(
-                                time = state.startTime,
-                                label = "Hora inicio",
-                                onValueChange = {
-                                    onValueChange(
-                                        NewEventEvents.onValueChange(
-                                            TypeValueChange.OnValueChangeStartTime,
-                                            it.toString()
-                                        )
-                                    )
-                                },
-                                titlePicker = "Seleccione una hora de inicio",
-                                error = when (state.startTimeError) {
-                                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                    else -> ""
-                                }
-                            )
-                            FeatOutlinedTimePicker(
-                                time = state.endTime,
-                                label = "Hora Fin",
-                                onValueChange = {
-                                    onValueChange(
-                                        NewEventEvents.onValueChange(
-                                            TypeValueChange.OnValueChangeEndTime,
-                                            it.toString()
-                                        )
-                                    )
-                                },
-                                titlePicker = "Seleccione una hora de inicio",
-                                error = when (state.endTimeError) {
-                                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                    else -> ""
-                                }
-                            )
-                        }
-                    }
-                }
-                1 -> FeatForm {
-                    Column {
-                        val periodicityList = mutableListOf<String>()
-                        state.periodicityList.map {
-                            periodicityList.add(it.description)
-                        }
-
-                        FeatOutlinedDropDown(
-                            label = "Perioricidad",
-                            options = periodicityList,
-                            selectedText = { value ->
-                                state.periodicityList.forEach {
-                                    if (it.description == value) {
-                                        onValueChange(
-                                            NewEventEvents.onValueChange(
-                                                TypeValueChange.OnValueChangePerioridicity,
-                                                it.id.toString()
-                                            )
-                                        )
-                                    }
-                                }
-                            },
-                            error = when (state.periodicityError) {
-                                NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                else -> ""
-                            }
-                        )
-
-                        FeatOutlinedTextField(
-                            text = state.address,
-                            textLabel = "Ubicacion",
-                            enabled = false,
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.GpsFixed,
-                                    contentDescription = "Ubicacion",
-                                    modifier = Modifier.clickable {
-                                        openMap = true
-                                    },
-                                    tint = PurpleLight,
-                                )
-                            },
-                            onValueChange = {},
-                            error = when (state.addressError) {
-                                NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                else -> ""
-                            }
-                        )
-
-                        FeatOutlinedTextField(
-                            text = state.description,
-                            textLabel = "Descripcion",
-                            onValueChange = {
-                                onValueChange(
-                                    NewEventEvents.onValueChange(
-                                        TypeValueChange.OnValueChangeDescription,
-                                        it
-                                    )
-                                )
-                            },
-                            error = when (state.descriptionError) {
-                                NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                else -> ""
-                            }
-                        )
-
-                        FeatOutlinedTextField(
-                            text = state.organizer,
-                            textLabel = "Organizador",
-                            onValueChange = {
-                                onValueChange(
-                                    NewEventEvents.onValueChange(
-                                        TypeValueChange.OnValueChangeOrganizer,
-                                        it
-                                    )
-                                )
-                            },
-                            error = when (state.organizerError) {
-                                NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                                else -> ""
-                            }
-                        )
-                        FeatSpacerSmall()
-                        FeatOutlinedButton(
-                            modifier = Modifier.align(Alignment.End),
-                            textContent = "Aceptar",
-                            contentColor = SuccessColor,
-                            backgroundColor = GreenColor20
-                        ) {
-                            onClick(NewEventEvents.onClick(TypeClick.Submit))
-                        }
-                    }
-                }
+                0 -> PageOne(state, onValueChange)
+                1 -> PageTwo(state, onValueChange, onClick, openMap = {
+                    openMap = true
+                })
             }
         }
         HorizontalPagerIndicator(
@@ -217,181 +57,6 @@ fun NewEventScreen(
             pagerState = pagerState
         )
     }
-
-//    Box(
-//        modifier = Modifier.fillMaxSize(),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        Column {
-//            FeatOutlinedTextField(
-//                text = state.name,
-//                textLabel = "Nombre del evento",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeName,
-//                            it
-//                        )
-//                    )
-//                },
-//                error = when (state.nameError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//            FeatOutlinedDatePicker(
-//                date = state.date,
-//                textLabel = "Dia",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeDate,
-//                            it.toString()
-//                        )
-//                    )
-//                },
-//                titlePicker = "Seleccione una fecha",
-//                error = when (state.dateError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//            FeatOutlinedTimePicker(
-//                time = state.startTime,
-//                label = "Hora inicio",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeStartTime,
-//                            it.toString()
-//                        )
-//                    )
-//                },
-//                titlePicker = "Seleccione una hora de inicio",
-//                error = when (state.startTimeError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//
-//            FeatOutlinedTimePicker(
-//                time = state.endTime,
-//                label = "Hora Fin",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeEndTime,
-//                            it.toString()
-//                        )
-//                    )
-//                },
-//                titlePicker = "Seleccione una hora de inicio",
-//                error = when (state.endTimeError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//
-//            val periodicityList = mutableListOf<String>()
-//            state.periodicityList.map {
-//                periodicityList.add(it.description)
-//            }
-//
-//            FeatOutlinedDropDown(
-//                label = "Perioricidad",
-//                options = periodicityList,
-//                selectedText = { value ->
-//                    state.periodicityList.forEach {
-//                        if (it.description == value) {
-//                            onValueChange(
-//                                NewEventEvents.onValueChange(
-//                                    TypeValueChange.OnValueChangePerioridicity,
-//                                    it.id.toString()
-//                                )
-//                            )
-//                        }
-//                    }
-//                },
-//                error = when (state.periodicityError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//
-//            FeatOutlinedTextField(
-//                text = state.address,
-//                textLabel = "Ubicacion",
-//                enabled = false,
-//                trailingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Outlined.GpsFixed,
-//                        contentDescription = "Ubicacion",
-//                        modifier = Modifier.clickable {
-//                            openMap = true
-//                        },
-//                        tint = PurpleLight,
-//                    )
-//                },
-//                onValueChange = {},
-//                error = when (state.addressError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//
-//            FeatOutlinedTextField(
-//                text = state.description,
-//                textLabel = "Descripcion",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeDescription,
-//                            it
-//                        )
-//                    )
-//                },
-//                error = when (state.descriptionError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//
-//            FeatOutlinedTextField(
-//                text = state.organizer,
-//                textLabel = "Organizador",
-//                onValueChange = {
-//                    onValueChange(
-//                        NewEventEvents.onValueChange(
-//                            TypeValueChange.OnValueChangeOrganizer,
-//                            it
-//                        )
-//                    )
-//                },
-//                error = when (state.organizerError) {
-//                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-//                    else -> ""
-//                }
-//            )
-//        }
-//        Row(
-//            modifier = Modifier.align(Alignment.BottomCenter)
-//        ) {
-//
-//            FeatOutlinedButton(
-//                modifier = Modifier.fillMaxWidth(0.5f),
-//                textContent = "Cancelar",
-//                contentColor = ErrorColor
-//            ) {
-//                onClick(NewEventEvents.onClick(TypeClick.GoToEvent))
-//            }
-//            FeatOutlinedButton(
-//                textContent = "Aceptar",
-//                contentColor = GreenLight
-//            ) {
-//                onClick(NewEventEvents.onClick(TypeClick.Submit))
-//            }
-//        }
-//    }
 
     if (openMap) {
         FeatMap(
@@ -419,5 +84,231 @@ fun NewEventScreen(
                 address[0].getAddressLine(0)
             )
         )
+    }
+}
+
+@Composable
+fun PageOne(
+    state: NewEventState = NewEventState(),
+    onValueChange: (NewEventEvents.onValueChange) -> Unit,
+) {
+
+    val sports = mutableListOf<String>()
+    state.sportGenericList.map {
+        sports.add(it.description)
+    }
+
+    val typeSport = mutableListOf<String>()
+    if (state.sportGeneric.isNotEmpty()) {
+        state.sportList.map {
+            if (it.sportGeneric.id == state.sportGeneric.toInt())
+                typeSport.add(it.description)
+        }
+    }
+
+    FeatForm(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        Column {
+            FeatOutlinedDropDown(
+                label = "Deporte",
+                selectedText = { value ->
+                    state.sportGenericList.forEach {
+                        if (it.description == value) {
+                            onValueChange(
+                                NewEventEvents.onValueChange(
+                                    TypeValueChange.OnValueChangeSportGeneric, it.id.toString()
+                                )
+                            )
+                        }
+                    }
+                },
+                options = sports,
+                error = when (state.sportGenericError) {
+                    NewEventState.GenericError.FieldEmpty -> {
+                        stringResource(id = R.string.text_field_empty)
+                    }
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedDropDown(
+                label = "Tipo",
+                options = typeSport,
+                selectedText = { value ->
+                    state.sportList.forEach {
+                        if (it.description == value) onValueChange(
+                            NewEventEvents.onValueChange(
+                                TypeValueChange.OnValueChangeTypeSport,
+                                it.id.toString()
+                            )
+                        )
+                    }
+                },
+                error = when (state.sportError) {
+                    NewEventState.GenericError.FieldEmpty -> {
+                        stringResource(id = R.string.text_field_empty)
+                    }
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedTextField(
+                text = state.name,
+                textLabel = "Nombre del evento",
+                onValueChange = {
+                    onValueChange(
+                        NewEventEvents.onValueChange(
+                            TypeValueChange.OnValueChangeName,
+                            it
+                        )
+                    )
+                },
+                error = when (state.nameError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedTextField(
+                text = state.description,
+                textLabel = "Descripcion",
+                onValueChange = {
+                    onValueChange(
+                        NewEventEvents.onValueChange(
+                            TypeValueChange.OnValueChangeDescription,
+                            it
+                        )
+                    )
+                },
+                error = when (state.descriptionError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun PageTwo(
+    state: NewEventState,
+    onValueChange: (NewEventEvents.onValueChange) -> Unit,
+    onClick: (NewEventEvents.onClick) -> Unit,
+    openMap: () -> Unit
+) {
+    val periodicityList = mutableListOf<String>()
+    state.periodicityList.map {
+        periodicityList.add(it.description)
+    }
+
+    FeatForm(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        Column {
+
+            FeatOutlinedDatePicker(
+                date = state.date,
+                textLabel = "Dia",
+                onValueChange = {
+                    onValueChange(
+                        NewEventEvents.onValueChange(
+                            TypeValueChange.OnValueChangeDate,
+                            it.toString()
+                        )
+                    )
+                },
+                titlePicker = "Seleccione una fecha",
+                error = when (state.dateError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+            FeatOutlinedTimePicker(
+                time = state.startTime,
+                label = "Hora inicio",
+                onValueChange = {
+                    onValueChange(
+                        NewEventEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTime,
+                            it.toString()
+                        )
+                    )
+                },
+                titlePicker = "Seleccione una hora de inicio",
+                error = when (state.startTimeError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+            FeatOutlinedTimePicker(
+                time = state.endTime,
+                label = "Hora Fin",
+                onValueChange = {
+                    onValueChange(
+                        NewEventEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTime,
+                            it.toString()
+                        )
+                    )
+                },
+                titlePicker = "Seleccione una hora de fin",
+                error = when (state.endTimeError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedDropDown(
+                label = "Perioricidad",
+                options = periodicityList,
+                selectedText = { value ->
+                    state.periodicityList.forEach {
+                        if (it.description == value) {
+                            onValueChange(
+                                NewEventEvents.onValueChange(
+                                    TypeValueChange.OnValueChangePerioridicity,
+                                    it.id.toString()
+                                )
+                            )
+                        }
+                    }
+                },
+                error = when (state.periodicityError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedTextField(
+                text = state.address,
+                textLabel = "Ubicacion",
+                enabled = false,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.GpsFixed,
+                        contentDescription = "Ubicacion",
+                        modifier = Modifier.clickable {
+                            openMap()
+                        },
+                        tint = PurpleLight,
+                    )
+                },
+                onValueChange = {},
+                error = when (state.addressError) {
+                    NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+            FeatSpacerSmall()
+            FeatOutlinedButton(
+                modifier = Modifier.align(Alignment.End),
+                textContent = "Aceptar",
+                contentColor = GreenColor,
+                backgroundColor = GreenColor20
+            ) {
+                onClick(NewEventEvents.onClick(TypeClick.Submit))
+            }
+        }
     }
 }

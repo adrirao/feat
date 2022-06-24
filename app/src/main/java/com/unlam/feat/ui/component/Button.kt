@@ -42,8 +42,7 @@ fun FeatOutlinedButton(
         onClick = {
             onClick()
         },
-        modifier =
-            modifier
+        modifier = modifier
                 .padding(horizontal = 20.dp, vertical = 5.dp)
                 .height(height),
         shape = shape,

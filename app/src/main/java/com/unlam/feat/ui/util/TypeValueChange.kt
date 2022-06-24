@@ -14,4 +14,6 @@ sealed class TypeValueChange {
     object OnValueChangePosition : TypeValueChange()
     object OnValueChangeDescription : TypeValueChange()
     object OnValueChangeOrganizer : TypeValueChange()
+    object OnValueChangeSportGeneric : TypeValueChange()
+    object OnValueChangeTypeSport : TypeValueChange()
 }

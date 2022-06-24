@@ -29,5 +29,6 @@
     <string name="desc_verify_email">Por favor verificar el email para poder ingresar.</string>
     <string name="text_event_created">Evento creado con exito</string>
     <string name="desc_event_created">El evento ha sido creado con exito, por favor verifique su listado.</string>
+    <string name="value_aplicated">APLICADO</string>
 
 </resources>

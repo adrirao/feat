@@ -26,7 +26,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.unlam.feat.ui.theme.ErrorColor
 import com.unlam.feat.ui.theme.Shapes
-import com.unlam.feat.ui.theme.SuccessColor
+import com.unlam.feat.ui.theme.GreenColor
 
 @Composable
 fun SuccessDialog(
@@ -98,7 +98,7 @@ fun SuccessDialog(
                             Button(
                                 onClick = onDismiss,
                                 shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = SuccessColor),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .weight(1f)
@@ -196,7 +196,7 @@ fun ErrorDialog(
                             Button(
                                 onClick = onDismiss,
                                 shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = SuccessColor),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .weight(1f)
@@ -276,7 +276,7 @@ fun InfoDialog(
                         Button(
                             onClick = onDismiss,
                             shape = Shapes.large,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = SuccessColor),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(5.dp))

@@ -17,5 +17,7 @@ data class Person(
     val userUid: User,
     val notifications: String,
     @SerializedName("willing_distance")
-    val willingDistance: Int
+    val willingDistance: Int,
+    @SerializedName("availability")
+    val availabilities: List<Availability>
 )

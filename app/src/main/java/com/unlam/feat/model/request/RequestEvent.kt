@@ -19,5 +19,5 @@ data class RequestEvent(
     val sport: String = "1",
     val state: String = "1",
     val periodicity: String = "1",
-    val organizer: String = "1"
+    val organizer: Int
 )

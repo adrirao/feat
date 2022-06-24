@@ -1,11 +1,7 @@
 package com.unlam.feat.ui.view.register
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -135,7 +131,7 @@ fun RegisterScreen(
                 FeatSpacerSmall()
                 FeatOutlinedButton(
                     modifier = Modifier.align(Alignment.End),
-                    contentColor = SuccessColor,
+                    contentColor = GreenColor,
                     backgroundColor = GreenColor20,
                     width = 10.dp,
                     textContent = stringResource(id = R.string.text_register),

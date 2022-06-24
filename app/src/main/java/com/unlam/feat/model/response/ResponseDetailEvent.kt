@@ -8,4 +8,6 @@ data class ResponseDetailEvent(
     val playersSuggested: List<Player>,
     val playersApplied : List<Player>,
     val playersConfirmed: List<Player>,
+    val players : List<Player>
 )
+

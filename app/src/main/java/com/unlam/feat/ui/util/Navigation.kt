@@ -84,7 +84,9 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
         val state by remember {
             homeViewModel.state
         }
-        HomeScreen(state, onClick = {})
+        HomeScreen(state, onClick = {
+
+        })
     }
 }
 

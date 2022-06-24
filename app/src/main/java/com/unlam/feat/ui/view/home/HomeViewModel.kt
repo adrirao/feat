@@ -28,7 +28,7 @@ constructor(
 
     private fun getEvents() {
         val uId = firebaseAuthRepository.getUserId()
-        featRepository.getEventsSuggestedAndConfirmedByUser(uId).onEach { result ->
+        featRepository.getDataHomeEvent(uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value = HomeState(message = result.message ?: "Error Inesperado")
@@ -38,8 +38,8 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value = HomeState(
-                        eventsSuggestedToday = result.data!!.eventsSuggestedToday,
-                        eventsConfirmedForMy = result.data.eventsConfirmedForMy
+                        eventsSuggestedToday = result.data!!.eventOfTheWeek,
+                        eventsConfirmedForMy = result.data.eventConfirmedOrApplied
                     )
                 }
             }

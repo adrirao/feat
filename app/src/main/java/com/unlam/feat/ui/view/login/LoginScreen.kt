@@ -15,7 +15,7 @@ import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.GreenColor20
 import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
-import com.unlam.feat.ui.theme.SuccessColor
+import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
@@ -86,7 +86,7 @@ fun LoginScreen(
                         modifier = Modifier.align(Alignment.End),
                         width = 150.dp,
                         backgroundColor = GreenColor20,
-                        contentColor = SuccessColor,
+                        contentColor = GreenColor,
                         textContent = "Ingresar",
                         onClick = {
                             onClick(LoginEvents.onClick(TypeClick.Login))

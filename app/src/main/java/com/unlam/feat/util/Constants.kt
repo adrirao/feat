@@ -9,11 +9,18 @@ object Constants {
     const val FEAT_URL_BASE = BuildConfig.HOST_DIR
 
     object Sports {
-        const val TENNIS = "Tennis"
-        const val SOCCER = "Futbol 5"
+        const val TENNIS_SINGLE = "Tenis Single"
+        const val TENNIS_DOUBLES = "Tenis Doubles"
+        const val SOCCER_5 = "Futbol 5"
         const val SOCCER_6 = "Futbol 6"
-        const val BASKETBALL = "Basketball"
-        const val PADDLE = "Paddle"
+        const val SOCCER_7 = "Futbol 7"
+        const val SOCCER_9 = "Futbol 9"
+        const val SOCCER_11 = "Futbol 11"
+        const val BASKETBALL = "Basquet"
+        const val PADDLE_SINGLE = "Padel Single"
+        const val PADDLE_DOUBLE = "Padel Doubles"
+        const val RECREATIONAL_ACTIVITY = "Actividad Recreativa"
+
     }
 
     object ImageSport{

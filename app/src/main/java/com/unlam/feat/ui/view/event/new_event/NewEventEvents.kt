@@ -8,7 +8,6 @@ sealed class NewEventEvents {
         val typeValueChange: TypeValueChange,
         val value: String,
         val valueOpt: String? = null
-    ) :
-        NewEventEvents()
+    ) : NewEventEvents()
     data class onClick (val typeClick: TypeClick) : NewEventEvents()
 }

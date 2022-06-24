@@ -8,6 +8,7 @@ import com.unlam.feat.R
 import com.unlam.feat.di.ResourcesProvider
 import com.unlam.feat.model.request.RequestEvent
 import com.unlam.feat.repository.FeatRepositoryImp
+import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,13 +24,15 @@ class NewEventViewModel
 @Inject
 constructor(
     private val resourcesProvider: ResourcesProvider,
-    private val featRepository: FeatRepositoryImp
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseAuthRepository: FirebaseAuthRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(NewEventState())
     val state: State<NewEventState> = _state
 
     init {
         getPeriodicities()
+        getEvents()
     }
 
     fun onEvent(event: NewEventEvents) {
@@ -82,6 +85,16 @@ constructor(
                             address = event.value
                         )
                     }
+                    TypeValueChange.OnValueChangeSportGeneric -> {
+                        _state.value = _state.value.copy(
+                            sportGeneric = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeTypeSport -> {
+                        _state.value = _state.value.copy(
+                            sport = event.value
+                        )
+                    }
                 }
             }
             NewEventEvents.onClick(TypeClick.DismissDialog) -> {
@@ -91,15 +104,38 @@ constructor(
                 )
             }
             NewEventEvents.onClick(TypeClick.Submit) -> {
+                validateSportGeneric(_state.value.sportGeneric)
+                validateSport(_state.value.sport)
                 validateName(_state.value.name)
                 validateDate(_state.value.date)
                 validateStartTime(_state.value.startTime)
+                validateEndTime(_state.value.endTime)
                 validatePeriodicity(_state.value.periodicity)
                 validateDescription(_state.value.description)
                 validateOrganizer(_state.value.organizer)
                 validateAddress(_state.value.address)
                 createEvent()
             }
+        }
+    }
+
+    private fun validateSportGeneric(sportGeneric: String) {
+        val trimmedSportGeneric = sportGeneric.trim()
+        if (trimmedSportGeneric.isBlank()) {
+            _state.value = _state.value.copy(
+                sportGenericError = NewEventState.GenericError.FieldEmpty
+            )
+            return
+        }
+    }
+
+    private fun validateSport(sport: String) {
+        val trimmedSport = sport.trim()
+        if (trimmedSport.isBlank()) {
+            _state.value = _state.value.copy(
+                sportError = NewEventState.GenericError.FieldEmpty
+            )
+            return
         }
     }
 
@@ -126,6 +162,15 @@ constructor(
         if (startTime == null) {
             _state.value = _state.value.copy(
                 startTimeError = NewEventState.GenericError.FieldEmpty
+            )
+            return
+        }
+    }
+
+    private fun validateEndTime(endTime: LocalTime?) {
+        if (endTime == null) {
+            _state.value = _state.value.copy(
+                endTimeError = NewEventState.GenericError.FieldEmpty
             )
             return
         }
@@ -171,6 +216,31 @@ constructor(
         }
     }
 
+    private fun getEvents() {
+        val uId: String = firebaseAuthRepository.getUserId()
+
+        featRepository.getDataAddEvent(uId).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value = NewEventState(
+                        error = result.message ?: "Error Inesperado"
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = NewEventState(isLoading = true)
+                }
+                is Result.Success -> {
+                    _state.value = NewEventState(
+                        periodicityList = result.data!!.periodicityList,
+                        person = result.data.person,
+                        sportGenericList = result.data.sportGenericList,
+                        sportList = result.data.sportList
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     private fun createEvent() {
         val name = if (_state.value.nameError == null) _state.value.name else return
         val date = if (_state.value.dateError == null) _state.value.date else return
@@ -184,7 +254,8 @@ constructor(
         val longitude = if (_state.value.longitudeError == null) _state.value.longitude else return
         val state = if (_state.value.stateError == null) _state.value.state else return
         val sport = if (_state.value.sportError == null) _state.value.sport else return
-        val organizer = if (_state.value.organizerError == null) _state.value.organizer else return
+        if (_state.value.sportGenericError == null) _state.value.sportGeneric else return
+        val organizer = _state.value.person!!.id
 
         val request = RequestEvent(
             name = name,
@@ -196,7 +267,7 @@ constructor(
             latitude = latitude,
             longitude = longitude,
             state = state,
-            sport = "2",
+            sport = sport,
             organizer = organizer,
         )
 

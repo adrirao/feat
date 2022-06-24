@@ -25,20 +25,21 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.unlam.feat.R
-import com.unlam.feat.ui.theme.GreenLight
-import com.unlam.feat.ui.theme.PurpleDark
-import com.unlam.feat.ui.theme.PurpleLight
-import com.unlam.feat.ui.theme.PurpleMedium
+import com.unlam.feat.ui.theme.*
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
@@ -52,11 +53,11 @@ fun FeatOutlinedTextField(
     text: String,
     textLabel: String,
     enabled: Boolean = true,
+    maxLines: Int = 3,
     error: String = "",
     focusedColor: Color = GreenLight,
-    unFocusedColor: Color = PurpleLight,
+    unFocusedColor: Color = PurpleLight ,
     shape: Shape = CircleShape,
-    border: BorderStroke = BorderStroke(2.dp, unFocusedColor),
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     isPasswordVisible: Boolean = false,
@@ -79,12 +80,12 @@ fun FeatOutlinedTextField(
             shape = shape,
             label = label,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                unfocusedBorderColor = unFocusedColor,
-                unfocusedLabelColor = unFocusedColor,
-                focusedBorderColor = focusedColor,
-                focusedLabelColor = focusedColor,
-                disabledBorderColor = unFocusedColor,
-                disabledLabelColor = unFocusedColor
+                unfocusedBorderColor = if (error != "") MaterialTheme.colors.error else unFocusedColor,
+                unfocusedLabelColor = if (error != "") MaterialTheme.colors.error else unFocusedColor,
+                focusedBorderColor = if (error != "") MaterialTheme.colors.error else focusedColor,
+                focusedLabelColor = if (error != "") MaterialTheme.colors.error else focusedColor,
+                disabledBorderColor = if (error != "") MaterialTheme.colors.error else unFocusedColor,
+                disabledLabelColor = if (error != "") MaterialTheme.colors.error else unFocusedColor
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
@@ -122,6 +123,7 @@ fun FeatOutlinedTextField(
             } else trailingIcon,
             isError = error != "",
             enabled = enabled,
+            maxLines = maxLines
         )
         if (error.isNotEmpty()) {
             Text(
@@ -154,7 +156,7 @@ fun FeatOutlinedDatePicker(
                 "dd LLLL yyyy"
             )
         )
-            ?: " ",
+            ?: "",
         onValueChange = {},
         modifier = Modifier
             .fillMaxWidth()
@@ -172,15 +174,25 @@ fun FeatOutlinedDatePicker(
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
-            positiveButton("Aceptar")
-            negativeButton("Cancelar")
+            positiveButton(
+                text = "Aceptar",
+                textStyle = TextStyle(color = GreenLight)
+            )
+            negativeButton(
+                text = "Cancelar",
+                textStyle = TextStyle(color = GreenLight)
+            )
         },
     ) {
         datepicker(
-            title = titlePicker
+            title = titlePicker,
+            colors = DatePickerDefaults.colors(
+                headerBackgroundColor = GreenLight,
+                dateActiveBackgroundColor = GreenLight,
+
+            ),
         ) { date ->
             onValueChange(date)
-
         }
     }
 }
@@ -192,7 +204,7 @@ fun FeatOutlinedTimePicker(
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
     titlePicker: String = "Default",
-    error:String =""
+    error: String = ""
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -203,7 +215,7 @@ fun FeatOutlinedTimePicker(
                 "h:mm"
             )
         )
-            ?: " ",
+            ?: "",
         onValueChange = {},
         modifier = modifier
             .fillMaxWidth()
@@ -220,24 +232,35 @@ fun FeatOutlinedTimePicker(
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
-            positiveButton("Aceptar")
-            negativeButton("Cancelar")
+            positiveButton(
+                text = "Aceptar",
+                textStyle = TextStyle(color = GreenLight)
+            )
+            negativeButton(
+                text = "Cancelar",
+                textStyle = TextStyle(color = GreenLight)
+            )
         },
 
         ) {
         timepicker(
-            title = titlePicker
+            title = titlePicker,
+            is24HourClock = true,
+            colors = TimePickerDefaults.colors(
+                activeBackgroundColor = GreenLight,
+                borderColor = GreenLight,
+                selectorColor = GreenLight
+            )
         ) { time ->
             onValueChange(time)
-
         }
     }
 }
 
 @Composable
 fun FeatOutlinedDropDown(
-    label: String = "FeatDropDown",
-    options: List<String> = emptyList(),
+    label: String,
+    options: List<String>,
     selectedText: (String) -> Unit,
     error: String = ""
 ) {
