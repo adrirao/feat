@@ -30,5 +30,13 @@
     <string name="text_event_created">Evento creado con exito</string>
     <string name="desc_event_created">El evento ha sido creado con exito, por favor verifique su listado.</string>
     <string name="value_aplicated">APLICADO</string>
+    <string name="last_name">Apellido</string>
+    <string name="day">Día</string>
+    <string name="select_date">Seleccione una fecha</string>
+    <string name="nickname">Apodo</string>
+    <string name="sex">Sexo</string>
+    <string name="name">Nombre</string>
+    <string name="location">Ubicación</string>
+    <string name="alias">Alias</string>
 
 </resources>

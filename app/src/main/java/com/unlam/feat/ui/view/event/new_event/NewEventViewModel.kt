@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unlam.feat.R
 import com.unlam.feat.di.ResourcesProvider
 import com.unlam.feat.model.request.RequestEvent
 import com.unlam.feat.repository.FeatRepositoryImp
@@ -59,7 +58,7 @@ constructor(
                             endTime = LocalTime.parse(event.value)
                         )
                     }
-                    TypeValueChange.OnValueChangePerioridicity -> {
+                    TypeValueChange.OnValueChangePeriodicity -> {
                         _state.value = _state.value.copy(
                             periodicity = event.value
                         )

@@ -17,7 +17,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.R
-import com.unlam.feat.model.SportGeneric
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
@@ -88,7 +87,7 @@ fun NewEventScreen(
 }
 
 @Composable
-fun PageOne(
+private fun PageOne(
     state: NewEventState = NewEventState(),
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
 ) {
@@ -191,7 +190,7 @@ fun PageOne(
 }
 
 @Composable
-fun PageTwo(
+private fun PageTwo(
     state: NewEventState,
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
     onClick: (NewEventEvents.onClick) -> Unit,
@@ -267,7 +266,7 @@ fun PageTwo(
                         if (it.description == value) {
                             onValueChange(
                                 NewEventEvents.onValueChange(
-                                    TypeValueChange.OnValueChangePerioridicity,
+                                    TypeValueChange.OnValueChangePeriodicity,
                                     it.id.toString()
                                 )
                             )
