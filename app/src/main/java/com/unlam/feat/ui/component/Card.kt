@@ -24,11 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
 import com.unlam.feat.ui.theme.*
-import com.unlam.feat.ui.view.home.component.FeatInfo
 
 @Composable
 fun FeatCard(

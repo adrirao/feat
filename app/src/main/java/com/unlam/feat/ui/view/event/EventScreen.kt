@@ -12,9 +12,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.component.common.event.FeatEventCard
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
-import com.unlam.feat.ui.view.home.component.FeatEventCard
 
 @Composable
 fun EventScreen(

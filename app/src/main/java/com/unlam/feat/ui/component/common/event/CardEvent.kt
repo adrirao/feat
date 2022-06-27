@@ -1,14 +1,10 @@
-package com.unlam.feat.ui.view.home.component
+package com.unlam.feat.ui.component.common.event
 
-import android.graphics.drawable.Icon
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -18,24 +14,19 @@ import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
 import com.unlam.feat.ui.component.FeatCard
+import com.unlam.feat.ui.component.FeatInfo
 import com.unlam.feat.ui.component.FeatSpacerSmall
 import com.unlam.feat.ui.component.FeatText
-import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.YellowColor
@@ -154,57 +145,4 @@ fun FeatEventCard(
             }
         }
     )
-}
-
-
-@Composable
-fun FeatInfo(
-    modifier: Modifier = Modifier,
-    textInfo: String,
-    colorText: Color? = null,
-    fontSize: TextUnit? = null,
-    maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip,
-    contentArrangement: Arrangement.Horizontal =  Arrangement.Start,
-    contentAlignment : Alignment.Vertical =  Alignment.CenterVertically,
-    @DrawableRes painter: Int? = null,
-    icon: ImageVector? = null,
-    iconColor: Color = GreenColor,
-    iconSize: Dp = 25.dp
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp, horizontal = 10.dp),
-        horizontalArrangement = contentArrangement,
-        verticalAlignment = contentAlignment
-    ) {
-        if(painter != null){
-            Image(
-                painter = painterResource(id = painter),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(iconSize)
-                    .weight(1f)
-            )
-        }else if(icon != null){
-            Icon(
-                imageVector = icon ,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(iconSize)
-                    .align(contentAlignment),
-                tint = iconColor
-            )
-        }
-        FeatText(
-            modifier = Modifier.weight(4f).padding(horizontal = 10.dp),
-            text = textInfo,
-            color = colorText ?: PurpleLight,
-            fontSize = fontSize ?: MaterialTheme.typography.body1.fontSize,
-            maxLines = maxLines,
-            overflow = overflow
-        )
-    }
 }

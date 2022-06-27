@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.unlam.feat.ui.util
+package com.unlam.feat.ui.component.common.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.Button
@@ -19,6 +19,8 @@ import com.unlam.feat.ui.component.ErrorDialog
 import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
+import com.unlam.feat.ui.util.Screen
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel

@@ -1,4 +1,4 @@
-package com.unlam.feat.ui.util
+package com.unlam.feat.ui.component.common.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

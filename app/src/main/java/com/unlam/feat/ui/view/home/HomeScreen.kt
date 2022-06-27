@@ -14,9 +14,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.component.common.event.FeatEventCard
+import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.theme.PurpleMedium
 import com.unlam.feat.ui.util.TypeClick
-import com.unlam.feat.ui.view.home.component.FeatEventCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 
@@ -98,17 +99,7 @@ fun HomeScreen(
                     }
                 })
             } else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    FeatText(
-                        text = "No se encontraron eventos.",
-                        fontSize = MaterialTheme.typography.body1.fontSize,
-                        color = PurpleMedium
-                    )
-                }
+                NotFoundEvent()
             }
         }
     }

@@ -1,25 +1,19 @@
 package com.unlam.feat.ui.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.unlam.feat.ui.component.FeatContent
-import com.unlam.feat.ui.theme.PurpleDark
-import com.unlam.feat.ui.util.BottomNavigationItem
-import com.unlam.feat.ui.util.Navigation
-import com.unlam.feat.ui.util.NavigationItem
+import com.unlam.feat.ui.component.common.navigation.BottomNavigationItem
+import com.unlam.feat.ui.component.common.navigation.Navigation
+import com.unlam.feat.ui.component.common.navigation.NavigationItem
 import com.unlam.feat.ui.util.Screen
 
 @Composable
