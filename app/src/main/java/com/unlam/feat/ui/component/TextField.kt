@@ -176,19 +176,19 @@ fun FeatOutlinedDatePicker(
         buttons = {
             positiveButton(
                 text = "Aceptar",
-                textStyle = TextStyle(color = GreenLight)
+                textStyle = TextStyle(color = GreenColor)
             )
             negativeButton(
                 text = "Cancelar",
-                textStyle = TextStyle(color = GreenLight)
+                textStyle = TextStyle(color = GreenColor)
             )
         },
     ) {
         datepicker(
             title = titlePicker,
             colors = DatePickerDefaults.colors(
-                headerBackgroundColor = GreenLight,
-                dateActiveBackgroundColor = GreenLight,
+                headerBackgroundColor = GreenColor,
+                dateActiveBackgroundColor = GreenColor,
 
             ),
         ) { date ->
@@ -234,11 +234,11 @@ fun FeatOutlinedTimePicker(
         buttons = {
             positiveButton(
                 text = "Aceptar",
-                textStyle = TextStyle(color = GreenLight)
+                textStyle = TextStyle(color = GreenColor)
             )
             negativeButton(
                 text = "Cancelar",
-                textStyle = TextStyle(color = GreenLight)
+                textStyle = TextStyle(color = GreenColor)
             )
         },
 
@@ -247,9 +247,9 @@ fun FeatOutlinedTimePicker(
             title = titlePicker,
             is24HourClock = true,
             colors = TimePickerDefaults.colors(
-                activeBackgroundColor = GreenLight,
-                borderColor = GreenLight,
-                selectorColor = GreenLight
+                activeBackgroundColor = GreenColor,
+                borderColor = GreenColor,
+                selectorColor = GreenColor
             )
         ) { time ->
             onValueChange(time)

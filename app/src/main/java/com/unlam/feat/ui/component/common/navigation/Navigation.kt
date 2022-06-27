@@ -14,28 +14,37 @@ import androidx.navigation.compose.composable
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
+import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
 import com.unlam.feat.ui.component.ErrorDialog
+import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
 import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.config_profile.ConfigProfileScreen
 import com.unlam.feat.ui.view.config_profile.ConfigProfileState
 import com.unlam.feat.ui.view.config_profile.ConfigProfileViewModel
+import com.unlam.feat.ui.util.Screen
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
+import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventState
 import com.unlam.feat.ui.view.event.new_event.NewEventViewModel
+import com.unlam.feat.ui.view.home.HomeEvents
 import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeScreen
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
 import com.unlam.feat.ui.view.login.LoginScreen
 import com.unlam.feat.ui.view.login.LoginState
 import com.unlam.feat.ui.view.login.LoginViewModel
 import com.unlam.feat.ui.view.main.MainEvents
 import com.unlam.feat.ui.view.main.MainScreen
+import com.unlam.feat.ui.view.profile.ProfileScreen
 import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
@@ -56,6 +65,11 @@ fun Navigation(navController: NavHostController) {
         addRouteEvent(navController)
         addRouteNewEvent(navController)
         addRouteSearch(navController)
+
+        addRouteProfile(navController)
+
+        addRouteDetailEventHome(navController)
+        addRouteDetailEventMyEvent(navController)
     }
 }
 
@@ -90,9 +104,20 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
         val state by remember {
             homeViewModel.state
         }
-        HomeScreen(state, onClick = {
-
-        })
+        HomeScreen(
+            state,
+            onClick = { event ->
+                when (event) {
+                    is HomeEvents.onClick -> {
+                        if (event.typeClick == TypeClick.GoToDetailEvent) {
+                            navController.navigate(
+                                route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                            )
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
@@ -227,25 +252,30 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
     }
 }
 
-    private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
+private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
         composable(Screen.Events.route) {
             val eventViewModel: EventViewModel = hiltViewModel()
             val state by remember {
                 eventViewModel.state
             }
 
-            EventScreen(
-                state = state,
-                onClick = { event ->
-                    when (event) {
-                        EventEvents.onClick(TypeClick.GoToNewEvent) -> {
-                            navController.navigate(Screen.NewEvent.route)
+        EventScreen(
+            state = state,
+            onClick = { event ->
+                when (event) {
+                    EventEvents.onClick(TypeClick.GoToNewEvent) -> {
+                        navController.navigate(Screen.NewEvent.route)
+                    }
+                    else -> {
+                        if (event.typeClick == TypeClick.GoToDetailEvent) {
+                            navController.navigate(Screen.DetailEventMyEvent.route + "/${event.value}")
                         }
                     }
                 }
-            )
-        }
+            }
+        )
     }
+}
 
     private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
         composable(Screen.NewEvent.route) {
@@ -307,3 +337,57 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
             }
         }
     }
+
+private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
+    composable(Screen.Profile.route) {
+        ProfileScreen()
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostController) {
+    composable(
+        route = Screen.DetailEventHome.route + "/{idEvent}",
+        arguments = Screen.DetailEventHome.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val detailEventHomeViewModel: DetailEventHomeViewModel = hiltViewModel()
+        val state by remember { detailEventHomeViewModel.state }
+
+        LaunchedEffect(key1 = true) {
+            detailEventHomeViewModel.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.event != null && state.players != null) {
+            DetailEventHomeScreen(state)
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostController) {
+    composable(
+        route = Screen.DetailEventMyEvent.route + "/{idEvent}",
+        arguments = Screen.DetailEventMyEvent.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val detailEventViewModel: DetailEventViewModel = hiltViewModel()
+        val state = detailEventViewModel.state.value
+
+        LaunchedEffect(key1 = true) {
+            detailEventViewModel.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.event != null && state.playersApplied != null && state.playersConfirmed != null && state.playersSuggested != null) {
+            DetailEventMyEventScreen(
+                state = state,
+            )
+        }
+    }
+}

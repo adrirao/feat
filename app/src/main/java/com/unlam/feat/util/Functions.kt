@@ -1,6 +1,5 @@
 package com.unlam.feat.util
 
-import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.util.Log

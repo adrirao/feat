@@ -6,17 +6,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -24,9 +22,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.unlam.feat.ui.theme.ErrorColor
-import com.unlam.feat.ui.theme.Shapes
-import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.*
 
 @Composable
 fun SuccessDialog(
@@ -39,18 +35,18 @@ fun SuccessDialog(
     ) {
         Box(
             modifier = Modifier
-                .width(300.dp)
+                .width(500.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(500.dp)
             ) {
                 Spacer(modifier = Modifier.height(36.dp))
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
+                        .width(500.dp)
                         .background(
-                            color = Color.White,
+                            color = PurpleMedium,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {
@@ -62,7 +58,7 @@ fun SuccessDialog(
                         Text(
                             text = title.uppercase(),
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -71,7 +67,7 @@ fun SuccessDialog(
                         Text(
                             text = desc,
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal
                             )
@@ -80,35 +76,25 @@ fun SuccessDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Button(
+                            FeatOutlinedButton(
+                                textContent = "Cancelar",
+                                contentColor = RedColor,
+                                backgroundColor = RedColor20,
+                                textColor = RedColor,
                                 onClick = onDismiss,
-                                shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = ErrorColor),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(5.dp))
-                            ) {
-                                Text(
-                                    text = "Cancel",
-                                    color = Color.White
-                                )
-                            }
+                                width = 100.dp,
+                                height = 40.dp
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(
+                            FeatOutlinedButton(
+                                textContent = "Aceptar",
+                                contentColor = GreenColor,
+                                backgroundColor = GreenColor20,
+                                textColor = GreenColor,
                                 onClick = onDismiss,
-                                shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(5.dp))
-                            ) {
-                                Text(
-                                    text = "Ok",
-                                    color = Color.White
-                                )
-                            }
+                                width = 100.dp,
+                                height = 40.dp
+                            )
                         }
                     }
                 }
@@ -126,29 +112,30 @@ fun SuccessDialog(
     }
 }
 
+@Preview
 @Composable
 fun ErrorDialog(
-    title: String,
-    desc: String,
-    onDismiss: () -> Unit
+    title: String = "",
+    desc: String = "",
+    onDismiss: () -> Unit = {}
 ) {
     Dialog(
         onDismissRequest = onDismiss
     ) {
         Box(
             modifier = Modifier
-                .width(300.dp)
+                .width(500.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(500.dp)
             ) {
                 Spacer(modifier = Modifier.height(36.dp))
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
+                        .width(500.dp)
                         .background(
-                            color = Color.White,
+                            color = PurpleMedium,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {
@@ -160,7 +147,7 @@ fun ErrorDialog(
                         Text(
                             text = title.uppercase(),
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -169,7 +156,7 @@ fun ErrorDialog(
                         Text(
                             text = desc,
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal
                             )
@@ -178,35 +165,25 @@ fun ErrorDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Button(
+                            FeatOutlinedButton(
+                                textContent = "Cancelar",
+                                contentColor = RedColor,
+                                backgroundColor = RedColor20,
+                                textColor = RedColor,
                                 onClick = onDismiss,
-                                shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = ErrorColor),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(5.dp))
-                            ) {
-                                Text(
-                                    text = "Cancel",
-                                    color = Color.White
-                                )
-                            }
+                                width = 100.dp,
+                                height = 40.dp
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(
+                            FeatOutlinedButton(
+                                textContent = "Aceptar",
+                                contentColor = GreenColor,
+                                backgroundColor = GreenColor20,
+                                textColor = GreenColor,
                                 onClick = onDismiss,
-                                shape = Shapes.large,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(5.dp))
-                            ) {
-                                Text(
-                                    text = "Ok",
-                                    color = Color.White
-                                )
-                            }
+                                width = 100.dp,
+                                height = 40.dp
+                            )
                         }
                     }
                 }
@@ -235,18 +212,18 @@ fun InfoDialog(
     ) {
         Box(
             modifier = Modifier
-                .width(300.dp)
+                .width(500.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(500.dp)
             ) {
                 Spacer(modifier = Modifier.height(36.dp))
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
+                        .width(500.dp)
                         .background(
-                            color = Color.White,
+                            color = PurpleMedium,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {
@@ -258,7 +235,7 @@ fun InfoDialog(
                         Text(
                             text = title.uppercase(),
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -267,23 +244,33 @@ fun InfoDialog(
                         Text(
                             text = desc,
                             style = TextStyle(
-                                color = Color.Black,
+                                color = PurpleLight,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal
                             )
                         )
                         Spacer(modifier = Modifier.height(24.dp))
-                        Button(
-                            onClick = onDismiss,
-                            shape = Shapes.large,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = GreenColor),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(5.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                text = "Ok",
-                                color = Color.White
+                            FeatOutlinedButton(
+                                textContent = "Cancelar",
+                                contentColor = RedColor,
+                                backgroundColor = RedColor20,
+                                textColor = RedColor,
+                                onClick = onDismiss,
+                                width = 100.dp,
+                                height = 40.dp
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            FeatOutlinedButton(
+                                textContent = "Aceptar",
+                                contentColor = GreenColor,
+                                backgroundColor = GreenColor20,
+                                textColor = GreenColor,
+                                onClick = onDismiss,
+                                width = 100.dp,
+                                height = 40.dp
                             )
                         }
                     }

@@ -1,4 +1,4 @@
-package com.unlam.feat.ui.util
+package com.unlam.feat.ui.component.common.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
@@ -23,8 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unlam.feat.ui.theme.GreenColor
-import com.unlam.feat.ui.theme.GreenLight
-import com.unlam.feat.ui.theme.PurpleLight
 
 @Composable
 fun RowScope.BottomNavigationItem(

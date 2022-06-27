@@ -1,13 +1,11 @@
 package com.unlam.feat.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.unlam.feat.ui.theme.GreenLight
+import com.unlam.feat.ui.theme.GreenColor
 
 @Composable
 fun FeatCircularProgress(){
@@ -22,7 +20,7 @@ fun FeatCircularProgress(){
             modifier = Modifier
                 .wrapContentHeight()
                 .wrapContentWidth(),
-            color = GreenLight
+            color = GreenColor
         )
     }
 }

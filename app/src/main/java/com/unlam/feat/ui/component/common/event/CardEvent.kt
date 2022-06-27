@@ -1,32 +1,32 @@
-package com.unlam.feat.ui.view.home.component
+package com.unlam.feat.ui.component.common.event
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.Directions
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
 import com.unlam.feat.ui.component.FeatCard
+import com.unlam.feat.ui.component.FeatInfo
 import com.unlam.feat.ui.component.FeatSpacerSmall
 import com.unlam.feat.ui.component.FeatText
-import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.YellowColor
@@ -57,7 +57,8 @@ fun FeatEventCard(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = event.name.uppercase(),
                     fontSize = MaterialTheme.typography.h5.fontSize,
-                    color = GreenColor
+                    color = GreenColor,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -93,12 +94,12 @@ fun FeatEventCard(
 
                             FeatInfo(
                                 textInfo = date,
-                                painter = R.drawable.calendar,
+                                icon = Icons.Outlined.CalendarToday,
                             )
 
                             FeatInfo(
                                 textInfo = day,
-                                painter = R.drawable.watch
+                                icon = Icons.Outlined.Timer
                             )
 
                             FeatInfo(
@@ -107,7 +108,8 @@ fun FeatEventCard(
                                         event.latitude.toDouble(),
                                         event.longitude.toDouble()
                                     )
-                                ).getAddressLine(0), painter = R.drawable.logotipo,
+                                ).getAddressLine(0),
+                                icon = Icons.Outlined.Directions,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -118,13 +120,13 @@ fun FeatEventCard(
                                 if (stateEvent == stringResource(R.string.value_aplicated)) {
                                     infoState = "Pendiente aplicacion"
                                     color = YellowColor
-                                } else if(stateEvent == "CONFIRMADO") {
+                                } else if (stateEvent == "CONFIRMADO") {
                                     infoState = "Confirmado"
                                     color = GreenColor
                                 }
                                 if (infoState.isNotEmpty()) {
                                     Card(
-                                        modifier= Modifier.align(Alignment.CenterHorizontally),
+                                        modifier= Modifier.align(Alignment.End),
                                         shape = RoundedCornerShape(30),
                                         backgroundColor = color,
                                         content = {
@@ -143,40 +145,4 @@ fun FeatEventCard(
             }
         }
     )
-}
-
-
-@Composable
-fun FeatInfo(
-    textInfo: String,
-    colorText: Color? = null,
-    fontSize: TextUnit? = null,
-    maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip,
-    @DrawableRes painter: Int
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = painter),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(25.dp)
-                .weight(1f)
-        )
-        FeatText(
-            modifier = Modifier.weight(4f),
-            text = textInfo,
-            color = colorText ?: PurpleLight,
-            fontSize = fontSize ?: MaterialTheme.typography.body1.fontSize,
-            maxLines = maxLines,
-            overflow = overflow
-        )
-    }
 }
