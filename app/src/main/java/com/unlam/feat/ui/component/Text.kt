@@ -54,8 +54,8 @@ fun FeatHeader(
     fontSize: TextUnit = MaterialTheme.typography.h2.fontSize,
     color: Color = Color.White,
     maxLines: Int = Int.MAX_VALUE,
+    icon: @Composable (() -> Unit)? = null,
     overflow: TextOverflow = TextOverflow.Clip,
-    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -73,17 +73,8 @@ fun FeatHeader(
                 maxLines = maxLines,
                 overflow = overflow
             )
-            IconButton(
-                onClick = {
-                    onClick()
-                },
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_add),
-                    contentDescription = null,
-                    tint = GreenColor,
-                    modifier = Modifier.size(60.dp)
-                )
+            if (icon != null) {
+                icon()
             }
         }
         Divider(

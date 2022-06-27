@@ -32,6 +32,7 @@ import com.unlam.feat.ui.view.login.LoginState
 import com.unlam.feat.ui.view.login.LoginViewModel
 import com.unlam.feat.ui.view.main.MainEvents
 import com.unlam.feat.ui.view.main.MainScreen
+import com.unlam.feat.ui.view.profile.ProfileScreen
 import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
@@ -51,6 +52,8 @@ fun Navigation(navController: NavHostController) {
         addRouteEvent(navController)
         addRouteNewEvent(navController)
         addRouteSearch(navController)
+
+        addRouteProfile(navController)
     }
 }
 
@@ -282,5 +285,11 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
         }) {
 
         }
+    }
+}
+
+private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
+    composable(Screen.Profile.route) {
+        ProfileScreen()
     }
 }

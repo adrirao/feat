@@ -118,13 +118,13 @@ fun FeatEventCard(
                                 if (stateEvent == stringResource(R.string.value_aplicated)) {
                                     infoState = "Pendiente aplicacion"
                                     color = YellowColor
-                                } else if(stateEvent == "CONFIRMADO") {
+                                } else if (stateEvent == "CONFIRMADO") {
                                     infoState = "Confirmado"
                                     color = GreenColor
                                 }
                                 if (infoState.isNotEmpty()) {
                                     Card(
-                                        modifier= Modifier.align(Alignment.CenterHorizontally),
+                                        modifier= Modifier.align(Alignment.End),
                                         shape = RoundedCornerShape(30),
                                         backgroundColor = color,
                                         content = {

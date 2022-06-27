@@ -42,13 +42,20 @@ fun FeatOutlinedButton(
         onClick = {
             onClick()
         },
-        modifier = modifier
+        modifier = if (width == null) {
+            modifier
                 .padding(horizontal = 20.dp, vertical = 5.dp)
-                .height(height),
+                .height(height)
+        } else {
+            modifier
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+        },
         shape = shape,
         border = border,
         colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = if(enabled) backgroundColor else LightTransparent,
+            backgroundColor = if (enabled) backgroundColor else LightTransparent,
             contentColor = contentColor,
         ),
         enabled = enabled

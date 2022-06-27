@@ -47,12 +47,16 @@ constructor(
             }
             LoginEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
-                    loginMessage = null
+                    loginMessage = null,
+                    messageError = "",
+                    emailError = null,
+                    passwordError = null
                 )
             }
             LoginEvents.onClick(TypeClick.Login) -> {
                 _state.value = _state.value.copy(
-                    isLoading = true
+                    isLoading = true,
+                    loginMessage = null
                 )
                 validateEmail(_state.value.textEmail)
                 validatePassword(_state.value.textPassword)
@@ -113,8 +117,8 @@ constructor(
     }
 
     private fun loginUser() {
-        var email = if (_state.value.emailError == null) _state.value.textEmail else return
-        var password = if (_state.value.passwordError == null) _state.value.textPassword else return
+        val email = if (_state.value.emailError == null) _state.value.textEmail else return
+        val password = if (_state.value.passwordError == null) _state.value.textPassword else return
         viewModelScope.launch {
             firebaseAuthRepository.authenticate(email, password) { isLogged, error ->
                 if (isLogged) {

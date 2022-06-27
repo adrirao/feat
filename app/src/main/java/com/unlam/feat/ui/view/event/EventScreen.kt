@@ -26,7 +26,7 @@ import com.unlam.feat.util.Constants
 
 @Composable
 fun EventScreen(
-    state : EventState,
+    state: EventState,
     onClick: (EventEvents.onClick) -> Unit
 ) {
     val events = state.events
@@ -35,27 +35,38 @@ fun EventScreen(
         FeatHeader(
             text = "Mis Eventos",
             fontSize = MaterialTheme.typography.h6.fontSize,
-            onClick = {
-                onClick(EventEvents.onClick(TypeClick.GoToNewEvent))
+            icon = {
+                IconButton(
+                    onClick = {
+                        onClick(EventEvents.onClick(TypeClick.GoToNewEvent))
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_add),
+                        contentDescription = null,
+                        tint = GreenColor,
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
             }
         )
         LazyColumn(
             content = {
-                items(events){event ->
+                items(events) { event ->
                     FeatEventCard(
                         modifier = Modifier
                             .padding(10.dp)
                             .height(220.dp),
                         event = event,
                         onClick = {
-                            EventEvents.onClick(TypeClick.GoToDetailEvent,event.id)
+                            EventEvents.onClick(TypeClick.GoToDetailEvent, event.id)
                         }
                     )
                 }
             }
         )
     }
-    if(state.eventsError != null){
+    if (state.eventsError != null) {
         ErrorDialog(
             title = "Error mis eventos",
             desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
