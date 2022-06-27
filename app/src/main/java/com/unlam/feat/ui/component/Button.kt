@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -72,5 +73,65 @@ fun FeatOutlinedButton(
             } else TextStyle(fontSize = 10.sp)
 
         )
+    }
+}
+
+
+@Composable
+fun FeatOutlinedButtonIcon(
+    modifier: Modifier = Modifier,
+    shape: Shape = CircleShape,
+    backgroundColor: Color = Color.Transparent,
+    contentColor: Color = PurpleLight,
+    border: BorderStroke = BorderStroke(2.dp, contentColor),
+    height: Dp = 50.dp,
+    width: Dp? = null,
+    enabled: Boolean = true,
+    icon: ImageVector,
+    textContent: String = "",
+    textColor: Color = contentColor,
+    textAlign: TextAlign = TextAlign.Center,
+    textWeight: FontWeight = FontWeight.Bold,
+    buttonElevation: ButtonElevation? = null,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        onClick = {
+            onClick()
+        },
+        modifier = if (width == null) {
+            modifier
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+                .height(height)
+        } else {
+            modifier
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+                .height(height)
+                .width(width)
+        },
+        shape = shape,
+        border = border,
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor = if (enabled) backgroundColor else LightTransparent,
+            contentColor = contentColor,
+        ),
+        enabled = enabled,
+        elevation = buttonElevation
+    ) {
+        Icon(imageVector = icon, contentDescription = null)
+        if (textContent.isNotEmpty()) {
+            Text(
+                text = textContent.uppercase(),
+                color = textColor,
+                textAlign = textAlign,
+                fontWeight = textWeight,
+                style = if (height >= 50.dp) {
+                    MaterialTheme.typography.h6.copy(
+                        color = textColor
+                    )
+                } else TextStyle(fontSize = 10.sp)
+
+            )
+        }
     }
 }

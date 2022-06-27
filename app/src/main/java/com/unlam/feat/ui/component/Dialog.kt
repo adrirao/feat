@@ -6,14 +6,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -81,9 +78,9 @@ fun SuccessDialog(
                         ) {
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
-                                contentColor = ErrorColor,
+                                contentColor = RedColor,
                                 backgroundColor = RedColor20,
-                                textColor = ErrorColor,
+                                textColor = RedColor,
                                 onClick = onDismiss,
                                 width = 100.dp,
                                 height = 40.dp
@@ -170,9 +167,9 @@ fun ErrorDialog(
                         ) {
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
-                                contentColor = ErrorColor,
+                                contentColor = RedColor,
                                 backgroundColor = RedColor20,
-                                textColor = ErrorColor,
+                                textColor = RedColor,
                                 onClick = onDismiss,
                                 width = 100.dp,
                                 height = 40.dp
@@ -258,9 +255,9 @@ fun InfoDialog(
                         ) {
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
-                                contentColor = ErrorColor,
+                                contentColor = RedColor,
                                 backgroundColor = RedColor20,
-                                textColor = ErrorColor,
+                                textColor = RedColor,
                                 onClick = onDismiss,
                                 width = 100.dp,
                                 height = 40.dp
