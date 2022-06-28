@@ -4,8 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -94,7 +96,7 @@ fun FeatForm(
         elevation = 3.dp,
         shape = RoundedCornerShape(5),
         content = {
-            Column(modifier = Modifier.padding(vertical = 40.dp)) {
+            Column(modifier = Modifier.padding(vertical = 40.dp).verticalScroll(rememberScrollState())) {
                 content()
             }
         }
