@@ -13,8 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.unlam.feat.model.*
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.FeatEventCard
+import com.unlam.feat.ui.component.common.event.FeatEventCardHome
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.theme.PurpleMedium
 import com.unlam.feat.ui.util.TypeClick
@@ -28,8 +30,8 @@ fun HomeScreen(
     state: HomeState,
     onClick: (HomeEvents) -> Unit
 ) {
-    val eventsConfirmed = state.eventsConfirmedForMy!!
-    val eventsSuggested = state.eventsSuggestedToday!!
+    val eventsConfirmed = state.eventsConfirmedForMy ?: listOf()
+    val eventsSuggested = state.eventsSuggestedToday ?: listOf()
 
     val pageState = rememberPagerState()
 
@@ -86,7 +88,7 @@ fun HomeScreen(
             if (eventsConfirmed.isNotEmpty()) {
                 LazyColumn(content = {
                     items(eventsConfirmed) { event ->
-                        FeatEventCard(
+                        FeatEventCardHome(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp)

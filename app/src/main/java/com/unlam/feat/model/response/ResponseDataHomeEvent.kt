@@ -5,5 +5,5 @@ import com.unlam.feat.model.*
 
 data class ResponseDataHomeEvent (
     val eventOfTheWeek: List<Event>,
-    val eventConfirmedOrApplied: List<Event>,
+    val eventConfirmedOrApplied: List<HomeEvent>,
 )

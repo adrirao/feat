@@ -235,7 +235,7 @@ constructor(
         }
     }
 
-    override fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<Event>>> = flow {
+    override fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<HomeEvent>>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.getAllConfirmedOrAppliedByUser(uId)
@@ -1132,7 +1132,7 @@ constructor(
                 featProvider.getAllConfirmedOrAppliedByUser(uId).body()
 
 
-            if (responseEventOfTheWeek.code() != 200 && responseEventConfirmedOrApplied != null) {
+            if (responseEventOfTheWeek.code() in 200..299 && responseEventConfirmedOrApplied != null) {
                 emit(
                     Result.Success(
                         data = ResponseDataHomeEvent(

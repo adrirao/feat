@@ -109,22 +109,20 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
             FeatCircularProgress()
         }
 
-        if (state.eventsConfirmedForMy != null && state.eventsSuggestedToday != null) {
-            HomeScreen(
-                state,
-                onClick = { event ->
-                    when (event) {
-                        is HomeEvents.onClick -> {
-                            if (event.typeClick == TypeClick.GoToDetailEvent) {
-                                navController.navigate(
-                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
-                                )
-                            }
+        HomeScreen(
+            state,
+            onClick = { event ->
+                when (event) {
+                    is HomeEvents.onClick -> {
+                        if (event.typeClick == TypeClick.GoToDetailEvent) {
+                            navController.navigate(
+                                route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                            )
                         }
                     }
                 }
-            )
-        }
+            }
+        )
     }
 }
 

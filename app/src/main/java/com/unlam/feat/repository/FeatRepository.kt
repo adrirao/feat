@@ -25,7 +25,7 @@ interface FeatRepository {
     fun setConfirmed(req: RequestEventState): Flow<Result<String>>// @POST("/events/setConfirmed")
     fun setCanceled(req: RequestEventState): Flow<Result<String>>// @POST("/events/setCanceled")
     fun getAllEventsOfTheWeek(uId: String): Flow<Result<List<Event>>>//  @GET("/events/getAllEventsOfTheWeek/{uid}")
-    fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<Event>>>//  @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
+    fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<HomeEvent>>>//  @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
 
 
     //</editor-fold">
