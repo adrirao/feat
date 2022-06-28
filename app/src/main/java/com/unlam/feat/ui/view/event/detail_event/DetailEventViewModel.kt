@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import com.unlam.feat.util.Result
-import com.unlam.feat.util.print
+import com.unlam.feat.util.logging
 
 @HiltViewModel
 class DetailEventViewModel
@@ -96,7 +96,6 @@ constructor(
                     _state.value = _state.value.copy(
                         error = "Algo malo ocurrio!"
                     )
-                    print(requestkickPlayer,result)
                 }
             }
         }.launchIn(viewModelScope)

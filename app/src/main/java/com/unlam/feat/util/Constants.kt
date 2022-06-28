@@ -30,3 +30,8 @@ object Constants {
         const val PADEL = "https://www.empadelados.com/wp-content/uploads/tipos_jugadores_2.jpg"
     }
 }
+
+object Messages{
+    const val UNKNOW_ERROR = "Ocurrió un error, por favor contáctese con el administrador."
+    const val SUCCESS_CREATED = "Creado con exito."
+}

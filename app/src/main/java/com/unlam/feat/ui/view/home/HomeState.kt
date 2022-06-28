@@ -5,7 +5,7 @@ import com.unlam.feat.model.Event
 
 data class HomeState(
     val message : String = "",
-    val eventsSuggestedToday : List<Event> = emptyList(),
-    val eventsConfirmedForMy : List<Event> = emptyList(),
+    val eventsSuggestedToday : List<Event>? = null,
+    val eventsConfirmedForMy : List<Event> ?= null,
     val isLoading : Boolean = false
 )

@@ -3,7 +3,6 @@
 package com.unlam.feat.ui.component.common.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -11,9 +10,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
+import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
 import com.unlam.feat.ui.component.ErrorDialog
 import com.unlam.feat.ui.component.FeatCircularProgress
@@ -46,6 +44,10 @@ import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
+import com.unlam.feat.ui.view.search.SearchScreen
+import com.unlam.feat.ui.view.search.SearchViewModel
+import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
+import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import com.unlam.feat.ui.view.splash.SplashScreen
 
 @Composable
@@ -66,6 +68,7 @@ fun Navigation(navController: NavHostController) {
 
         addRouteDetailEventHome(navController)
         addRouteDetailEventMyEvent(navController)
+        addRouteDetailSearchEvent(navController)
     }
 }
 
@@ -97,23 +100,31 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
 private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
     composable(Screen.Home.route) {
         val homeViewModel: HomeViewModel = hiltViewModel()
+
         val state by remember {
             homeViewModel.state
         }
-        HomeScreen(
-            state,
-            onClick = { event ->
-                when (event) {
-                    is HomeEvents.onClick -> {
-                        if (event.typeClick == TypeClick.GoToDetailEvent) {
-                            navController.navigate(
-                                route = Screen.DetailEventHome.route + "/${event.idEvent}"
-                            )
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.eventsConfirmedForMy != null && state.eventsSuggestedToday != null) {
+            HomeScreen(
+                state,
+                onClick = { event ->
+                    when (event) {
+                        is HomeEvents.onClick -> {
+                            if (event.typeClick == TypeClick.GoToDetailEvent) {
+                                navController.navigate(
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -306,13 +317,15 @@ private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
     composable(Screen.Search.route) {
-        Button(onClick = {
-            Firebase.auth.signOut()
-            navController.popBackStack(Screen.Home.route, inclusive = true)
-            navController.navigate(Screen.Login.route)
-        }) {
-
-        }
+        val searchViewModel: SearchViewModel = hiltViewModel()
+        val state = searchViewModel.state.value
+        SearchScreen(
+            state = state,
+            onClick = searchViewModel::onEvent,
+            onClickCard = {
+                navController.navigate(Screen.SearchEventDetail.route + "/${it.id}")
+            }
+        )
     }
 }
 
@@ -365,12 +378,14 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
             FeatCircularProgress()
         }
 
-        if(state.successPlayer || state.successCancelEvent || state.successConfirmEvent){
+        if (state.successPlayer || state.successCancelEvent || state.successConfirmEvent) {
             SuccessDialog(
                 title = state.successTitle,
                 desc = state.successDescription
             ) {
                 detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+                navController.popBackStack()
+                navController.navigate(Screen.Events.route)
             }
         }
 
@@ -389,6 +404,54 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
                 onClick = { event ->
                     detailEventViewModel.onEvent(event)
                 }
+            )
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailSearchEvent(
+    navController: NavHostController
+) {
+    composable(
+        route = Screen.SearchEventDetail.route + "/{idEvent}",
+        arguments = Screen.SearchEventDetail.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val searchEventDetailViewModel: SearchEventDetailViewModel = hiltViewModel()
+        val state = searchEventDetailViewModel.state.value
+
+        LaunchedEffect(key1 = true) {
+            searchEventDetailViewModel.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.error.isNotBlank()) {
+            ErrorDialog(
+                title = "Ocurrio un error",
+                desc = "No se pudo procesar la solicitud",
+                onDismiss = {
+                    searchEventDetailViewModel.onEvent(SearchEventDetailEvent.DismissDialog)
+                }
+            )
+        }
+        if (state.success) {
+            SuccessDialog(
+                title = "Enhorabuena",
+                desc = "Solicitud Enviada Correctamente!!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Search.route)
+                }
+            )
+        }
+
+        if (state.event != null && state.playersConfirmed != null) {
+            DetailSearchEventScreen(
+                state = state,
+                onClick = searchEventDetailViewModel::onEvent,
             )
         }
     }

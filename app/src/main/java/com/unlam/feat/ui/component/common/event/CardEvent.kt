@@ -41,11 +41,11 @@ fun FeatEventCard(
     event: Event,
     onClick: () -> Unit
 ) {
-    val date = LocalDate.parse(event!!.date.substring(0, 10)).format(
+    val date = LocalDate.parse(event.date.substring(0, 10)).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
     )
     val day = "${event.startTime.substring(0, 5)} - ${event.endTime.substring(0, 5)}"
-    val stateEvent = event.state.toString().trim().uppercase()
+//    val stateEvent = event.state?.toString().trim().uppercase() ?: "CONFIRMADO"
 
     FeatCard(
         modifier = modifier,
@@ -116,29 +116,29 @@ fun FeatEventCard(
                             FeatSpacerSmall()
                             var infoState = ""
                             var color: Color = Color.Transparent
-                            if (stateEvent.isNotEmpty()) {
-                                if (stateEvent == stringResource(R.string.value_aplicated)) {
-                                    infoState = "Pendiente aplicacion"
-                                    color = YellowColor
-                                } else if (stateEvent == "CONFIRMADO") {
-                                    infoState = "Confirmado"
-                                    color = GreenColor
-                                }
-                                if (infoState.isNotEmpty()) {
-                                    Card(
-                                        modifier= Modifier.align(Alignment.End),
-                                        shape = RoundedCornerShape(30),
-                                        backgroundColor = color,
-                                        content = {
-                                            Text(
-                                                modifier = Modifier.padding(5.dp),
-                                                text = infoState,
-                                                color = PurpleDark
-                                            )
-                                        }
-                                    )
-                                }
-                            }
+//                            if (stateEvent.isNotEmpty()) {
+//                                if (stateEvent == stringResource(R.string.value_aplicated)) {
+//                                    infoState = "Pendiente aplicacion"
+//                                    color = YellowColor
+//                                } else if (stateEvent == "CONFIRMADO") {
+//                                    infoState = "Confirmado"
+//                                    color = GreenColor
+//                                }
+//                                if (infoState.isNotEmpty()) {
+//                                    Card(
+//                                        modifier= Modifier.align(Alignment.End),
+//                                        shape = RoundedCornerShape(30),
+//                                        backgroundColor = color,
+//                                        content = {
+//                                            Text(
+//                                                modifier = Modifier.padding(5.dp),
+//                                                text = infoState,
+//                                                color = PurpleDark
+//                                            )
+//                                        }
+//                                    )
+//                                }
+//                            }
                         }
                     }
                 )

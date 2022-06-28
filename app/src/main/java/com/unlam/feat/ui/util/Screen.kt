@@ -18,6 +18,9 @@ sealed class Screen(
     object Events : Screen("events_screen")
     object Home : Screen("home_screen")
     object SearchList : Screen("search_list_screen")
+    object SearchEventDetail : Screen("search_event_detail", listOf(
+        navArgument("idEvent") { type = NavType.StringType }
+    ))
     object Search : Screen("search_screen")
     object Invite : Screen("invite_screen")
 

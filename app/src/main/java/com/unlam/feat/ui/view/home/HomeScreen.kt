@@ -28,8 +28,8 @@ fun HomeScreen(
     state: HomeState,
     onClick: (HomeEvents) -> Unit
 ) {
-    val eventsConfirmed = state.eventsConfirmedForMy
-    val eventsSuggested = state.eventsSuggestedToday
+    val eventsConfirmed = state.eventsConfirmedForMy!!
+    val eventsSuggested = state.eventsSuggestedToday!!
 
     val pageState = rememberPagerState()
 
@@ -103,7 +103,5 @@ fun HomeScreen(
             }
         }
     }
-    if (state.isLoading) {
-        FeatCircularProgress()
-    }
+
 }
