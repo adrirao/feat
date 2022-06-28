@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -40,60 +41,61 @@ fun DetailEventMyEventScreen(
         }
     }
 
+    Column {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            HorizontalPager(
+                count = 3,
+                state = pagerState
+            ) { position ->
+                when (position) {
+                    0 -> PageOne(
+                        state = state,
+                        onClick = onClick
+                    )
+                    1 -> PageTwo(
+                        state,
+                        onClick = onClick
+                    )
+                    2 -> PageTree(
+                        state,
+                        onClick = onClick
+                    )
+                }
+            }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        HorizontalPager(
-            count = 3,
-            state = pagerState
-        ) { position ->
-            when (position) {
-                0 -> PageOne(
-                    state = state,
-                    onClick = onClick
+
+            HorizontalPagerIndicator(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
+                pagerState = pagerState
+            )
+
+            if (pagerState.currentPage != 0) {
+                FeatOutlinedButtonIcon(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    icon = Icons.Outlined.PersonAdd, onClick = { nextPage = true },
+                    height = 70.dp,
+                    width = 70.dp,
+                    contentColor = GreenColor,
+                    backgroundColor = GreenColor20,
+                    textColor = GreenColor,
                 )
-                1 -> PageTwo(
-                    state,
-                    onClick = onClick
-                )
-                2 -> PageTree(
-                    state,
-                    onClick = onClick
+            } else {
+                FeatOutlinedButtonIcon(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    icon = Icons.Outlined.PlayArrow,
+                    height = 50.dp,
+                    width = 50.dp,
+                    onClick = { nextPage = true },
+                    contentColor = PurpleMedium,
+                    backgroundColor = PurpleMedium20
                 )
             }
+
         }
-
-
-        HorizontalPagerIndicator(
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            pagerState = pagerState
-        )
-
-        if (pagerState.currentPage != 0) {
-            FeatOutlinedButtonIcon(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                icon = Icons.Outlined.PersonAdd, onClick = { nextPage = true },
-                height = 70.dp,
-                width = 70.dp,
-                contentColor = GreenColor,
-                backgroundColor = GreenColor20,
-                textColor = GreenColor,
-            )
-        } else {
-            FeatOutlinedButtonIcon(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                icon = Icons.Outlined.PlayArrow,
-                height = 50.dp,
-                width = 50.dp,
-                onClick = { nextPage = true },
-                contentColor = PurpleMedium,
-                backgroundColor = PurpleMedium20
-            )
-        }
-
     }
 
 }
@@ -104,36 +106,44 @@ fun PageOne(
     onClick: (DetailEventEvent) -> Unit
 ) {
     val event = state.event!!
-    DetailEvent(
-        event = event,
-        content = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                FeatOutlinedButton(
-                    textContent = "Cancelar",
-                    onClick = {
-                        onClick(DetailEventEvent.CancelEvent)
-                    },
-                    contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor,
-                    height = 46.dp
-                )
-                FeatOutlinedButton(
-                    textContent = "Confirmar",
-                    onClick = {
-                        onClick(DetailEventEvent.ConfirmEvent)
-                    },
-                    contentColor = GreenColor,
-                    backgroundColor = GreenColor20,
-                    textColor = GreenColor,
-                    height = 46.dp
-                )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        FeatText(
+            text = "Detalle del evento:",
+            fontSize = MaterialTheme.typography.h6.fontSize,
+            separator = true,
+            verticalPadding = true
+        )
+        DetailEvent(
+            event = event,
+            content = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    FeatOutlinedButton(
+                        textContent = "Cancelar",
+                        onClick = {
+                            onClick(DetailEventEvent.CancelEvent)
+                        },
+                        contentColor = RedColor,
+                        backgroundColor = RedColor20,
+                        textColor = RedColor,
+                        height = 46.dp
+                    )
+                    FeatOutlinedButton(
+                        textContent = "Confirmar",
+                        onClick = {
+                            onClick(DetailEventEvent.ConfirmEvent)
+                        },
+                        contentColor = GreenColor,
+                        backgroundColor = GreenColor20,
+                        textColor = GreenColor,
+                        height = 46.dp
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable

@@ -43,7 +43,7 @@ fun FeatApp(
         ),
         NavigationItem(
             route = Screen.Invite.route,
-            icon = Icons.Outlined.Sms,
+            icon = Icons.Outlined.MailOutline,
             contentDescription = "Invite",
             alertCount = 99
         ),
