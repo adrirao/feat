@@ -49,14 +49,14 @@ import kotlin.reflect.jvm.internal.impl.types.checker.TypeRefinementSupport
 
 @Composable
 fun FeatOutlinedTextField(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     text: String,
     textLabel: String,
     enabled: Boolean = true,
     maxLines: Int = 3,
     error: String = "",
     focusedColor: Color = GreenLight,
-    unFocusedColor: Color = PurpleLight ,
+    unFocusedColor: Color = PurpleLight,
     shape: Shape = CircleShape,
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
@@ -69,12 +69,10 @@ fun FeatOutlinedTextField(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 5.dp),
     ) {
         OutlinedTextField(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = modifier,
             value = text,
             onValueChange = { onValueChange(it) },
             shape = shape,
@@ -190,7 +188,7 @@ fun FeatOutlinedDatePicker(
                 headerBackgroundColor = GreenColor,
                 dateActiveBackgroundColor = GreenColor,
 
-            ),
+                ),
         ) { date ->
             onValueChange(date)
         }
@@ -199,7 +197,7 @@ fun FeatOutlinedDatePicker(
 
 @Composable
 fun FeatOutlinedTimePicker(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     time: LocalTime?,
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
@@ -218,7 +216,6 @@ fun FeatOutlinedTimePicker(
             ?: "",
         onValueChange = {},
         modifier = modifier
-            .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
