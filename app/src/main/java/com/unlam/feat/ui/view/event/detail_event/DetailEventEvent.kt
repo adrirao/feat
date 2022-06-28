@@ -1,4 +1,4 @@
-package com.unlam.feat.presentation.view.events.detail_event
+package com.unlam.feat.ui.view.event.detail_event
 
 
 sealed class DetailEventEvent {

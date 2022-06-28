@@ -15,18 +15,19 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import com.unlam.feat.presentation.view.events.detail_event.DetailEventState
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DetailEventMyEventScreen(
     state: DetailEventState,
+    onClick: (DetailEventEvent) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -51,9 +52,16 @@ fun DetailEventMyEventScreen(
             when (position) {
                 0 -> PageOne(
                     state = state,
+                    onClick = onClick
                 )
-                1 -> PageTwo(state)
-                2 -> PageTree(state)
+                1 -> PageTwo(
+                    state,
+                    onClick = onClick
+                )
+                2 -> PageTree(
+                    state,
+                    onClick = onClick
+                )
             }
         }
 
@@ -74,7 +82,7 @@ fun DetailEventMyEventScreen(
                 backgroundColor = GreenColor20,
                 textColor = GreenColor,
             )
-        }else{
+        } else {
             FeatOutlinedButtonIcon(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 icon = Icons.Outlined.PlayArrow,
@@ -93,6 +101,7 @@ fun DetailEventMyEventScreen(
 @Composable
 fun PageOne(
     state: DetailEventState,
+    onClick: (DetailEventEvent) -> Unit
 ) {
     val event = state.event!!
     DetailEvent(
@@ -104,7 +113,9 @@ fun PageOne(
             ) {
                 FeatOutlinedButton(
                     textContent = "Cancelar",
-                    onClick = {},
+                    onClick = {
+                        onClick(DetailEventEvent.CancelEvent)
+                    },
                     contentColor = RedColor,
                     backgroundColor = RedColor20,
                     textColor = RedColor,
@@ -112,7 +123,9 @@ fun PageOne(
                 )
                 FeatOutlinedButton(
                     textContent = "Confirmar",
-                    onClick = {},
+                    onClick = {
+                        onClick(DetailEventEvent.ConfirmEvent)
+                    },
                     contentColor = GreenColor,
                     backgroundColor = GreenColor20,
                     textColor = GreenColor,
@@ -125,7 +138,8 @@ fun PageOne(
 
 @Composable
 fun PageTwo(
-    state: DetailEventState
+    state: DetailEventState,
+    onClick: (DetailEventEvent) -> Unit
 ) {
     val players = state.playersConfirmed!!
     Box {
@@ -154,7 +168,9 @@ fun PageTwo(
                                     FeatOutlinedButton(
                                         textContent = "Expulsar",
                                         height = 40.dp,
-                                        onClick = {},
+                                        onClick = {
+                                            onClick(DetailEventEvent.KickPlayer(player.id))
+                                        },
                                         contentColor = RedColor,
                                         backgroundColor = RedColor20,
                                         textColor = RedColor
@@ -175,7 +191,8 @@ fun PageTwo(
 
 @Composable
 fun PageTree(
-    state: DetailEventState
+    state: DetailEventState,
+    onClick: (DetailEventEvent) -> Unit
 ) {
     val players = state.playersApplied!!
     Box {
@@ -204,7 +221,9 @@ fun PageTree(
                                     FeatOutlinedButton(
                                         textContent = "Rechazar",
                                         height = 40.dp,
-                                        onClick = {},
+                                        onClick = {
+                                                  onClick(DetailEventEvent.RejectPlayer(player.id))
+                                        },
                                         contentColor = RedColor,
                                         backgroundColor = RedColor20,
                                         textColor = RedColor
@@ -212,7 +231,9 @@ fun PageTree(
                                     FeatOutlinedButton(
                                         textContent = "Aceptar",
                                         height = 40.dp,
-                                        onClick = {},
+                                        onClick = {
+                                            onClick(DetailEventEvent.AcceptPlayer(player.id))
+                                        },
                                         contentColor = GreenColor,
                                         backgroundColor = GreenColor20,
                                         textColor = GreenColor

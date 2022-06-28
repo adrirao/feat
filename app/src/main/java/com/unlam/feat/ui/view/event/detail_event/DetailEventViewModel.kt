@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.model.request.RequestEventState
-import com.unlam.feat.presentation.view.events.detail_event.DetailEventEvent
-import com.unlam.feat.presentation.view.events.detail_event.DetailEventState
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +34,8 @@ constructor(
                     isLoading = false,
                     error = "",
                     successPlayer = false,
-                    successConfirmEvent = false
+                    successConfirmEvent = false,
+                    successCancelEvent = false,
                 )
             }
             is DetailEventEvent.CancelEvent -> {

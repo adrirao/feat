@@ -24,6 +24,7 @@ import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
+import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
@@ -339,7 +340,10 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
         }
 
         if (state.event != null && state.players != null) {
-            DetailEventHomeScreen(state)
+            DetailEventHomeScreen(
+                state,
+                onClick = {}
+            )
         }
     }
 }
@@ -348,7 +352,7 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
     composable(
         route = Screen.DetailEventMyEvent.route + "/{idEvent}",
         arguments = Screen.DetailEventMyEvent.arguments ?: listOf()
-    ) {
+    ) { it ->
         val idEvent = it.arguments?.getString("idEvent") ?: ""
         val detailEventViewModel: DetailEventViewModel = hiltViewModel()
         val state = detailEventViewModel.state.value
@@ -361,9 +365,30 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
             FeatCircularProgress()
         }
 
+        if(state.successPlayer || state.successCancelEvent || state.successConfirmEvent){
+            SuccessDialog(
+                title = state.successTitle,
+                desc = state.successDescription
+            ) {
+                detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+            }
+        }
+
+        if (state.error.isNotEmpty()) {
+            ErrorDialog(
+                title = stringResource(R.string.text_error),
+                desc = stringResource(R.string.desc_error)
+            ) {
+                detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+            }
+        }
+
         if (state.event != null && state.playersApplied != null && state.playersConfirmed != null && state.playersSuggested != null) {
             DetailEventMyEventScreen(
                 state = state,
+                onClick = { event ->
+                    detailEventViewModel.onEvent(event)
+                }
             )
         }
     }

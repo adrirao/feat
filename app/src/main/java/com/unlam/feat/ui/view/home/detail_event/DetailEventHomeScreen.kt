@@ -1,6 +1,5 @@
 package com.unlam.feat.ui.view.home.detail_event
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,11 +20,11 @@ import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.theme.*
 
-@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DetailEventHomeScreen(
     state: DetailEventHomeState,
+    onClick: (DetailEventHomeEvent) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -50,6 +49,9 @@ fun DetailEventHomeScreen(
             when (position) {
                 0 -> PageOne(
                     state = state,
+                    onClick = {
+                        onClick(DetailEventHomeEvent.DismissDialog)
+                    }
                 )
                 1 -> PageTwo(state)
             }
@@ -80,10 +82,9 @@ fun DetailEventHomeScreen(
 @Composable
 fun PageOne(
     state: DetailEventHomeState,
+    onClick: () -> Unit
 ) {
-
     val event = state.event!!
-
     DetailEvent(
         event = event,
         content = {
@@ -98,7 +99,7 @@ fun PageOne(
                         backgroundColor = GreenColor20,
                         textContent = "Participar",
                         height = 45.dp,
-                        onClick = { }
+                        onClick = { onClick() }
                     )
                 }
             )
@@ -122,7 +123,7 @@ fun PageTwo(
                 separator = true,
                 verticalPadding = true
             )
-            if(players.isNotEmpty()){
+            if (players.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
                         .padding(10.dp),
@@ -136,10 +137,9 @@ fun PageTwo(
                         }
                     }
                 )
-            }else{
+            } else {
                 NotFoundEvent()
             }
-
 
 
         }
