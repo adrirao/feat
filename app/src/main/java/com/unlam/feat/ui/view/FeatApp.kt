@@ -42,7 +42,7 @@ fun FeatApp(
             contentDescription = "Search"
         ),
         NavigationItem(
-            route = Screen.Invite.route,
+            route = Screen.Invitation.route,
             icon = Icons.Outlined.MailOutline,
             contentDescription = "Invite",
             alertCount = 99

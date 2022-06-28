@@ -41,6 +41,7 @@ fun NewEventScreen(
             text = "Nuevo evento:",
             fontSize = MaterialTheme.typography.h6.fontSize,
             separator = true,
+            verticalPadding = true
         )
         Box(
             modifier = Modifier.fillMaxSize(),

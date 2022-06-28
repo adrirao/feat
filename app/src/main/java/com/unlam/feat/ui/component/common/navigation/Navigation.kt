@@ -33,6 +33,11 @@ import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeScreen
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeViewModel
+import com.unlam.feat.ui.view.invitation.InvitationScreen
+import com.unlam.feat.ui.view.invitation.InvitationViewModel
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationEvent
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationScreen
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
 import com.unlam.feat.ui.view.login.LoginScreen
 import com.unlam.feat.ui.view.login.LoginState
@@ -61,11 +66,11 @@ fun Navigation(navController: NavHostController) {
         addRouteMain(navController)
         addRouteHome(navController)
         addRouteEvent(navController)
-        addRouteNewEvent(navController)
         addRouteSearch(navController)
-
         addRouteProfile(navController)
+        addRouteInvitation(navController)
 
+        addRouteNewEvent(navController)
         addRouteDetailEventHome(navController)
         addRouteDetailEventMyEvent(navController)
         addRouteDetailSearchEvent(navController)
@@ -109,20 +114,22 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
             FeatCircularProgress()
         }
 
-        HomeScreen(
-            state,
-            onClick = { event ->
-                when (event) {
-                    is HomeEvents.onClick -> {
-                        if (event.typeClick == TypeClick.GoToDetailEvent) {
-                            navController.navigate(
-                                route = Screen.DetailEventHome.route + "/${event.idEvent}"
-                            )
+        if (state.eventsConfirmedForMy != null && state.eventsSuggestedToday != null) {
+            HomeScreen(
+                state,
+                onClick = { event ->
+                    when (event) {
+                        is HomeEvents.onClick -> {
+                            if (event.typeClick == TypeClick.GoToDetailEvent) {
+                                navController.navigate(
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -450,6 +457,81 @@ private fun NavGraphBuilder.addRouteDetailSearchEvent(
             DetailSearchEventScreen(
                 state = state,
                 onClick = searchEventDetailViewModel::onEvent,
+            )
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteInvitation(navController: NavHostController) {
+    composable(Screen.Invitation.route) {
+        val invitationViewModel: InvitationViewModel = hiltViewModel()
+        val state = invitationViewModel.state.value
+        val isRefreshing = invitationViewModel.isRefreshing.collectAsState()
+
+        InvitationScreen(
+            state = state,
+            onClick = invitationViewModel::onEvent,
+            onClickCard = {
+                navController.navigate(
+                    Screen.DetailInvitation.route + "/${it}"
+                )
+            }
+        )
+
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailInvitation(
+    navController: NavHostController,
+) {
+    composable(
+        route = Screen.DetailInvitation.route + "/{idEvent}",
+        arguments = Screen.DetailInvitation.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val detailInvitation: DetailInvitationViewModel = hiltViewModel()
+        val state = detailInvitation.state.value
+
+        LaunchedEffect(key1 = true) {
+            detailInvitation.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.error.isNotBlank()) {
+            ErrorDialog(
+                title = "Ocurrio un error",
+                desc = "No se pudo procesar la solicitud, por favor, vuelva a intentarlo",
+                onDismiss = {
+                    detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
+                }
+            )
+        }
+        if (state.success) {
+            SuccessDialog(
+                title = state.successTitle,
+                desc = state.successDescription,
+                onDismiss = {
+                    detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
+                    navController.popBackStack()
+                    navController.navigate(Screen.Invitation.route)
+                }
+            )
+        }
+
+        if (state.event != null && state.playersConfirmed != null) {
+            DetailInvitationScreen(
+                state = state,
+                onClick = { event ->
+                    if (event == DetailInvitationEvent.CancelInvitation) {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Invitation.route)
+                    } else {
+                        detailInvitation.onEvent(event)
+                    }
+                },
             )
         }
     }
