@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -35,38 +36,49 @@ fun FeatCard(
     height: Dp? = width,
     colorCard: Color = PurpleDark,
     urlImage: String = "",
+    new: Boolean = false,
     @DrawableRes painter: Int? = null,
     padding: Dp = 15.dp,
     content: @Composable (BoxScope.() -> Unit)
 ) {
-    Card(
-        modifier = if (width != null && height != null) {
-            modifier.height(height)
-        } else {
-            modifier
-        },
-        backgroundColor = colorCard,
-        elevation = 3.dp,
-        shape = RoundedCornerShape(10)
-    ) {
-        if (urlImage.isBlank() && painter != null) {
-            Image(
-                painter = painterResource(id = painter),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else if (urlImage.isNotBlank()) {
-            AsyncImage(
-                model = urlImage,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-        Box(
-            modifier = Modifier.padding(padding)
+    Box {
+        Card(
+            modifier = if (width != null && height != null) {
+                modifier.height(height)
+            } else {
+                modifier
+            },
+            backgroundColor = colorCard,
+            elevation = 3.dp,
+            shape = RoundedCornerShape(10)
         ) {
-            content()
+            if (urlImage.isBlank() && painter != null) {
+                Image(
+                    painter = painterResource(id = painter),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else if (urlImage.isNotBlank()) {
+                AsyncImage(
+                    model = urlImage,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            Box(
+                modifier = Modifier.padding(padding)
+            ) {
+                content()
+            }
+        }
+        if(new){
+            Image(
+                modifier = Modifier.align(Alignment.TopEnd).size(30.dp),
+                painter = painterResource(id = R.drawable.ic_new),
+                contentDescription = null,
+            )
         }
     }
 }

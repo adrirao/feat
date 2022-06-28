@@ -127,7 +127,7 @@ fun FeatEventCardHome(
                                 }
                                 if (infoState.isNotEmpty()) {
                                     Card(
-                                        modifier= Modifier.align(Alignment.End),
+                                        modifier = Modifier.align(Alignment.End),
                                         shape = RoundedCornerShape(30),
                                         backgroundColor = color,
                                         content = {
@@ -151,7 +151,9 @@ fun FeatEventCardHome(
 @Composable
 fun FeatEventCard(
     modifier: Modifier = Modifier,
+    colorCard: Color = PurpleDark,
     event: Event,
+    new: Boolean = false,
     onClick: () -> Unit
 ) {
     val date = LocalDate.parse(event.date.substring(0, 10)).format(
@@ -162,6 +164,8 @@ fun FeatEventCard(
 
     FeatCard(
         modifier = modifier,
+        new = new,
+        colorCard = colorCard,
         content = {
             Column(
                 modifier = Modifier.clickable { onClick() }
@@ -239,7 +243,7 @@ fun FeatEventCard(
                                 }
                                 if (infoState.isNotEmpty()) {
                                     Card(
-                                        modifier= Modifier.align(Alignment.End),
+                                        modifier = Modifier.align(Alignment.End),
                                         shape = RoundedCornerShape(30),
                                         backgroundColor = color,
                                         content = {

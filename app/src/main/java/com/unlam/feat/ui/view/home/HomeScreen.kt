@@ -18,6 +18,7 @@ import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.FeatEventCard
 import com.unlam.feat.ui.component.common.event.FeatEventCardHome
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
+import com.unlam.feat.ui.theme.PurpleDarkAlt
 import com.unlam.feat.ui.theme.PurpleMedium
 import com.unlam.feat.ui.util.TypeClick
 import kotlinx.coroutines.delay
@@ -65,6 +66,8 @@ fun HomeScreen(
                                     .fillMaxWidth()
                                     .height(220.dp)
                                     .padding(horizontal = 10.dp),
+                                new = true,
+                                colorCard = PurpleDarkAlt,
                                 event = event,
                                 onClick = {
                                     onClick(HomeEvents.onClick(TypeClick.GoToDetailEvent, event.id))
