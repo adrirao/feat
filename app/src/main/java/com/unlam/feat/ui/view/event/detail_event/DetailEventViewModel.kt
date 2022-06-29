@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.model.request.RequestEventState
-import com.unlam.feat.presentation.view.events.detail_event.DetailEventEvent
-import com.unlam.feat.presentation.view.events.detail_event.DetailEventState
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +14,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import com.unlam.feat.util.Result
-import com.unlam.feat.util.print
+import com.unlam.feat.util.logging
 
 @HiltViewModel
 class DetailEventViewModel
@@ -36,7 +34,8 @@ constructor(
                     isLoading = false,
                     error = "",
                     successPlayer = false,
-                    successConfirmEvent = false
+                    successConfirmEvent = false,
+                    successCancelEvent = false,
                 )
             }
             is DetailEventEvent.CancelEvent -> {
@@ -97,7 +96,6 @@ constructor(
                     _state.value = _state.value.copy(
                         error = "Algo malo ocurrio!"
                     )
-                    print(requestkickPlayer,result)
                 }
             }
         }.launchIn(viewModelScope)

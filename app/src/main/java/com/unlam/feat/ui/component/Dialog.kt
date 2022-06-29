@@ -46,7 +46,7 @@ fun SuccessDialog(
                     modifier = Modifier
                         .width(500.dp)
                         .background(
-                            color = PurpleMedium,
+                            color = PurpleDark,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {
@@ -135,7 +135,7 @@ fun ErrorDialog(
                     modifier = Modifier
                         .width(500.dp)
                         .background(
-                            color = PurpleMedium,
+                            color = PurpleDark,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {
@@ -223,7 +223,7 @@ fun InfoDialog(
                     modifier = Modifier
                         .width(500.dp)
                         .background(
-                            color = PurpleMedium,
+                            color = PurpleDark,
                             shape = RoundedCornerShape(10.dp)
                         )
                 ) {

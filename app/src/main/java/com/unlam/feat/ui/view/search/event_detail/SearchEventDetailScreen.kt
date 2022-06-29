@@ -1,11 +1,11 @@
-package com.unlam.feat.ui.view.home.detail_event
+package com.unlam.feat.ui.view.search.event_detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,17 +14,22 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.component.FeatOutlinedButton
+import com.unlam.feat.ui.component.FeatOutlinedButtonIcon
+import com.unlam.feat.ui.component.FeatText
 import com.unlam.feat.ui.component.common.event.DetailEvent
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
-import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.GreenColor20
+import com.unlam.feat.ui.theme.PurpleMedium
+import com.unlam.feat.ui.theme.PurpleMedium20
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DetailEventHomeScreen(
-    state: DetailEventHomeState,
-    onClick: (DetailEventHomeEvent) -> Unit
+fun DetailSearchEventScreen(
+    state: SearchEventDetailState,
+    onClick: (SearchEventDetailEvent) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -50,7 +55,7 @@ fun DetailEventHomeScreen(
                 0 -> PageOne(
                     state = state,
                     onClick = {
-                        onClick(DetailEventHomeEvent.DismissDialog)
+                        onClick(SearchEventDetailEvent.ApplyEvent)
                     }
                 )
                 1 -> PageTwo(state)
@@ -81,7 +86,7 @@ fun DetailEventHomeScreen(
 
 @Composable
 fun PageOne(
-    state: DetailEventHomeState,
+    state: SearchEventDetailState,
     onClick: () -> Unit
 ) {
     val event = state.event!!
@@ -110,9 +115,9 @@ fun PageOne(
 
 @Composable
 fun PageTwo(
-    state: DetailEventHomeState
+    state: SearchEventDetailState
 ) {
-    val players = state.players!!
+    val players = state.playersConfirmed!!
     Box {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -145,4 +150,3 @@ fun PageTwo(
         }
     }
 }
-

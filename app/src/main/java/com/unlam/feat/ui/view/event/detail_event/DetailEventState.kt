@@ -1,4 +1,4 @@
-package com.unlam.feat.presentation.view.events.detail_event
+package com.unlam.feat.ui.view.event.detail_event
 
 import com.unlam.feat.model.Event
 import com.unlam.feat.model.Player

@@ -133,7 +133,6 @@ fun RegisterScreen(
                     modifier = Modifier.align(Alignment.End),
                     contentColor = GreenColor,
                     backgroundColor = GreenColor20,
-                    width = 10.dp,
                     textContent = stringResource(id = R.string.text_register),
                     onClick = {
                         onClick(RegisterEvents.onClick(TypeClick.Register))

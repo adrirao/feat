@@ -20,7 +20,7 @@ import com.unlam.feat.ui.theme.PurpleLight
 @Composable
 fun CardPlayer(
     player: Player,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit = {}
 ) {
     FeatCard(
         modifier = Modifier.fillMaxWidth(),

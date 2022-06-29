@@ -3,7 +3,6 @@
 package com.unlam.feat.ui.component.common.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -11,9 +10,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
+import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
 import com.unlam.feat.ui.component.ErrorDialog
 import com.unlam.feat.ui.component.FeatCircularProgress
@@ -26,6 +24,7 @@ import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
+import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
@@ -36,6 +35,11 @@ import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeScreen
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeViewModel
+import com.unlam.feat.ui.view.invitation.InvitationScreen
+import com.unlam.feat.ui.view.invitation.InvitationViewModel
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationEvent
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationScreen
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationViewModel
 import com.unlam.feat.ui.view.login.LoginEvents
 import com.unlam.feat.ui.view.login.LoginScreen
 import com.unlam.feat.ui.view.login.LoginState
@@ -47,6 +51,10 @@ import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
+import com.unlam.feat.ui.view.search.SearchScreen
+import com.unlam.feat.ui.view.search.SearchViewModel
+import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
+import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import com.unlam.feat.ui.view.splash.SplashScreen
 
 @Composable
@@ -61,13 +69,14 @@ fun Navigation(navController: NavHostController) {
         addRouteMain(navController)
         addRouteHome(navController)
         addRouteEvent(navController)
-        addRouteNewEvent(navController)
         addRouteSearch(navController)
-
         addRouteProfile(navController)
+        addRouteInvitation(navController)
 
+        addRouteNewEvent(navController)
         addRouteDetailEventHome(navController)
         addRouteDetailEventMyEvent(navController)
+        addRouteDetailSearchEvent(navController)
     }
 }
 
@@ -99,23 +108,31 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
 private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
     composable(Screen.Home.route) {
         val homeViewModel: HomeViewModel = hiltViewModel()
+
         val state by remember {
             homeViewModel.state
         }
-        HomeScreen(
-            state,
-            onClick = { event ->
-                when (event) {
-                    is HomeEvents.onClick -> {
-                        if (event.typeClick == TypeClick.GoToDetailEvent) {
-                            navController.navigate(
-                                route = Screen.DetailEventHome.route + "/${event.idEvent}"
-                            )
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.eventsConfirmedForMy != null && state.eventsSuggestedToday != null) {
+            HomeScreen(
+                state,
+                onClick = { event ->
+                    when (event) {
+                        is HomeEvents.onClick -> {
+                            if (event.typeClick == TypeClick.GoToDetailEvent) {
+                                navController.navigate(
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -324,17 +341,19 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
         }
     }
 
-    private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
-        composable(Screen.Search.route) {
-            Button(onClick = {
-                Firebase.auth.signOut()
-                navController.popBackStack(Screen.Home.route, inclusive = true)
-                navController.navigate(Screen.Login.route)
-            }) {
-
+private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
+    composable(Screen.Search.route) {
+        val searchViewModel: SearchViewModel = hiltViewModel()
+        val state = searchViewModel.state.value
+        SearchScreen(
+            state = state,
+            onClick = searchViewModel::onEvent,
+            onClickCard = {
+                navController.navigate(Screen.SearchEventDetail.route + "/${it.id}")
             }
-        }
+        )
     }
+}
 
 private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
     composable(Screen.Profile.route) {
@@ -360,7 +379,10 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
         }
 
         if (state.event != null && state.players != null) {
-            DetailEventHomeScreen(state)
+            DetailEventHomeScreen(
+                state,
+                onClick = {}
+            )
         }
     }
 }
@@ -369,7 +391,7 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
     composable(
         route = Screen.DetailEventMyEvent.route + "/{idEvent}",
         arguments = Screen.DetailEventMyEvent.arguments ?: listOf()
-    ) {
+    ) { it ->
         val idEvent = it.arguments?.getString("idEvent") ?: ""
         val detailEventViewModel: DetailEventViewModel = hiltViewModel()
         val state = detailEventViewModel.state.value
@@ -382,9 +404,155 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
             FeatCircularProgress()
         }
 
+        if (state.successPlayer || state.successCancelEvent || state.successConfirmEvent) {
+            SuccessDialog(
+                title = state.successTitle,
+                desc = state.successDescription
+            ) {
+                detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+                navController.popBackStack()
+                navController.navigate(Screen.Events.route)
+            }
+        }
+
+        if (state.error.isNotEmpty()) {
+            ErrorDialog(
+                title = stringResource(R.string.text_error),
+                desc = stringResource(R.string.desc_error)
+            ) {
+                detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+            }
+        }
+
         if (state.event != null && state.playersApplied != null && state.playersConfirmed != null && state.playersSuggested != null) {
             DetailEventMyEventScreen(
                 state = state,
+                onClick = { event ->
+                    detailEventViewModel.onEvent(event)
+                }
+            )
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailSearchEvent(
+    navController: NavHostController
+) {
+    composable(
+        route = Screen.SearchEventDetail.route + "/{idEvent}",
+        arguments = Screen.SearchEventDetail.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val searchEventDetailViewModel: SearchEventDetailViewModel = hiltViewModel()
+        val state = searchEventDetailViewModel.state.value
+
+        LaunchedEffect(key1 = true) {
+            searchEventDetailViewModel.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.error.isNotBlank()) {
+            ErrorDialog(
+                title = "Ocurrio un error",
+                desc = "No se pudo procesar la solicitud",
+                onDismiss = {
+                    searchEventDetailViewModel.onEvent(SearchEventDetailEvent.DismissDialog)
+                }
+            )
+        }
+        if (state.success) {
+            SuccessDialog(
+                title = "Enhorabuena",
+                desc = "Solicitud Enviada Correctamente!!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Search.route)
+                }
+            )
+        }
+
+        if (state.event != null && state.playersConfirmed != null) {
+            DetailSearchEventScreen(
+                state = state,
+                onClick = searchEventDetailViewModel::onEvent,
+            )
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteInvitation(navController: NavHostController) {
+    composable(Screen.Invitation.route) {
+        val invitationViewModel: InvitationViewModel = hiltViewModel()
+        val state = invitationViewModel.state.value
+        val isRefreshing = invitationViewModel.isRefreshing.collectAsState()
+
+        InvitationScreen(
+            state = state,
+            onClick = invitationViewModel::onEvent,
+            onClickCard = {
+                navController.navigate(
+                    Screen.DetailInvitation.route + "/${it}"
+                )
+            }
+        )
+
+    }
+}
+
+private fun NavGraphBuilder.addRouteDetailInvitation(
+    navController: NavHostController,
+) {
+    composable(
+        route = Screen.DetailInvitation.route + "/{idEvent}",
+        arguments = Screen.DetailInvitation.arguments ?: listOf()
+    ) {
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val detailInvitation: DetailInvitationViewModel = hiltViewModel()
+        val state = detailInvitation.state.value
+
+        LaunchedEffect(key1 = true) {
+            detailInvitation.getDataDetailEvent(idEvent.toInt())
+        }
+
+        if (state.loading) {
+            FeatCircularProgress()
+        }
+
+        if (state.error.isNotBlank()) {
+            ErrorDialog(
+                title = "Ocurrio un error",
+                desc = "No se pudo procesar la solicitud, por favor, vuelva a intentarlo",
+                onDismiss = {
+                    detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
+                }
+            )
+        }
+        if (state.success) {
+            SuccessDialog(
+                title = state.successTitle,
+                desc = state.successDescription,
+                onDismiss = {
+                    detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
+                    navController.popBackStack()
+                    navController.navigate(Screen.Invitation.route)
+                }
+            )
+        }
+
+        if (state.event != null && state.playersConfirmed != null) {
+            DetailInvitationScreen(
+                state = state,
+                onClick = { event ->
+                    if (event == DetailInvitationEvent.CancelInvitation) {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Invitation.route)
+                    } else {
+                        detailInvitation.onEvent(event)
+                    }
+                },
             )
         }
     }

@@ -50,7 +50,7 @@ interface FeatProvider {
     suspend fun getAllEventsOfTheWeek(@Path("uid") uid: String): Response<List<Event>>
 
     @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
-    suspend fun getAllConfirmedOrAppliedByUser(@Path("uid") uid: String): Response<List<Event>>
+    suspend fun getAllConfirmedOrAppliedByUser(@Path("uid") uid: String): Response<List<HomeEvent>>
 
     //</editor-fold>
     //<editor-fold desc="Availabilities">
