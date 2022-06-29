@@ -9,7 +9,8 @@ sealed class ConfigProfileEvents {
     data class onValueChange(
         val typeValueChange: TypeValueChange,
         val value: String,
-        val valueOpt: String? = null
+        val valueOpt: String? = null,
+        val valueBooleanOpt: Boolean? = null
     ) :
         ConfigProfileEvents()
 }

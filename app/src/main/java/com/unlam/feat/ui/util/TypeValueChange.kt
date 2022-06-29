@@ -20,4 +20,6 @@ sealed class TypeValueChange {
     object OnValueChangeOrganizer : TypeValueChange()
     object OnValueChangeSportGeneric : TypeValueChange()
     object OnValueChangeTypeSport : TypeValueChange()
+    object OnValueChangeSundayIsChecked: TypeValueChange()
+
 }

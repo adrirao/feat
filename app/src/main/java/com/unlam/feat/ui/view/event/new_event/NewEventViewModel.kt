@@ -154,6 +154,10 @@ constructor(
                 dateError = NewEventState.GenericError.FieldEmpty
             )
             return
+        }else if(date.isBefore(LocalDate.now())){
+            _state.value = _state.value.copy(
+                dateError = NewEventState.DateError.DateInvalid
+            )
         }
     }
 

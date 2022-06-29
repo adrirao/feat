@@ -38,57 +38,58 @@ fun ConfigProfileScreen(
     val pagerState = rememberPagerState()
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            contentAlignment = Alignment.Center
-        ) {
-            HorizontalPager(
-                count = 2,
-                state = pagerState
-            ) { position ->
-                when (position) {
-                    0 -> PageOne(state, onValueChange)
-                    1 -> PageTwo(state, onValueChange, onClick, openMap = {
-                        openMap = true
-                    })
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.Center
+    ) {
+        HorizontalPager(
+            count = 3,
+            state = pagerState
+        ) { position ->
+            when (position) {
+                0 -> PageOne(state, onValueChange)
+                1 -> PageTwo(state, onValueChange, onClick, openMap = {
+                    openMap = true
+                })
+                2 -> PageThree(state, onValueChange, onClick)
             }
-            HorizontalPagerIndicator(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
-                pagerState = pagerState
-            )
+        }
+        HorizontalPagerIndicator(
+            modifier = Modifier
+                .align(Alignment.BottomCenter),
+            pagerState = pagerState
+        )
 
-        }
-        if (openMap) {
-            FeatMap(
-                setLocation = {
-                    onValueChange(
-                        ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangePosition,
-                            it.latitude.toString(),
-                            it.longitude.toString()
-                        )
+    }
+    if (openMap) {
+        FeatMap(
+            setLocation = {
+                onValueChange(
+                    ConfigProfileEvents.onValueChange(
+                        TypeValueChange.OnValueChangePosition,
+                        it.latitude.toString(),
+                        it.longitude.toString()
                     )
-                    openMap = false
-                }
-            )
-        }
-        if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
-            val address = Geocoder(LocalContext.current).getFromLocation(
-                state.latitude.toDouble(),
-                state.longitude.toDouble(),
-                1
-            )
-            onValueChange(
-                ConfigProfileEvents.onValueChange(
-                    TypeValueChange.OnValueChangeAddress,
-                    address[0].getAddressLine(0)
                 )
+                openMap = false
+            }
+        )
+    }
+    if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
+        val address = Geocoder(LocalContext.current).getFromLocation(
+            state.latitude.toDouble(),
+            state.longitude.toDouble(),
+            1
+        )
+        onValueChange(
+            ConfigProfileEvents.onValueChange(
+                TypeValueChange.OnValueChangeAddress,
+                address[0].getAddressLine(0)
             )
-        }
+        )
+    }
 
 }
 
@@ -101,7 +102,7 @@ private fun PageOne(
         modifier = Modifier.padding(10.dp)
     ) {
 
-        Column{
+        Column {
 
             FeatOutlinedTextField(
                 text = state.lastName,
@@ -151,6 +152,8 @@ private fun PageOne(
                 titlePicker = stringResource(R.string.select_date),
                 error = when (state.dateOfBirthError) {
                     ConfigProfileState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    ConfigProfileState.DateError.DateInvalid -> stringResource(id = R.string.invalid_date)
+                    ConfigProfileState.DateError.IsNotOfLegalAge -> stringResource(R.string.is_not_of_legal_age)
                     else -> ""
                 }
             )
@@ -248,6 +251,40 @@ private fun PageTwo(
                     else -> ""
                 }
             )
+        }
+    }
+}
+
+@Composable
+private fun PageThree(
+    state: ConfigProfileState,
+    onValueChange: (ConfigProfileEvents.onValueChange) -> Unit,
+    onClick: (ConfigProfileEvents.onClick) -> Unit,
+) {
+    FeatForm(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        Column {
+
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.sundayIsChecked,
+                onCheckedChange = {
+                    onValueChange(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeSundayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = "Domingo",
+                state.startTimeSunday,
+                state.endTimeSunday,
+                onValueChangeStartTime = {},
+                onValueChangeEndTime = {},
+
+            )
+
+
+
         }
     }
 }

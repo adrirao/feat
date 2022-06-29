@@ -223,6 +223,7 @@ private fun PageTwo(
                 titlePicker = "Seleccione una fecha",
                 error = when (state.dateError) {
                     NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    NewEventState.DateError.DateInvalid -> stringResource(R.string.invalid_date)
                     else -> ""
                 }
             )

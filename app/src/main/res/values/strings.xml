@@ -38,5 +38,7 @@
     <string name="name">Nombre</string>
     <string name="location">Ubicación</string>
     <string name="alias">Alias</string>
+    <string name="invalid_date">Fecha invalida</string>
+    <string name="is_not_of_legal_age">Debe ser mayor de 16 años para utilizar la aplicación</string>
 
 </resources>
