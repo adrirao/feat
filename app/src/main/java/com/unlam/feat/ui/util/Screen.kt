@@ -45,4 +45,7 @@ sealed class Screen(
     ))
 
     object Chat : Screen("chat_screen")
+    object EditProfileAddress: Screen("edit_profile_address_screen")
+    object EditProfilePersonalInformation: Screen("edit_personal_information_screen")
+    object EditProfilePreferences: Screen("edit_profile_preferences_screen")
 }

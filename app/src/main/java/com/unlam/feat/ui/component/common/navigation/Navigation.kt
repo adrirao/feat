@@ -44,7 +44,13 @@ import com.unlam.feat.ui.view.login.LoginState
 import com.unlam.feat.ui.view.login.LoginViewModel
 import com.unlam.feat.ui.view.main.MainEvents
 import com.unlam.feat.ui.view.main.MainScreen
+import com.unlam.feat.ui.view.profile.ProfileEvent
 import com.unlam.feat.ui.view.profile.ProfileScreen
+import com.unlam.feat.ui.view.profile.ProfileViewModel
+import com.unlam.feat.ui.view.profile.personal_information.EditPersonalInformationScreen
+import com.unlam.feat.ui.view.profile.personal_information.EditPersonalInformationViewModel
+import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesScreen
+import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesViewModel
 import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
@@ -74,6 +80,9 @@ fun Navigation(navController: NavHostController) {
         addRouteDetailEventHome(navController)
         addRouteDetailEventMyEvent(navController)
         addRouteDetailSearchEvent(navController)
+
+        addRouteEditPersonalInformation(navController)
+        addRouteEditPreferences(navController)
     }
 }
 
@@ -336,7 +345,28 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
     composable(Screen.Profile.route) {
-        ProfileScreen()
+        val profileViewModel: ProfileViewModel = hiltViewModel()
+        val state by remember {
+            profileViewModel.state
+        }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.person != null && state.availabilities != null) {
+            ProfileScreen(
+                state = state,
+                navigateTo = { typeNavigate ->
+                    if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPersonalInfo) {
+                        navController.navigate(Screen.EditProfilePersonalInformation.route)
+                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferencies) {
+                        navController.navigate(Screen.EditProfilePreferences.route)
+                    }
+                }
+            )
+        }
+
     }
 }
 
@@ -532,6 +562,52 @@ private fun NavGraphBuilder.addRouteDetailInvitation(
                         detailInvitation.onEvent(event)
                     }
                 },
+            )
+        }
+    }
+}
+
+private fun NavGraphBuilder.addRouteEditPersonalInformation(
+    navController: NavHostController,
+) {
+    composable(
+        route = Screen.EditProfilePersonalInformation.route,
+    ) {
+        val editPersonalInformationViewModel: EditPersonalInformationViewModel = hiltViewModel()
+        val state by remember { editPersonalInformationViewModel.state }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.person != null) {
+            EditPersonalInformationScreen(
+                state = state,
+                onValueChange = editPersonalInformationViewModel::onEvent,
+                updatePerson = {}
+            )
+        }
+
+    }
+}
+
+private fun NavGraphBuilder.addRouteEditPreferences(
+    navController: NavHostController,
+) {
+    composable(
+        route = Screen.EditProfilePreferences.route,
+    ) {
+        val editProfilePreferencesViewModel: EditProfilePreferencesViewModel = hiltViewModel()
+        val state by remember { editProfilePreferencesViewModel.state }
+
+        if(state.isLoading){
+            FeatCircularProgress()
+        }
+
+        if(state.person != null){
+            EditProfilePreferencesScreen(
+                state =state,
+                onValueChange = {}
             )
         }
     }

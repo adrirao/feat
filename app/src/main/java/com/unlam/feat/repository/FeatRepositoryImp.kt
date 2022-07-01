@@ -1068,6 +1068,7 @@ constructor(
     override fun getDetailProfile(uId: String): Flow<Result<ResponseDetailProfile>> = flow {
         try {
             emit(Result.Loading())
+            delay(600)
             val person = featProvider.getPerson(uId).body()
             val players = featProvider.getPlayersByUser(uId).body() ?: emptyList()
             val addresses = featProvider.getAddressesByUser(uId).body() ?: emptyList()

@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -32,6 +34,8 @@ fun FeatText(
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
     fontWeight : FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    fontStyle: FontStyle? = null,
     verticalPadding: Boolean = false
 ) {
     if (verticalPadding) FeatSpacerSmall()
@@ -42,7 +46,9 @@ fun FeatText(
         color = color,
         maxLines = maxLines,
         overflow = overflow,
-        fontWeight = fontWeight
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+        fontStyle = fontStyle
     )
     if (separator)
         Divider(
