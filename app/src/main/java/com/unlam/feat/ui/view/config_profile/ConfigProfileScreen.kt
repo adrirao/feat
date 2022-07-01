@@ -20,16 +20,19 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.GreenColor20
 import com.unlam.feat.ui.theme.PurpleLight
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ConfigProfileScreen(
     state: ConfigProfileState,
-    onValueChange: (ConfigProfileEvents.onValueChange) -> Unit,
-    onClick: (ConfigProfileEvents.onClick) -> Unit
+    onEvent: (ConfigProfileEvents) -> Unit,
 ) {
     var openMap by remember {
         mutableStateOf(false)
@@ -40,8 +43,7 @@ fun ConfigProfileScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         HorizontalPager(
@@ -49,11 +51,11 @@ fun ConfigProfileScreen(
             state = pagerState
         ) { position ->
             when (position) {
-                0 -> PageOne(state, onValueChange)
-                1 -> PageTwo(state, onValueChange, onClick, openMap = {
+                0 -> PageOne(state, onEvent)
+                1 -> PageTwo(state, onEvent, openMap = {
                     openMap = true
                 })
-                2 -> PageThree(state, onValueChange, onClick)
+                2 -> PageThree(state, onEvent)
             }
         }
         HorizontalPagerIndicator(
@@ -66,7 +68,7 @@ fun ConfigProfileScreen(
     if (openMap) {
         FeatMap(
             setLocation = {
-                onValueChange(
+                onEvent(
                     ConfigProfileEvents.onValueChange(
                         TypeValueChange.OnValueChangePosition,
                         it.latitude.toString(),
@@ -83,7 +85,7 @@ fun ConfigProfileScreen(
             state.longitude.toDouble(),
             1
         )
-        onValueChange(
+        onEvent(
             ConfigProfileEvents.onValueChange(
                 TypeValueChange.OnValueChangeAddress,
                 address[0].getAddressLine(0)
@@ -96,7 +98,7 @@ fun ConfigProfileScreen(
 @Composable
 private fun PageOne(
     state: ConfigProfileState,
-    onValueChange: (ConfigProfileEvents.onValueChange) -> Unit,
+    onValueChange: (ConfigProfileEvents) -> Unit,
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp)
@@ -205,8 +207,7 @@ private fun PageOne(
 @Composable
 private fun PageTwo(
     state: ConfigProfileState,
-    onValueChange: (ConfigProfileEvents.onValueChange) -> Unit,
-    onClick: (ConfigProfileEvents.onClick) -> Unit,
+    onEvent: (ConfigProfileEvents) -> Unit,
     openMap: () -> Unit
 ) {
     FeatForm(
@@ -218,7 +219,7 @@ private fun PageTwo(
                 text = state.addressAlias,
                 textLabel = stringResource(R.string.alias),
                 onValueChange = {
-                    onValueChange(
+                    onEvent(
                         ConfigProfileEvents.onValueChange(
                             TypeValueChange.OnValueChangeLastName,
                             it
@@ -258,8 +259,7 @@ private fun PageTwo(
 @Composable
 private fun PageThree(
     state: ConfigProfileState,
-    onValueChange: (ConfigProfileEvents.onValueChange) -> Unit,
-    onClick: (ConfigProfileEvents.onClick) -> Unit,
+    onEvent: (ConfigProfileEvents) -> Unit,
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp)
@@ -269,21 +269,270 @@ private fun PageThree(
             FeatAvailabilityCheckBoxPickerTime(
                 checked = state.sundayIsChecked,
                 onCheckedChange = {
-                    onValueChange(
+                    onEvent(
                         ConfigProfileEvents.onValueChange(
                             TypeValueChange.OnValueChangeSundayIsChecked, "", valueBooleanOpt = it
                         )
                     )
                 },
-                label = "Domingo",
+                label = stringResource(R.string.sunday),
                 state.startTimeSunday,
                 state.endTimeSunday,
-                onValueChangeStartTime = {},
-                onValueChangeEndTime = {},
-
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeSunday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeSunday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.sundayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
             )
 
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.mondayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeMondayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.monday),
+                state.startTimeMonday,
+                state.endTimeMonday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeMonday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeMonday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.mondayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
 
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.tuesdayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeTuesdayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.tuesday),
+                state.startTimeTuesday,
+                state.endTimeTuesday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeTuesday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeTuesday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.tuesdayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
+
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.wednesdayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeWednesdayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.wednesday),
+                state.startTimeWednesday,
+                state.endTimeWednesday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeWednesday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeWednesday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.wednesdayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
+
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.thursdayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeThursdayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.thursday),
+                state.startTimeThursday,
+                state.endTimeThursday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeThursday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeThursday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.thursdayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
+
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.fridayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeFridayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.friday),
+                state.startTimeFriday,
+                state.endTimeFriday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeFriday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeFriday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.fridayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
+
+            FeatAvailabilityCheckBoxPickerTime(
+                checked = state.saturdayIsChecked,
+                onCheckedChange = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeSaturdayIsChecked, "", valueBooleanOpt = it
+                        )
+                    )
+                },
+                label = stringResource(R.string.saturday),
+                state.startTimeSaturday,
+                state.endTimeSaturday,
+                onValueChangeStartTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeStartTimeSaturday,"",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                onValueChangeEndTime = {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeEndTimeSaturday, "",valueLocalTimeOpt = it
+                        )
+                    )
+                },
+                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerEnd = stringResource(R.string.select_end_time),
+                error = when (state.saturdayError) {
+                    ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
+                    ConfigProfileState.DayError.StarTimeEmpty -> stringResource(R.string.star_time_empty)
+                    ConfigProfileState.DayError.EndTimeEmpty -> stringResource(R.string.end_time_empty)
+                    ConfigProfileState.DayError.TimeEmpty -> stringResource(R.string.time_empty)
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedButton(
+                modifier = Modifier.align(Alignment.End),
+                textContent = "Aceptar",
+                contentColor = GreenColor,
+                backgroundColor = GreenColor20
+            ) {
+                onEvent(ConfigProfileEvents.onClick(TypeClick.Submit))
+            }
 
         }
     }

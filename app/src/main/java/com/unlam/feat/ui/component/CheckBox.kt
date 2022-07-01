@@ -1,12 +1,10 @@
 package com.unlam.feat.ui.component
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxColors
 import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +18,7 @@ import java.time.LocalTime
 
 
 @Composable
-fun FeatCheckbox (
+fun FeatCheckbox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     label: String,
@@ -28,9 +26,10 @@ fun FeatCheckbox (
     enabled: Boolean = true,
     colors: CheckboxColors = CheckboxDefaults.colors(
         checkedColor = GreenLight,
-        checkmarkColor = PurpleDark ,
-        uncheckedColor = GreenLight ,
-    )
+        checkmarkColor = PurpleDark,
+        uncheckedColor = GreenLight,
+    ),
+    error: String = ""
 ) {
 
     Row(
@@ -44,7 +43,9 @@ fun FeatCheckbox (
             enabled = enabled,
             colors = colors,
         )
-        FeatText(text = label , fontSize = 15.sp, color = PurpleLight)
+        FeatText(modifier= Modifier.padding(end = 5.dp),text = label, fontSize = 15.sp, color = PurpleLight)
+        FeatText(text = error, fontSize = 15.sp, color = MaterialTheme.colors.error)
+
     }
 }
 
@@ -57,7 +58,10 @@ fun FeatAvailabilityCheckBoxPickerTime(
     starTime: LocalTime?,
     endTime: LocalTime?,
     onValueChangeStartTime: (LocalTime?) -> Unit,
-    onValueChangeEndTime: (LocalTime?) -> Unit
+    onValueChangeEndTime: (LocalTime?) -> Unit,
+    titlePickerStart: String = "Default",
+    titlePickerEnd: String = "Default",
+    error: String = ""
 ) {
 
 
@@ -65,28 +69,38 @@ fun FeatAvailabilityCheckBoxPickerTime(
         modifier = Modifier.fillMaxWidth(),
         checked = checked,
         onCheckedChange = { onCheckedChange(it) },
-        label = label
+        label = label,
+        error = error
     )
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
 
     ) {
         if (checked) {
 
             FeatOutlinedTimePicker(
-                modifier = Modifier.width(50.dp),
+                modifier = Modifier.width(120.dp),
                 time = starTime,
                 onValueChange = { onValueChangeStartTime(it) },
+                label = stringResource(R.string.start_time),
+                titlePicker = titlePickerStart,
+                error = error,
+                isErrorVisible = false
             )
 
             FeatOutlinedTimePicker(
-                modifier = Modifier.width(50.dp),
+                modifier = Modifier.width(120.dp),
                 time = endTime,
                 onValueChange = { onValueChangeEndTime(it) },
+                label = stringResource(R.string.end_time),
+                titlePicker = titlePickerEnd,
+                error = error,
+                isErrorVisible = false
             )
 
-        }else{
+        } else {
             onValueChangeStartTime(null)
             onValueChangeEndTime(null)
 

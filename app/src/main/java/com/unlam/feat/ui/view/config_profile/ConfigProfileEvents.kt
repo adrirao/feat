@@ -2,6 +2,7 @@ package com.unlam.feat.ui.view.config_profile
 
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import java.time.LocalTime
 
 
 sealed class ConfigProfileEvents {
@@ -10,7 +11,8 @@ sealed class ConfigProfileEvents {
         val typeValueChange: TypeValueChange,
         val value: String,
         val valueOpt: String? = null,
-        val valueBooleanOpt: Boolean? = null
+        val valueBooleanOpt: Boolean? = null,
+        val valueLocalTimeOpt: LocalTime? = null
     ) :
         ConfigProfileEvents()
 }

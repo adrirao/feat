@@ -105,6 +105,7 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
     composable(Screen.Home.route) {
         val homeViewModel: HomeViewModel = hiltViewModel()
@@ -258,10 +259,9 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
 
         ConfigProfileScreen(
             state = state,
-            onValueChange = { event ->
+            onEvent = { event ->
                 configProfileViewModel.onEvent(event)
-            },
-            onClick = {})
+            })
 
 
     }

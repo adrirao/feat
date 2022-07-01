@@ -40,5 +40,20 @@
     <string name="alias">Alias</string>
     <string name="invalid_date">Fecha invalida</string>
     <string name="is_not_of_legal_age">Debe ser mayor de 16 años para utilizar la aplicación</string>
+    <string name="start_time">Inicio</string>
+    <string name="end_time">Fin</string>
+    <string name="sunday">Domingo</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miercoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sabado</string>
+    <string name="select_start_time">Seleccione una hora de inicio</string>
+    <string name="select_end_time">Seleccione una hora de fin</string>
+    <string name="wrong_time_range">Hora inicio es mayor a hora fin.</string>
+    <string name="star_time_empty">Hora inicio esta vacía.</string>
+    <string name="end_time_empty">Hora fin está vacía.</string>
+    <string name="time_empty">Ingrese un rango horario</string>
 
 </resources>

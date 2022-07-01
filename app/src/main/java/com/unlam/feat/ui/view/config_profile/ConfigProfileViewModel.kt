@@ -11,6 +11,7 @@ import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,6 +73,130 @@ constructor(
                             sundayIsChecked = event.valueBooleanOpt!!
                         )
                     }
+                    TypeValueChange.OnValueChangeStartTimeSunday -> {
+                        _state.value = _state.value.copy(
+                            startTimeSunday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeSunday -> {
+                        _state.value = _state.value.copy(
+                            endTimeSunday = event.valueLocalTimeOpt
+                        )
+                    }
+                    TypeValueChange.OnValueChangeMondayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            mondayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeMonday -> {
+                        _state.value = _state.value.copy(
+                            startTimeMonday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeMonday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeMonday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeTuesdayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            tuesdayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeTuesday -> {
+
+                        _state.value = _state.value.copy(
+                            startTimeTuesday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeTuesday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeTuesday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeWednesdayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            wednesdayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeWednesday -> {
+
+                        _state.value = _state.value.copy(
+                            startTimeWednesday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeWednesday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeWednesday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeThursdayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            thursdayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeThursday -> {
+
+                        _state.value = _state.value.copy(
+                            startTimeThursday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeThursday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeThursday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeFridayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            fridayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeFriday -> {
+
+                        _state.value = _state.value.copy(
+                            startTimeFriday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeFriday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeFriday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeSaturdayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            saturdayIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
+                    TypeValueChange.OnValueChangeStartTimeSaturday -> {
+
+                        _state.value = _state.value.copy(
+                            startTimeSaturday = event.valueLocalTimeOpt
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeEndTimeSaturday -> {
+
+                        _state.value = _state.value.copy(
+                            endTimeSaturday = event.valueLocalTimeOpt
+                        )
+
+                    }
 
                 }
             }
@@ -88,6 +213,44 @@ constructor(
                 validateSex(_state.value.sex)
                 validateAddress(_state.value.address)
                 validateAddressAlias(_state.value.addressAlias)
+                _state.value = _state.value.copy(
+                    sundayError = validateDayIsValidRange(
+                        state.value.startTimeSunday,
+                        state.value.endTimeSunday,
+                        state.value.sundayIsChecked
+                    ),
+                    mondayError = validateDayIsValidRange(
+                        state.value.startTimeMonday,
+                        state.value.endTimeMonday,
+                        state.value.mondayIsChecked
+                    ),
+                    tuesdayError = validateDayIsValidRange(
+                        state.value.startTimeTuesday,
+                        state.value.endTimeTuesday,
+                        state.value.tuesdayIsChecked
+                    ),
+                    wednesdayError = validateDayIsValidRange(
+                        state.value.startTimeWednesday,
+                        state.value.endTimeWednesday,
+                        state.value.wednesdayIsChecked
+                    ),
+                    thursdayError = validateDayIsValidRange(
+                        state.value.startTimeThursday,
+                        state.value.endTimeThursday,
+                        state.value.thursdayIsChecked
+                    ),
+                    fridayError = validateDayIsValidRange(
+                        state.value.startTimeFriday,
+                        state.value.endTimeFriday,
+                        state.value.fridayIsChecked
+                    ),
+                    saturdayError = validateDayIsValidRange(
+                        state.value.startTimeSaturday,
+                        state.value.endTimeSaturday,
+                        state.value.saturdayIsChecked
+                    ),
+
+                )
 
             }
 
@@ -165,6 +328,28 @@ constructor(
             )
             return
         }
+    }
+
+    private fun validateDayIsValidRange(
+        dayStar: LocalTime?,
+        dayEnd: LocalTime?,
+        dayIsChecked: Boolean
+    ): ConfigProfileState.DayError? {
+        if (dayIsChecked) {
+            if (dayEnd == null && dayStar == null) {
+                return ConfigProfileState.DayError.TimeEmpty
+            }
+            if (dayStar == null) {
+                return ConfigProfileState.DayError.StarTimeEmpty
+            }
+            if (dayEnd == null) {
+                return ConfigProfileState.DayError.EndTimeEmpty
+            }
+            if (dayStar.isAfter(dayEnd)) {
+                return ConfigProfileState.DayError.WrongTimeRange
+            }
+        }
+        return null
     }
 
 }

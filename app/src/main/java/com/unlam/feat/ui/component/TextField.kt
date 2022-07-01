@@ -1,6 +1,5 @@
 package com.unlam.feat.ui.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -16,21 +15,19 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -45,7 +42,6 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import kotlin.reflect.jvm.internal.impl.types.checker.TypeRefinementSupport
 
 @Composable
 fun FeatOutlinedTextField(
@@ -130,7 +126,7 @@ fun FeatOutlinedTextField(
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.End,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.End)
                     .padding(end = 15.dp)
             )
         }
@@ -202,7 +198,9 @@ fun FeatOutlinedTimePicker(
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
     titlePicker: String = "Default",
-    error: String = ""
+    error: String = "",
+    isErrorVisible:Boolean = true
+
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -224,7 +222,8 @@ fun FeatOutlinedTimePicker(
             },
         enabled = false,
         textLabel = label,
-        error = error
+        error = if(isErrorVisible) error else "",
+        unFocusedColor =  if(error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
     )
     MaterialDialog(
         dialogState = dialogState,
