@@ -118,9 +118,10 @@ fun PageOne(
             content = {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.End
                 ) {
                     FeatOutlinedButton(
+                        modifier = Modifier.weight(1f),
                         textContent = "Cancelar",
                         onClick = {
                             onClick(DetailEventEvent.CancelEvent)
@@ -128,17 +129,16 @@ fun PageOne(
                         contentColor = RedColor,
                         backgroundColor = RedColor20,
                         textColor = RedColor,
-                        height = 46.dp
                     )
                     FeatOutlinedButton(
+                        modifier = Modifier.weight(1f),
                         textContent = "Confirmar",
                         onClick = {
                             onClick(DetailEventEvent.ConfirmEvent)
                         },
                         contentColor = GreenColor,
-                        backgroundColor = GreenColor20,
-                        textColor = GreenColor,
-                        height = 46.dp
+                        backgroundColor = GreenColor90,
+                        textColor = PurpleDark,
                     )
                 }
             }

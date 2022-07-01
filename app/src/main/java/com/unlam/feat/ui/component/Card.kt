@@ -102,7 +102,7 @@ fun FeatForm(
             if (title == null) {
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 40.dp)
+                        .padding(vertical = 10.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
                     content()
@@ -112,7 +112,7 @@ fun FeatForm(
                     modifier
                         .padding(
                             top = 10.dp,
-                            bottom = 40.dp
+                            bottom = 10.dp
                         )
                         .verticalScroll(rememberScrollState())
                 ) {

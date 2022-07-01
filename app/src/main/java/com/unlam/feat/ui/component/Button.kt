@@ -67,7 +67,7 @@ fun FeatOutlinedButton(
             textAlign = textAlign,
             fontWeight = textWeight,
             style = if (height >= 50.dp) {
-                MaterialTheme.typography.h6.copy(
+                MaterialTheme.typography.body1.copy(
                     color = textColor
                 )
             } else TextStyle(fontSize = 10.sp)

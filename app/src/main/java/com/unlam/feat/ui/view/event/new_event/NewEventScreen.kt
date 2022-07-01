@@ -315,7 +315,8 @@ fun PageTwo(
                 modifier = Modifier.align(Alignment.End),
                 textContent = "Aceptar",
                 contentColor = GreenColor,
-                backgroundColor = GreenColor20
+                backgroundColor = GreenColor90,
+                textColor = PurpleDark
             ) {
                 onClick(NewEventEvents.onClick(TypeClick.Submit))
             }
