@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.view.register
 
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +8,11 @@ import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.messaging.FirebaseMessaging
 import com.unlam.feat.model.request.RequestUser
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseMessagingRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.util.Constants
@@ -198,35 +201,38 @@ constructor(
         val rePassword = if (_state.value.rePasswordError == null) _state.value.textRePassword else return
 
         firebaseAuthRepository.register(email, password) { isSuccessRegistration, error ->
-            if (isSuccessRegistration) {
-                val uid = firebaseAuthRepository.getUserId()
-                val request = RequestUser(uid = uid, email = email, "2")
-                featRepository.createUser(request).onEach { result ->
-                    when (result) {
-                        is Result.Loading -> {
-                            _state.value = _state.value.copy(
-                                isLoading = true
-                            )
+            val firebaseMessaging = FirebaseMessagingRepositoryImp()
+            firebaseMessaging.getToken { token ->
+                if (isSuccessRegistration) {
+                    val uid = firebaseAuthRepository.getUserId()
+                    val request = RequestUser(uid = uid, email = email, "2",token)
+                    featRepository.createUser(request).onEach { result ->
+                        when (result) {
+                            is Result.Loading -> {
+                                _state.value = _state.value.copy(
+                                    isLoading = true
+                                )
+                            }
+                            is Result.Success -> {
+                                _state.value = _state.value.copy(
+                                    registrationMessage = RegisterState.RegistrationMessage.RegistrationSuccess,
+                                    isLoading = false
+                                )
+                            }
+                            is Result.Error -> {
+                                _state.value = _state.value.copy(
+                                    registrationMessage = RegisterState.RegistrationMessage.RegistrationError,
+                                    isLoading = false
+                                )
+                            }
                         }
-                        is Result.Success -> {
-                            _state.value = _state.value.copy(
-                                registrationMessage = RegisterState.RegistrationMessage.RegistrationSuccess,
-                                isLoading = false
-                            )
-                        }
-                        is Result.Error -> {
-                            _state.value = _state.value.copy(
-                                registrationMessage = RegisterState.RegistrationMessage.RegistrationError,
-                                isLoading = false
-                            )
-                        }
-                    }
-                }.launchIn(viewModelScope)
-            } else if (error is FirebaseAuthUserCollisionException) {
-                _state.value = _state.value.copy(
-                    registrationMessage = RegisterState.RegistrationMessage.UserAlreadyExist,
-                    isLoading = false
-                )
+                    }.launchIn(viewModelScope)
+                } else if (error is FirebaseAuthUserCollisionException) {
+                    _state.value = _state.value.copy(
+                        registrationMessage = RegisterState.RegistrationMessage.UserAlreadyExist,
+                        isLoading = false
+                    )
+                }
             }
         }
 
