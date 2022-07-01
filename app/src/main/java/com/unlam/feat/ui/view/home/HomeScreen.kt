@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -18,8 +19,7 @@ import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.FeatEventCard
 import com.unlam.feat.ui.component.common.event.FeatEventCardHome
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
-import com.unlam.feat.ui.theme.PurpleDarkAlt
-import com.unlam.feat.ui.theme.PurpleMedium
+import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -67,7 +67,7 @@ fun HomeScreen(
                                     .height(220.dp)
                                     .padding(horizontal = 10.dp),
                                 new = true,
-                                colorCard = PurpleDarkAlt,
+                                colorCard = IndigoColor,
                                 event = event,
                                 onClick = {
                                     onClick(HomeEvents.onClick(TypeClick.GoToDetailEvent, event.id))

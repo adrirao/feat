@@ -8,10 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.*
@@ -23,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -75,11 +73,14 @@ fun FeatCard(
                 content()
             }
         }
-        if(new){
-            Image(
-                modifier = Modifier.align(Alignment.TopEnd).size(30.dp),
+        if (new) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(50.dp),
                 painter = painterResource(id = R.drawable.ic_new),
                 contentDescription = null,
+                tint = BrownColor
             )
         }
     }
@@ -88,6 +89,8 @@ fun FeatCard(
 @Composable
 fun FeatForm(
     modifier: Modifier = Modifier,
+    title: String? = null,
+    page: String? = null,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -96,9 +99,43 @@ fun FeatForm(
         elevation = 3.dp,
         shape = RoundedCornerShape(5),
         content = {
-            Column(modifier = Modifier.padding(vertical = 40.dp).verticalScroll(rememberScrollState())) {
-                content()
+            if (title == null) {
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 40.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    content()
+                }
+            } else {
+                Column(
+                    modifier
+                        .padding(
+                            top = 10.dp,
+                            bottom = 40.dp
+                        )
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        FeatText(
+                            text = title,
+                            fontSize = MaterialTheme.typography.body2.fontSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                        FeatText(
+                            text = page!!,
+                            fontSize = MaterialTheme.typography.body2.fontSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    FeatSpacerSmall()
+                    content()
+                }
             }
+
         }
     )
 }

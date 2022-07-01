@@ -3,6 +3,8 @@ package com.unlam.feat.ui.view.event.new_event
 import android.location.Geocoder
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -37,14 +39,9 @@ fun NewEventScreen(
     val pagerState = rememberPagerState()
 
     Column {
-        FeatText(
-            text = "Nuevo evento:",
-            fontSize = MaterialTheme.typography.h6.fontSize,
-            separator = true,
-            verticalPadding = true
-        )
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
@@ -116,7 +113,9 @@ fun PageOne(
     }
 
     FeatForm(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        title = "Datos del nuevo evento:",
+        page = "1/2"
     ) {
         Column {
             FeatOutlinedDropDown(
@@ -212,7 +211,9 @@ fun PageTwo(
     }
 
     FeatForm(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        title = "Datos del nuevo evento:",
+        page = "2/2"
     ) {
         Column {
 

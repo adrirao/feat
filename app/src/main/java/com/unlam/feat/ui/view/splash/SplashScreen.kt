@@ -65,7 +65,7 @@ fun Content(
             scale.animateTo(
                 targetValue = 0.5f,
                 animationSpec = tween(
-                    durationMillis = 800,
+                    durationMillis = 1500,
                     easing = {
                         overshootInterpolator.getInterpolation(it)
                     }
@@ -81,10 +81,9 @@ fun Content(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_isologotype_2),
+            painter = painterResource(id = R.drawable.ic_isologotype_3),
             contentDescription = "feat",
             modifier = Modifier
-                .size(400.dp)
                 .scale(scale.value)
         )
     }
