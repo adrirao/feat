@@ -1,11 +1,9 @@
 package com.unlam.feat.ui.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -63,7 +61,7 @@ fun FeatOutlinedTextField(
     onPasswordToggleClick: (Boolean) -> Unit = {},
     onValueChange: (String) -> Unit
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .padding(horizontal = 20.dp, vertical = 5.dp),
     ) {
@@ -125,9 +123,18 @@ fun FeatOutlinedTextField(
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.End,
-                modifier = Modifier
-                    .align(Alignment.End)
+                modifier = if(trailingIcon == null ){Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp)
+                    .align(Alignment.CenterEnd)
                     .padding(end = 15.dp)
+                    }else{
+                    Modifier
+                        .padding(vertical = 5.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 40.dp)
+                    }
             )
         }
     }
@@ -198,9 +205,7 @@ fun FeatOutlinedTimePicker(
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
     titlePicker: String = "Default",
-    error: String = "",
-    isErrorVisible:Boolean = true
-
+    error: String = ""
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -222,8 +227,7 @@ fun FeatOutlinedTimePicker(
             },
         enabled = false,
         textLabel = label,
-        error = if(isErrorVisible) error else "",
-        unFocusedColor =  if(error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
+        error = error
     )
     MaterialDialog(
         dialogState = dialogState,

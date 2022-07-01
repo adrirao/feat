@@ -93,12 +93,11 @@ fun PageOne(
                 horizontalArrangement = Arrangement.End,
                 content = {
                     FeatOutlinedButton(
-                        modifier = Modifier,
-                        textColor = GreenColor,
+                        modifier = Modifier.weight(1f),
                         contentColor = GreenColor,
-                        backgroundColor = GreenColor20,
+                        backgroundColor = GreenColor90,
+                        textColor = PurpleDark,
                         textContent = "Participar",
-                        height = 45.dp,
                         onClick = { onClick() }
                     )
                 }

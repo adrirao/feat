@@ -6,5 +6,7 @@ data class RequestUser(
     val uid: String,
     val email: String,
     @SerializedName("user_type")
-    val userType: String
+    val userType: String,
+    @SerializedName("mobile_token")
+    val mobileToken: String
 )

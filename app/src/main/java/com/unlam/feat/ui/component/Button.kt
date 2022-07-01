@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unlam.feat.ui.theme.LightTransparent
+import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.PurpleLight
 import java.util.*
 
@@ -67,7 +68,7 @@ fun FeatOutlinedButton(
             textAlign = textAlign,
             fontWeight = textWeight,
             style = if (height >= 50.dp) {
-                MaterialTheme.typography.h6.copy(
+                MaterialTheme.typography.body1.copy(
                     color = textColor
                 )
             } else TextStyle(fontSize = 10.sp)
@@ -90,6 +91,7 @@ fun FeatOutlinedButtonIcon(
     icon: ImageVector,
     textContent: String = "",
     textColor: Color = contentColor,
+    iconColor: Color = PurpleDark,
     textAlign: TextAlign = TextAlign.Center,
     textWeight: FontWeight = FontWeight.Bold,
     buttonElevation: ButtonElevation? = null,
@@ -118,7 +120,7 @@ fun FeatOutlinedButtonIcon(
         enabled = enabled,
         elevation = buttonElevation
     ) {
-        Icon(imageVector = icon, contentDescription = null)
+        Icon(imageVector = icon, contentDescription = null, tint = iconColor)
         if (textContent.isNotEmpty()) {
             Text(
                 text = textContent.uppercase(),
