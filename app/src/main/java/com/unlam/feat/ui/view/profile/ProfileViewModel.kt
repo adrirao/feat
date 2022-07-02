@@ -40,8 +40,12 @@ constructor(
                     error = ""
                 )
             }
+            is ProfileEvent.SingOutUser -> {
+                firebaseAuthRepository.signOut()
+            }
         }
     }
+
 
     private fun getDetailProfile(){
         val uId = firebaseAuthRepository.getUserId();

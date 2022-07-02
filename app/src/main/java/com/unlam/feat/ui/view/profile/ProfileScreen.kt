@@ -41,7 +41,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ProfileScreen(
     state: ProfileState,
-    navigateTo: (ProfileEvent.NavigateTo.TypeNavigate) -> Unit
+    navigateTo: (ProfileEvent.NavigateTo.TypeNavigate) -> Unit,
+    onClick: (ProfileEvent.SingOutUser)-> Unit
 ) {
 
     var imageUrl by remember { mutableStateOf<Uri?>(null) }
@@ -316,7 +317,11 @@ fun ProfileScreen(
                     backgroundColor = Color.Transparent,
                     contentColor = Color.Transparent,
                     textColor = RedColor40,
-                    onClick = {}
+                    onClick = {
+                        navigateTo(
+                            ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin
+                        )
+                    }
                 )
             }
         }

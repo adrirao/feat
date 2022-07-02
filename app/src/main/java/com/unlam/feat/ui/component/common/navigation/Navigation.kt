@@ -388,7 +388,12 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.EditProfilePersonalInformation.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferencies) {
                         navController.navigate(Screen.EditProfilePreferences.route)
+                    }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
+                        navController.navigate(Screen.Login.route)
                     }
+                },
+                onClick = {
+                    profileViewModel.onEvent(it)
                 }
             )
         }
