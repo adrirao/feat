@@ -642,7 +642,7 @@ private fun NavGraphBuilder.addRouteEditPreferences(
         if (state.person != null) {
             EditProfilePreferencesScreen(
                 state = state,
-                onValueChange = {}
+                onValueChange = editProfilePreferencesViewModel::onEvent
             )
         }
     }
