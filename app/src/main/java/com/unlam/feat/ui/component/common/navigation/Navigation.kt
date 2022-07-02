@@ -2,7 +2,9 @@
 
 package com.unlam.feat.ui.component.common.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
@@ -67,6 +69,7 @@ import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import com.unlam.feat.ui.view.splash.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Splash.route) {
@@ -90,6 +93,7 @@ fun Navigation(navController: NavHostController) {
 
         addRouteEditPersonalInformation(navController)
         addRouteEditPreferences(navController)
+        addRouteDetailInvitation(navController)
     }
 }
 
@@ -369,6 +373,7 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
     composable(Screen.Profile.route) {
         val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -392,9 +397,8 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.Login.route)
                     }
                 },
-                onClick = {
-                    profileViewModel.onEvent(it)
-                }
+                uploadImage = profileViewModel::onEvent,
+                onClick = { profileViewModel.onEvent(it) }
             )
         }
 
@@ -631,13 +635,13 @@ private fun NavGraphBuilder.addRouteEditPreferences(
         val editProfilePreferencesViewModel: EditProfilePreferencesViewModel = hiltViewModel()
         val state by remember { editProfilePreferencesViewModel.state }
 
-        if(state.isLoading){
+        if (state.isLoading) {
             FeatCircularProgress()
         }
 
-        if(state.person != null){
+        if (state.person != null) {
             EditProfilePreferencesScreen(
-                state =state,
+                state = state,
                 onValueChange = {}
             )
         }

@@ -5,8 +5,10 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,20 +29,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.unlam.feat.R
-import com.unlam.feat.model.Player
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ProfileScreen(
     state: ProfileState,
+    uploadImage: (ProfileEvent.UploadImage) -> Unit,
     navigateTo: (ProfileEvent.NavigateTo.TypeNavigate) -> Unit,
     onClick: (ProfileEvent.SingOutUser)-> Unit
 ) {
@@ -48,7 +49,9 @@ fun ProfileScreen(
     var imageUrl by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-    var showImaget by remember { mutableStateOf(false) }
+    val image = ImageRequest.Builder(LocalContext.current)
+        .data(state.image)
+        .build()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -74,14 +77,23 @@ fun ProfileScreen(
                 Box {
                     imageUrl?.let {
                         if (Build.VERSION.SDK_INT < 28) {
-                            LaunchedEffect(key1 = true) {
+                            LaunchedEffect(key1 = imageUrl) {
                                 bitmap.value =
-                                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                                    MediaStore.Images.Media.getBitmap(
+                                        context.contentResolver,
+                                        it
+                                    )
+                                val source =
+                                    ImageDecoder.createSource(context.contentResolver, it)
+                                bitmap.value = ImageDecoder.decodeBitmap(source)
+                                uploadImage(ProfileEvent.UploadImage(bitmap.value!!))
                             }
                         } else {
-                            LaunchedEffect(key1 = true) {
+                            LaunchedEffect(key1 = imageUrl) {
                                 val source = ImageDecoder.createSource(context.contentResolver, it)
                                 bitmap.value = ImageDecoder.decodeBitmap(source)
+
+                                uploadImage(ProfileEvent.UploadImage(bitmap.value!!))
                             }
                         }
                     }
@@ -117,13 +129,17 @@ fun ProfileScreen(
                             )
                         }
                     } else {
-                        Image(
+                        SubcomposeAsyncImage(
+                            model = state.image,
+                            loading= {
+                                     FeatCircularProgress()
+                            },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50))
                                 .border(3.dp, PurpleLight, RoundedCornerShape(50))
                                 .size(200.dp),
-                            painter = painterResource(id = R.drawable.ic_launcher_foreground),
                             contentDescription = null,
+                            contentScale = ContentScale.Crop
                         )
                         Box(
                             modifier = Modifier

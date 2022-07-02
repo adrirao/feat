@@ -47,7 +47,7 @@ fun DetailInvitationScreen(
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
-                count = 3,
+                count = 2,
                 state = pagerState
             ) { position ->
                 when (position) {
@@ -79,12 +79,6 @@ fun DetailInvitationScreen(
                     textColor = GreenColor,
                 )
             } else {
-                FeatText(
-                    text = "Detalle del evento:",
-                    fontSize = MaterialTheme.typography.h6.fontSize,
-                    separator = true,
-                    verticalPadding = true
-                )
                 FeatOutlinedButtonIcon(
                     modifier = Modifier.align(Alignment.BottomEnd),
                     icon = Icons.Outlined.PlayArrow,

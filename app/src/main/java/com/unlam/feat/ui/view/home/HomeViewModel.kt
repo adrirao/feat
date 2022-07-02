@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
-import com.unlam.feat.repository.FirebaseMessagingRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

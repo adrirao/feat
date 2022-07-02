@@ -1,5 +1,7 @@
 package com.unlam.feat.ui.view.profile
 
+import android.graphics.Bitmap
+
 sealed class ProfileEvent {
     object DismissDialog : ProfileEvent()
     object SingOutUser : ProfileEvent()
@@ -12,4 +14,5 @@ sealed class ProfileEvent {
             object NavigateToLogin: TypeNavigate()
         }
     }
+    data class UploadImage(val image: Bitmap) : ProfileEvent()
 }
