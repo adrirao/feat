@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.unlam.feat.model.request.RequestUser
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseMessagingRepository
 import com.unlam.feat.repository.FirebaseMessagingRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
@@ -27,8 +28,9 @@ class RegisterViewModel
 @Inject
 constructor(
     private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
-    private  val featRepository: FeatRepositoryImp
-): ViewModel() {
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseMessagingRepository: FirebaseMessagingRepositoryImp
+) : ViewModel() {
     private val _state = mutableStateOf(RegisterState())
     val state: State<RegisterState> = _state
 
@@ -58,7 +60,7 @@ constructor(
                     }
                 }
             }
-             RegisterEvents.onClick(TypeClick.ToggledPassword) -> {
+            RegisterEvents.onClick(TypeClick.ToggledPassword) -> {
                 _state.value = _state.value.copy(
                     isVisiblePassword = !_state.value.isVisiblePassword
                 )
@@ -86,16 +88,16 @@ constructor(
         }
     }
 
-    private fun validateEmail(email:String) {
+    private fun validateEmail(email: String) {
         val trimmedEmail = email.trim()
-        if(trimmedEmail.isBlank()){
+        if (trimmedEmail.isBlank()) {
             _state.value = _state.value.copy(
                 emailError = RegisterState.EmailError.FieldEmpty,
                 isLoading = false
             )
             return
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _state.value = _state.value.copy(
                 emailError = RegisterState.EmailError.InvalidEmail,
                 isLoading = false
@@ -105,10 +107,10 @@ constructor(
         _state.value = _state.value.copy(emailError = null)
     }
 
-    private fun validateReEmail(reEmail:String) {
+    private fun validateReEmail(reEmail: String) {
         val trimmedEmail = reEmail.trim()
 
-        if(reEmail != _state.value.textEmail){
+        if (reEmail != _state.value.textEmail) {
             _state.value = _state.value.copy(
                 reEmailError = RegisterState.EmailError.DiffEmail,
                 isLoading = false
@@ -116,14 +118,14 @@ constructor(
             return
         }
 
-        if(trimmedEmail.isBlank()){
+        if (trimmedEmail.isBlank()) {
             _state.value = _state.value.copy(
                 reEmailError = RegisterState.EmailError.FieldEmpty,
                 isLoading = false
             )
             return
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(reEmail).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(reEmail).matches()) {
             _state.value = _state.value.copy(
                 reEmailError = RegisterState.EmailError.InvalidEmail,
                 isLoading = false
@@ -134,14 +136,14 @@ constructor(
     }
 
     private fun validatePassword(password: String) {
-        if(password.isBlank()) {
+        if (password.isBlank()) {
             _state.value = _state.value.copy(
                 passwordError = RegisterState.PasswordError.FieldEmpty,
                 isLoading = false
             )
             return
         }
-        if(password.length < Constants.MIN_PASSWORD_LENGTH) {
+        if (password.length < Constants.MIN_PASSWORD_LENGTH) {
             _state.value = _state.value.copy(
                 passwordError = RegisterState.PasswordError.InputTooShort,
                 isLoading = false
@@ -150,7 +152,7 @@ constructor(
         }
         val capitalLettersInPassword = password.any { it.isUpperCase() }
         val numberInPassword = password.any { it.isDigit() }
-        if(!capitalLettersInPassword || !numberInPassword) {
+        if (!capitalLettersInPassword || !numberInPassword) {
             _state.value = _state.value.copy(
                 passwordError = RegisterState.PasswordError.InvalidPassword,
                 isLoading = false
@@ -161,21 +163,21 @@ constructor(
     }
 
     private fun validateRePassword(rePassword: String) {
-        if(rePassword.isBlank()) {
+        if (rePassword.isBlank()) {
             _state.value = _state.value.copy(
                 rePasswordError = RegisterState.PasswordError.FieldEmpty,
                 isLoading = false
             )
             return
         }
-        if(rePassword != _state.value.textPassword){
+        if (rePassword != _state.value.textPassword) {
             _state.value = _state.value.copy(
                 rePasswordError = RegisterState.PasswordError.DiffPassword,
                 isLoading = false
             )
             return
         }
-        if(rePassword.length < Constants.MIN_PASSWORD_LENGTH) {
+        if (rePassword.length < Constants.MIN_PASSWORD_LENGTH) {
             _state.value = _state.value.copy(
                 rePasswordError = RegisterState.PasswordError.InputTooShort,
                 isLoading = false
@@ -184,7 +186,7 @@ constructor(
         }
         val capitalLettersInPassword = rePassword.any { it.isUpperCase() }
         val numberInPassword = rePassword.any { it.isDigit() }
-        if(!capitalLettersInPassword || !numberInPassword) {
+        if (!capitalLettersInPassword || !numberInPassword) {
             _state.value = _state.value.copy(
                 rePasswordError = RegisterState.PasswordError.InvalidPassword,
                 isLoading = false
@@ -194,18 +196,18 @@ constructor(
         _state.value = _state.value.copy(rePasswordError = null)
     }
 
-    private fun registerUser(){
+    private fun registerUser() {
         val email = if (_state.value.emailError == null) _state.value.textEmail else return
         val password = if (_state.value.passwordError == null) _state.value.textPassword else return
         val reEmail = if (_state.value.reEmailError == null) _state.value.textReEmail else return
-        val rePassword = if (_state.value.rePasswordError == null) _state.value.textRePassword else return
+        val rePassword =
+            if (_state.value.rePasswordError == null) _state.value.textRePassword else return
 
         firebaseAuthRepository.register(email, password) { isSuccessRegistration, error ->
-            val firebaseMessaging = FirebaseMessagingRepositoryImp()
-            firebaseMessaging.getToken { token ->
+            firebaseMessagingRepository.getToken { token ->
                 if (isSuccessRegistration) {
                     val uid = firebaseAuthRepository.getUserId()
-                    val request = RequestUser(uid = uid, email = email, "2",token)
+                    val request = RequestUser(uid = uid, email = email, "2", token)
                     featRepository.createUser(request).onEach { result ->
                         when (result) {
                             is Result.Loading -> {

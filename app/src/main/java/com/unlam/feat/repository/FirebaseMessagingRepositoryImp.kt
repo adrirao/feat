@@ -1,7 +1,5 @@
 package com.unlam.feat.repository
 
-import android.provider.Settings.Global.getString
-import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import javax.inject.Inject
@@ -11,10 +9,10 @@ import javax.inject.Singleton
 class FirebaseMessagingRepositoryImp
 @Inject
 constructor(
-
-){
-    fun getToken(isSuccess: (String) -> Unit){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+    private val firebaseMessaging: FirebaseMessaging
+) : FirebaseMessagingRepository {
+    override fun getToken(isSuccess: (String) -> Unit) {
+        firebaseMessaging.token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
