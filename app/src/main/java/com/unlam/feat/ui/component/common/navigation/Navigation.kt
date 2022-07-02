@@ -93,6 +93,7 @@ fun Navigation(navController: NavHostController) {
 
         addRouteEditPersonalInformation(navController)
         addRouteEditPreferences(navController)
+        addRouteDetailInvitation(navController)
     }
 }
 
