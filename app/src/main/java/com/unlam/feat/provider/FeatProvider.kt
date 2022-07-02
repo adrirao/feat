@@ -116,7 +116,7 @@ interface FeatProvider {
     suspend fun getAllPlayersConfirmedByEvent(@Path("eventId") eventId: Int): Response<List<Player>>
 
     @GET("/players/getAllAppliedByEvent/{eventId}")
-    suspend fun getAllPlayersAppliedByEvent(@Path("eventId") eventId: Int): Response<List<Player>>
+    suspend fun getAllPlayersAppliedByEvent(@Path("eventId") eventId: Int): Response<List<PlayerApplyDetail>>
 
     @POST("/players/create")
     suspend fun createPlayer(@Body req: RequestPlayer): Response<String>

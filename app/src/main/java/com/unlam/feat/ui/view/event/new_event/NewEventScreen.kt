@@ -94,7 +94,7 @@ fun NewEventScreen(
 }
 
 @Composable
-fun PageOne(
+private fun PageOne(
     state: NewEventState = NewEventState(),
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
 ) {
@@ -199,7 +199,7 @@ fun PageOne(
 }
 
 @Composable
-fun PageTwo(
+private fun PageTwo(
     state: NewEventState,
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
     onClick: (NewEventEvents.onClick) -> Unit,
@@ -231,6 +231,7 @@ fun PageTwo(
                 titlePicker = "Seleccione una fecha",
                 error = when (state.dateError) {
                     NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                    NewEventState.DateError.DateInvalid -> stringResource(R.string.invalid_date)
                     else -> ""
                 }
             )
@@ -277,7 +278,7 @@ fun PageTwo(
                         if (it.description == value) {
                             onValueChange(
                                 NewEventEvents.onValueChange(
-                                    TypeValueChange.OnValueChangePerioridicity,
+                                    TypeValueChange.OnValueChangePeriodicity,
                                     it.id.toString()
                                 )
                             )

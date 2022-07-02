@@ -51,6 +51,10 @@ data class NewEventState(
         object FieldEmpty : GenericError()
     }
 
+    sealed class DateError{
+        object DateInvalid : GenericError()
+    }
+
     sealed class NewEventMessage {
         object NewEventSuccess : NewEventMessage()
         object NewEventError : NewEventMessage()

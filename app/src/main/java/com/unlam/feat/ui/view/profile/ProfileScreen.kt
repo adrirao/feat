@@ -29,31 +29,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.unlam.feat.R
-import com.unlam.feat.model.Player
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
-import kotlinx.coroutines.coroutineScope
-import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ProfileScreen(
     state: ProfileState,
+    uploadImage: (ProfileEvent.UploadImage) -> Unit,
     navigateTo: (ProfileEvent.NavigateTo.TypeNavigate) -> Unit,
-    uploadImage: (ProfileEvent.UploadImage) -> Unit
+    onClick: (ProfileEvent.SingOutUser)-> Unit
 ) {
 
     var imageUrl by remember { mutableStateOf<Uri?>(null) }
@@ -343,7 +333,12 @@ fun ProfileScreen(
                     backgroundColor = Color.Transparent,
                     contentColor = Color.Transparent,
                     textColor = RedColor40,
-                    onClick = {}
+                    onClick = {
+                        onClick(ProfileEvent.SingOutUser)
+                        navigateTo(
+                            ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin
+                        )
+                    }
                 )
             }
         }

@@ -13,6 +13,8 @@ sealed class Screen(
     object Splash : Screen("splash_screen")
     object Login : Screen("login_screen")
     object Register : Screen("register_screen")
+    object ConfigProfile : Screen("config_profile_screen")
+
 
     object Profile : Screen("profile_screen")
     object Events : Screen("events_screen")

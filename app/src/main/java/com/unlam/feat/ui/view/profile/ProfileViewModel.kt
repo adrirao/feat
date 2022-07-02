@@ -51,8 +51,12 @@ constructor(
             is ProfileEvent.UploadImage -> {
                 uploadImage(event.image)
             }
+            is ProfileEvent.SingOutUser -> {
+                firebaseAuthRepository.signOut()
+            }
         }
     }
+
 
     private fun getDetailProfile() {
         val uId = firebaseAuthRepository.getUserId()

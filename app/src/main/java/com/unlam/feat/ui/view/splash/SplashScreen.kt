@@ -31,10 +31,10 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.state.collect() {
-            if (it.isAuthenticate == true) {
-//                navController.popBackStack()
-//                navController.navigate(Screen.ConfigProfilePersonalData.route)
-//            } else if(it.isAuthenticate == true && it.isFirstLogin == false){
+            if (it.isAuthenticate == true && it.isFirstLogin == true) {
+                navController.popBackStack()
+                navController.navigate(Screen.ConfigProfile.route)
+            } else if(it.isAuthenticate == true && it.isFirstLogin == false){
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
             } else if (it.isAuthenticate == false) {

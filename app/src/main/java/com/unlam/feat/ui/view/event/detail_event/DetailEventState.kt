@@ -2,6 +2,7 @@ package com.unlam.feat.ui.view.event.detail_event
 
 import com.unlam.feat.model.Event
 import com.unlam.feat.model.Player
+import com.unlam.feat.model.PlayerApplyDetail
 
 data class DetailEventState(
     val loading: Boolean = false,
@@ -17,6 +18,6 @@ data class DetailEventState(
     val event: Event? = null,
     val playersSuggested: List<Player>? = null,
     val playersConfirmed: List<Player>? = null,
-    val playersApplied: List<Player>? = null,
+    val playersApplied: List<PlayerApplyDetail>? = null,
     val idPlayer : Int? = null
 )

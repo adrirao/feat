@@ -13,14 +13,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
+import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
 import com.unlam.feat.ui.component.ErrorDialog
 import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.InfoDialog
 import com.unlam.feat.ui.component.SuccessDialog
+import com.unlam.feat.ui.view.config_profile.ConfigProfileScreen
+import com.unlam.feat.ui.view.config_profile.ConfigProfileViewModel
 import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.event.EventEvents
@@ -65,6 +69,7 @@ import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import com.unlam.feat.ui.view.splash.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Splash.route) {
@@ -72,6 +77,7 @@ fun Navigation(navController: NavHostController) {
         addRouteSplash(navController)
         addRouteLogin(navController)
         addRouteRegister(navController)
+        addRouteConfigProfile(navController)
 
         addRouteMain(navController)
         addRouteHome(navController)
@@ -115,8 +121,10 @@ private fun NavGraphBuilder.addRouteMain(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
     composable(Screen.Home.route) {
+
         val homeViewModel: HomeViewModel = hiltViewModel()
 
         val state by remember {
@@ -259,12 +267,29 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
-    composable(Screen.Events.route) {
-        val eventViewModel: EventViewModel = hiltViewModel()
+private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostController) {
+    composable(Screen.ConfigProfile.route) {
+        val configProfileViewModel: ConfigProfileViewModel = hiltViewModel()
         val state by remember {
-            eventViewModel.state
+            configProfileViewModel.state
         }
+
+        ConfigProfileScreen(
+            state = state,
+            onEvent = { event ->
+                configProfileViewModel.onEvent(event)
+            })
+
+
+    }
+}
+
+private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
+        composable(Screen.Events.route) {
+            val eventViewModel: EventViewModel = hiltViewModel()
+            val state by remember {
+                eventViewModel.state
+            }
 
         EventScreen(
             state = state,
@@ -284,54 +309,54 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
-    composable(Screen.NewEvent.route) {
-        val newEventViewModel: NewEventViewModel = hiltViewModel()
-        val state by remember {
-            newEventViewModel.state
-        }
-
-        when (state.newEventMessage) {
-            NewEventState.NewEventMessage.NewEventError -> {
-                ErrorDialog(
-                    title = stringResource(R.string.text_error),
-                    desc = stringResource(R.string.desc_error)
-                ) {
-                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
-                }
+    private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
+        composable(Screen.NewEvent.route) {
+            val newEventViewModel: NewEventViewModel = hiltViewModel()
+            val state by remember {
+                newEventViewModel.state
             }
-            NewEventState.NewEventMessage.NewEventSuccess -> {
-                SuccessDialog(
-                    title = stringResource(R.string.text_event_created),
-                    desc = stringResource(R.string.desc_event_created)
-                ) {
-                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
-                    navController.popBackStack()
-                    navController.navigate(Screen.Events.route)
-                }
-            }
-            else -> {}
-        }
 
-        NewEventScreen(
-            state = state,
-            onValueChange = { event ->
-                newEventViewModel.onEvent(event)
-            },
-            onClick = { event ->
-                when (event) {
-                    NewEventEvents.onClick(TypeClick.GoToEvent) -> {
+            when (state.newEventMessage) {
+                NewEventState.NewEventMessage.NewEventError -> {
+                    ErrorDialog(
+                        title = stringResource(R.string.text_error),
+                        desc = stringResource(R.string.desc_error)
+                    ) {
+                        newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
+                    }
+                }
+                NewEventState.NewEventMessage.NewEventSuccess -> {
+                    SuccessDialog(
+                        title = stringResource(R.string.text_event_created),
+                        desc = stringResource(R.string.desc_event_created)
+                    ) {
+                        newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
                         navController.popBackStack()
                         navController.navigate(Screen.Events.route)
                     }
-                    NewEventEvents.onClick(TypeClick.Submit) -> {
-                        newEventViewModel.onEvent(event)
+                }
+                else -> {}
+            }
+
+            NewEventScreen(
+                state = state,
+                onValueChange = { event ->
+                    newEventViewModel.onEvent(event)
+                },
+                onClick = { event ->
+                    when (event) {
+                        NewEventEvents.onClick(TypeClick.GoToEvent) -> {
+                            navController.popBackStack()
+                            navController.navigate(Screen.Events.route)
+                        }
+                        NewEventEvents.onClick(TypeClick.Submit) -> {
+                            newEventViewModel.onEvent(event)
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
-}
 
 private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
     composable(Screen.Search.route) {
@@ -367,9 +392,12 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.EditProfilePersonalInformation.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferencies) {
                         navController.navigate(Screen.EditProfilePreferences.route)
+                    }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
+                        navController.navigate(Screen.Login.route)
                     }
                 },
-                uploadImage = profileViewModel::onEvent
+                uploadImage = profileViewModel::onEvent,
+                onClick = { profileViewModel.onEvent(it) }
             )
         }
 
