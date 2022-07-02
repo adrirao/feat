@@ -3,6 +3,7 @@ package com.unlam.feat.di
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
 import com.unlam.feat.util.Constants
 import com.unlam.feat.provider.FeatProvider
 import dagger.Module
@@ -65,5 +66,9 @@ class ProviderModule {
     @Provides
     @Singleton
     fun provideFirebaseMessagingInstance() = FirebaseMessaging.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorageInstance() = FirebaseStorage.getInstance()
 }
 

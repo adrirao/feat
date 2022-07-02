@@ -6,7 +6,7 @@ import com.unlam.feat.model.Person
 import com.unlam.feat.model.Player
 
 
-data class ProfileState (
+data class ProfileState(
     val isLoading: Boolean = false,
     val error: String = "",
     val isUpdatedMessage: String? = "",
@@ -15,5 +15,6 @@ data class ProfileState (
     val addresses: List<Address>? = emptyList(),
     val players: List<Player>? = emptyList(),
     val availabilities: List<Availability>? = emptyList(),
+    val image: String? = null
 
 )

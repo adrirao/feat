@@ -1,5 +1,7 @@
 package com.unlam.feat.ui.view.profile
 
+import android.graphics.Bitmap
+
 sealed class ProfileEvent {
     object DismissDialog : ProfileEvent()
     data class NavigateTo(val typeNavigate : TypeNavigate): ProfileEvent(){
@@ -10,4 +12,5 @@ sealed class ProfileEvent {
             object NavigateToPreferencies : TypeNavigate()
         }
     }
+    data class UploadImage(val image: Bitmap) : ProfileEvent()
 }
