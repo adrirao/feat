@@ -318,6 +318,7 @@ fun ProfileScreen(
                     contentColor = Color.Transparent,
                     textColor = RedColor40,
                     onClick = {
+                        onClick(ProfileEvent.SingOutUser)
                         navigateTo(
                             ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin
                         )
