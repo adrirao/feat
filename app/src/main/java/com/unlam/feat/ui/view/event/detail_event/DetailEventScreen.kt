@@ -250,7 +250,7 @@ fun PageTree(
                                             backgroundColor = GreenColor20,
                                             textColor = GreenColor
                                         )
-                                    }else if(player.origin == "Postulado"){
+                                    }else if(player.origin == "Invitado"){
                                         FeatOutlinedButton(
                                             textContent = "Cancelar invitación",
                                             height = 40.dp,
