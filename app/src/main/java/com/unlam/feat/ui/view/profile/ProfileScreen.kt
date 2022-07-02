@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import java.time.LocalDate
@@ -129,18 +130,30 @@ fun ProfileScreen(
                             )
                         }
                     } else {
-                        SubcomposeAsyncImage(
-                            model = state.image,
-                            loading= {
-                                     FeatCircularProgress()
-                            },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                .size(200.dp),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
+                        if(state.image!!.isNotEmpty()){
+                            SubcomposeAsyncImage(
+                                model = state.image,
+                                loading= {
+                                    FeatCircularProgress()
+                                },
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                    .size(200.dp),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+                        }else{
+                            Image(
+                                painter = painterResource(id = (R.drawable.ic_launcher_foreground)),
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                    .size(200.dp),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)

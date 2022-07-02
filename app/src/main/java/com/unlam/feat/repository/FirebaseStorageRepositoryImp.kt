@@ -30,6 +30,8 @@ constructor(
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.downloadUrl.addOnSuccessListener {
             isSuccess(it)
+        }.addOnFailureListener {
+            isSuccess(Uri.EMPTY)
         }
     }
 }
