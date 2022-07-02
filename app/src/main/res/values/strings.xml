@@ -55,5 +55,8 @@
     <string name="star_time_empty">Hora inicio esta vacía.</string>
     <string name="end_time_empty">Hora fin está vacía.</string>
     <string name="time_empty">Ingrese un rango horario</string>
+    <string name="invalid_range">Edad minima es mayor a edad maxima</string>
+    <string name="min_age_empty">Edad minima vacia</string>
+    <string name="max_age_empty">Edad maxima vacia</string>
 
 </resources>

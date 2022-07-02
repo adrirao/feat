@@ -40,6 +40,11 @@ data class ConfigProfileState(
     val endTimeFriday: LocalTime? = null,
     val startTimeSaturday: LocalTime? = null,
     val endTimeSaturday: LocalTime? = null,
+    val minAge: String = "",
+    val maxAge: String = "",
+    val notifications: Boolean = false,
+    val willingDistance: String = "1",
+
 
 
     val lastNameError: GenericError? = null,
@@ -58,6 +63,8 @@ data class ConfigProfileState(
     val thursdayError: DayError? = null,
     val fridayError: DayError? = null,
     val saturdayError: DayError? = null,
+    val ageError: RangeAgeError? = null,
+    val willingDistanceError: GenericError? = null,
 
 
 
@@ -75,5 +82,12 @@ data class ConfigProfileState(
         object StarTimeEmpty : DayError()
         object EndTimeEmpty : DayError()
         object TimeEmpty : DayError()
+    }
+
+    sealed class RangeAgeError {
+        object IsInvalidRange : RangeAgeError()
+        object MinAgeEmpty : RangeAgeError()
+        object MaxAgeEmpty : RangeAgeError()
+        object FieldEmpty : RangeAgeError()
     }
 }

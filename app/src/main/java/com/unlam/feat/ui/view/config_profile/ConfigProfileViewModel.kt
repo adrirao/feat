@@ -197,6 +197,24 @@ constructor(
                         )
 
                     }
+                    TypeValueChange.OnValueChangeMinAge -> {
+                        _state.value = _state.value.copy(
+                            minAge = event.value
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeMaxAge -> {
+                        _state.value = _state.value.copy(
+                            maxAge = event.value
+                        )
+
+                    }
+                    TypeValueChange.OnValueChangeWillingDistance -> {
+                        _state.value = _state.value.copy(
+                            willingDistance = event.value
+                        )
+
+                    }
 
                 }
             }
@@ -251,10 +269,54 @@ constructor(
                     ),
 
                 )
-
+                validateAgeIsNotEmptyAndValid(_state.value.minAge,_state.value.maxAge)
+                validateWillingDistance(_state.value.willingDistance)
             }
 
         }
+    }
+
+    private fun validateWillingDistance(willingDistance: String) {
+        val trimmedName = willingDistance.trim()
+        if (trimmedName.isBlank()) {
+            _state.value = _state.value.copy(
+                willingDistanceError = ConfigProfileState.GenericError.FieldEmpty
+            )
+            return
+        }
+    }
+    private fun validateAgeIsNotEmptyAndValid(minAge: String, maxAge: String) {
+        val trimmedMinAge = minAge.trim()
+        val trimmedMaxAge = maxAge.trim()
+
+        if (trimmedMaxAge.isBlank() && trimmedMinAge.isBlank()) {
+            _state.value = _state.value.copy(
+                ageError = ConfigProfileState.RangeAgeError.FieldEmpty
+            )
+            return
+        }
+        if (trimmedMinAge.isBlank()) {
+            _state.value = _state.value.copy(
+                ageError = ConfigProfileState.RangeAgeError.MinAgeEmpty
+            )
+            return
+        }
+        if (trimmedMaxAge.isBlank()) {
+            _state.value = _state.value.copy(
+                ageError = ConfigProfileState.RangeAgeError.MaxAgeEmpty
+            )
+            return
+        }
+
+        if (minAge.toInt() > maxAge.toInt()) {
+            _state.value = _state.value.copy(
+                ageError = ConfigProfileState.RangeAgeError.IsInvalidRange
+            )
+            return
+        }
+
+        _state.value = _state.value.copy(ageError = null)
+
     }
 
     private fun validateLastName(name: String) {

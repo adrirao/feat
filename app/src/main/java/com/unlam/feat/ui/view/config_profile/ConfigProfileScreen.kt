@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GpsFixed
 import androidx.compose.runtime.*
@@ -13,19 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
-import com.unlam.feat.ui.theme.GreenColor
-import com.unlam.feat.ui.theme.GreenColor20
-import com.unlam.feat.ui.theme.PurpleLight
+import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
+import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesEvent
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -47,7 +49,7 @@ fun ConfigProfileScreen(
         contentAlignment = Alignment.Center
     ) {
         HorizontalPager(
-            count = 3,
+            count = 4,
             state = pagerState
         ) { position ->
             when (position) {
@@ -56,6 +58,7 @@ fun ConfigProfileScreen(
                     openMap = true
                 })
                 2 -> PageThree(state, onEvent)
+                3 -> PageFour(state, onEvent)
             }
         }
         HorizontalPagerIndicator(
@@ -101,7 +104,9 @@ private fun PageOne(
     onValueChange: (ConfigProfileEvents) -> Unit,
 ) {
     FeatForm(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        title = "Datos personales:",
+        page = "1/5"
     ) {
 
         Column {
@@ -211,7 +216,9 @@ private fun PageTwo(
     openMap: () -> Unit
 ) {
     FeatForm(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        title = "Direcciónes:",
+        page = "2/5"
     ) {
         Column {
 
@@ -262,7 +269,9 @@ private fun PageThree(
     onEvent: (ConfigProfileEvents) -> Unit,
 ) {
     FeatForm(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
+        title = "Disponibilidad:",
+        page = "3/5"
     ) {
         Column {
 
@@ -281,18 +290,18 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeSunday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeSunday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeSunday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeSunday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.sundayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -318,18 +327,18 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeMonday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeMonday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeMonday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeMonday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.mondayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -355,18 +364,20 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeTuesday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeTuesday,
+                            "",
+                            valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeTuesday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeTuesday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.tuesdayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -382,7 +393,9 @@ private fun PageThree(
                 onCheckedChange = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeWednesdayIsChecked, "", valueBooleanOpt = it
+                            TypeValueChange.OnValueChangeWednesdayIsChecked,
+                            "",
+                            valueBooleanOpt = it
                         )
                     )
                 },
@@ -392,18 +405,22 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeWednesday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeWednesday,
+                            "",
+                            valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeWednesday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeWednesday,
+                            "",
+                            valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.wednesdayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -429,18 +446,20 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeThursday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeThursday,
+                            "",
+                            valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeThursday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeThursday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.thursdayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -466,18 +485,18 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeFriday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeFriday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeFriday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeFriday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.fridayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -503,18 +522,20 @@ private fun PageThree(
                 onValueChangeStartTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeStartTimeSaturday,"",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeStartTimeSaturday,
+                            "",
+                            valueLocalTimeOpt = it
                         )
                     )
                 },
                 onValueChangeEndTime = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeEndTimeSaturday, "",valueLocalTimeOpt = it
+                            TypeValueChange.OnValueChangeEndTimeSaturday, "", valueLocalTimeOpt = it
                         )
                     )
                 },
-                titlePickerStart = stringResource(R.string.select_start_time) ,
+                titlePickerStart = stringResource(R.string.select_start_time),
                 titlePickerEnd = stringResource(R.string.select_end_time),
                 error = when (state.saturdayError) {
                     ConfigProfileState.DayError.WrongTimeRange -> stringResource(R.string.wrong_time_range)
@@ -524,16 +545,100 @@ private fun PageThree(
                     else -> ""
                 }
             )
-
-            FeatOutlinedButton(
-                modifier = Modifier.align(Alignment.End),
-                textContent = "Aceptar",
-                contentColor = GreenColor,
-                backgroundColor = GreenColor20
-            ) {
-                onEvent(ConfigProfileEvents.onClick(TypeClick.Submit))
-            }
-
         }
+    }
+}
+
+@Composable
+private fun PageFour(
+    state: ConfigProfileState,
+    onEvent: (ConfigProfileEvents) -> Unit,
+) {
+    FeatForm(
+        modifier = Modifier.padding(10.dp),
+        title = "Preferencias:",
+        page = "4/5"
+    ) {
+        FeatText(
+            modifier = Modifier.padding(start = 20.dp),
+            text = when (state.ageError) {
+            ConfigProfileState.RangeAgeError.IsInvalidRange -> stringResource(R.string.invalid_range)
+            ConfigProfileState.RangeAgeError.MinAgeEmpty -> stringResource(R.string.min_age_empty)
+            ConfigProfileState.RangeAgeError.MaxAgeEmpty -> stringResource(R.string.max_age_empty)
+            ConfigProfileState.RangeAgeError.FieldEmpty -> stringResource(R.string.text_field_empty)
+            else -> "" },
+            fontSize = 15.sp, color = MaterialTheme.colors.error)
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            FeatOutlinedTextField(
+                modifier = Modifier.width(150.dp),
+                text = state.minAge,
+                keyboardType = KeyboardType.Number,
+                textLabel = "Edad minima",
+                onValueChange = { age ->
+                    if (age.length <= 3 && ((age.toIntOrNull()) ?: 0) <= 150) {
+                        onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangeMinAge, age.filter { it.isDigit() })
+                        )
+
+                    }
+                },
+            )
+            FeatOutlinedTextField(
+                modifier = Modifier.width(150.dp),
+                text = state.maxAge,
+                textLabel = "Edad maxima",
+                keyboardType = KeyboardType.Number,
+                onValueChange = { age ->
+                    if (age.length <= 3 && ((age.toIntOrNull()) ?: 0) <= 150) {
+                        onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangeMaxAge, age.filter { it.isDigit() })
+                        )
+
+                    }
+                }
+            )
+        }
+        FeatOutlinedTextField(
+            text = state.willingDistance,
+            textLabel = "Distancia",
+            keyboardType = KeyboardType.Number,
+            onValueChange = { distance ->
+                if (distance.length <= 2 && ((distance.toIntOrNull()) ?: 0) <= 30) {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeWillingDistance, distance
+                        )
+                    )
+
+                }
+            },
+            error = when (state.willingDistanceError) {
+                ConfigProfileState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                else -> ""
+            }
+        )
+
+        FeatOutlinedButton(
+//            modifier = Modifier.align(Alignment.End),
+            textContent = "ACEPTAR",
+            contentColor = YellowColor,
+            backgroundColor = YellowColor,
+            textColor = PurpleDark,
+            onClick = {
+                onEvent(
+                    ConfigProfileEvents.onClick(
+                        TypeClick.Submit
+                    )
+                )
+            }
+        )
+
     }
 }
