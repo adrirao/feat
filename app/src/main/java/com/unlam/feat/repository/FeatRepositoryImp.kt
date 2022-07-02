@@ -518,7 +518,7 @@ constructor(
         }
     }
 
-    override fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<Player>>> = flow {
+    override fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.getAllPlayersAppliedByEvent(eventId)

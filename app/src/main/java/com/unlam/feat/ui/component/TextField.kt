@@ -205,7 +205,8 @@ fun FeatOutlinedTimePicker(
     onValueChange: (LocalTime) -> Unit,
     label: String = "",
     titlePicker: String = "Default",
-    error: String = ""
+    error: String = "",
+    isErrorVisible:Boolean = true
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -227,7 +228,8 @@ fun FeatOutlinedTimePicker(
             },
         enabled = false,
         textLabel = label,
-        error = error
+        error = if(isErrorVisible) error else "",
+        unFocusedColor =  if(error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
     )
     MaterialDialog(
         dialogState = dialogState,

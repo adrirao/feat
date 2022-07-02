@@ -20,6 +20,7 @@ import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
+import com.unlam.feat.ui.component.common.player.CardPlayerDetail
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
 
@@ -223,31 +224,45 @@ fun PageTree(
                         .padding(10.dp),
                     content = {
                         items(players) { player ->
-                            CardPlayer(player = player) {
+                            CardPlayerDetail(player = player) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    FeatOutlinedButton(
-                                        textContent = "Rechazar",
-                                        height = 40.dp,
-                                        onClick = {
-                                                  onClick(DetailEventEvent.RejectPlayer(player.id))
-                                        },
-                                        contentColor = RedColor,
-                                        backgroundColor = RedColor20,
-                                        textColor = RedColor
-                                    )
-                                    FeatOutlinedButton(
-                                        textContent = "Aceptar",
-                                        height = 40.dp,
-                                        onClick = {
-                                            onClick(DetailEventEvent.AcceptPlayer(player.id))
-                                        },
-                                        contentColor = GreenColor,
-                                        backgroundColor = GreenColor20,
-                                        textColor = GreenColor
-                                    )
+                                    if(player.origin == "Postulado"){
+                                        FeatOutlinedButton(
+                                            textContent = "Rechazar",
+                                            height = 40.dp,
+                                            onClick = {
+                                                onClick(DetailEventEvent.RejectPlayer(player.id))
+                                            },
+                                            contentColor = RedColor,
+                                            backgroundColor = RedColor20,
+                                            textColor = RedColor
+                                        )
+                                        FeatOutlinedButton(
+                                            textContent = "Aceptar",
+                                            height = 40.dp,
+                                            onClick = {
+                                                onClick(DetailEventEvent.AcceptPlayer(player.id))
+                                            },
+                                            contentColor = GreenColor,
+                                            backgroundColor = GreenColor20,
+                                            textColor = GreenColor
+                                        )
+                                    }else if(player.origin == "Postulado"){
+                                        FeatOutlinedButton(
+                                            textContent = "Cancelar invitación",
+                                            height = 40.dp,
+                                            onClick = {
+                                                onClick(DetailEventEvent.RejectPlayer(player.id))
+                                            },
+                                            contentColor = RedColor,
+                                            backgroundColor = RedColor20,
+                                            textColor = RedColor
+                                        )
+                                    }
+
                                 }
                             }
 
