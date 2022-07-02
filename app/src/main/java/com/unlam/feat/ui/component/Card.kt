@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
@@ -204,5 +206,104 @@ fun PreviewCard(
                 }
             }
         }
+    }
+}
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun FeatSportCard(
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp),
+    elevation: Dp = 6.dp,
+    backgroundColor: Color = PurpleDarkAlt,
+    corner: CornerSize = CornerSize(16.dp),
+    shape: RoundedCornerShape = RoundedCornerShape(corner),
+    onClickCard: () -> Unit,
+
+    //ICON SPORT
+    sport: String = "",
+    sportDescription: String = "",
+    idSport:Int  = 0,
+    isSelected:Boolean = false
+) {
+
+    Card(
+        modifier = modifier,
+        onClick = onClickCard,
+        elevation = elevation,
+        backgroundColor = backgroundColor,
+        shape = shape
+    ) {
+        when (idSport) {
+            1 -> contentCard(
+                textSport = sport,
+                shape = shape,
+                sportDescription = sportDescription,
+                routeImage = R.drawable.soccer,
+                isSelected
+            )
+            2-> contentCard(
+                textSport = sport,
+                shape = shape,
+                sportDescription = sportDescription,
+                routeImage = R.drawable.padel,
+                isSelected
+            )
+            3 -> contentCard(
+                textSport = sport,
+                shape = shape,
+                sportDescription = sportDescription,
+                routeImage = R.drawable.tennis,
+                isSelected
+            )
+            4 -> contentCard(
+                textSport = sport,
+                shape = shape,
+                sportDescription = sportDescription,
+                routeImage = R.drawable.basketball,
+                isSelected
+            )
+            5 -> contentCard(
+                textSport = sport,
+                shape = shape,
+                sportDescription = sportDescription,
+                routeImage = R.drawable.recreational_activity,
+                isSelected
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun contentCard(
+    textSport: String,
+    shape: RoundedCornerShape,
+    sportDescription: String,
+    routeImage: Int,
+    isSelected: Boolean
+) {
+    Row() {
+        FeatText(
+            modifier = Modifier
+                .weight(10.0f)
+                .align(Alignment.CenterVertically)
+                .padding(15.dp),
+            text = textSport,
+            color = if(isSelected) GreenColor else PurpleLight,
+            fontWeight = FontWeight.Black,
+            fontSize = 20.sp
+        )
+        Image(
+            painter = painterResource(id = routeImage),
+            contentDescription = sportDescription,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .padding(8.dp)
+                .size(100.dp)
+                .clip(shape)
+                .align(Alignment.CenterVertically)
+                .weight(4.0f)
+        )
     }
 }

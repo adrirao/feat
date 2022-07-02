@@ -1,11 +1,19 @@
 package com.unlam.feat.ui.view.config_profile
 
+import com.unlam.feat.model.Level
+import com.unlam.feat.model.Position
+import com.unlam.feat.model.SportGeneric
+import com.unlam.feat.model.Valuation
 import java.time.LocalDate
 import java.time.LocalTime
 
 
 data class ConfigProfileState(
 
+    val sportsList: List<SportGeneric> = emptyList(),
+    val levelList: List<Level> = emptyList(),
+    val valuationList: List<Valuation> = emptyList(),
+    val positionList: List<Position> = emptyList(),
     val sexList: List<String> = listOf("Hombre", "Mujer", "Otro"),
     val sundayIsChecked: Boolean = false,
     val mondayIsChecked: Boolean = false,
@@ -14,7 +22,7 @@ data class ConfigProfileState(
     val thursdayIsChecked: Boolean = false,
     val fridayIsChecked: Boolean = false,
     val saturdayIsChecked: Boolean = false,
-
+    val isLoading: Boolean = false,
 
 
     val lastName: String = "",
@@ -44,9 +52,14 @@ data class ConfigProfileState(
     val maxAge: String = "",
     val notifications: Boolean = false,
     val willingDistance: String = "1",
+    val idSoccer:String? = null,
+    val abilitiesSoccer:String = "",
+    val positionIdSoccer:Int? = null,
+    val levelIdSoccer:Int? = null,
+    val valuationIdSoccer:Int? = null,
 
 
-
+    val error: String = "",
     val lastNameError: GenericError? = null,
     val nameError: GenericError? = null,
     val dateOfBirthError: GenericError? = null,
@@ -65,6 +78,10 @@ data class ConfigProfileState(
     val saturdayError: DayError? = null,
     val ageError: RangeAgeError? = null,
     val willingDistanceError: GenericError? = null,
+    val abilitiesSoccerError:GenericError? = null,
+    val positionIdSoccerError:GenericError? = null,
+    val levelIdSoccerError:GenericError? = null,
+    val valuationIdSoccerError:GenericError? = null,
 
 
 

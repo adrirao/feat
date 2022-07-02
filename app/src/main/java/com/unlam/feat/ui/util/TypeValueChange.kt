@@ -45,6 +45,33 @@ sealed class TypeValueChange {
     object OnValueChangeMaxAge : TypeValueChange()
     object OnValueChangeWillingDistance : TypeValueChange()
     object OnValueChangeNotifications : TypeValueChange()
+    object OnValueChangeSelectSport : TypeValueChange()
+
+    object OnValueChangeIdSoccer : TypeValueChange()
+    object OnValueChangePositionSoccer : TypeValueChange()
+    object OnValueChangeLevelSoccer : TypeValueChange()
+    object OnValueChangeValuationSoccer : TypeValueChange()
+    object OnValueChangeAbilitiesSoccer : TypeValueChange()
+
+    object OnValueChangePositionBasketball : TypeValueChange()
+    object OnValueChangeLevelBasketball : TypeValueChange()
+    object OnValueChangeValuationBasketball : TypeValueChange()
+    object OnValueChangeAbilitiesBasketball : TypeValueChange()
+
+    object OnValueChangePositionTennis : TypeValueChange()
+    object OnValueChangeLevelTennis : TypeValueChange()
+    object OnValueChangeValuationTennis : TypeValueChange()
+    object OnValueChangeAbilitiesTennis : TypeValueChange()
+
+    object OnValueChangePositionPadel : TypeValueChange()
+    object OnValueChangeLevelPadel : TypeValueChange()
+    object OnValueChangeValuationPadel : TypeValueChange()
+    object OnValueChangeAbilitiesPadel : TypeValueChange()
+
+    object OnValueChangePositionRecreationalActivity : TypeValueChange()
+    object OnValueChangeLevelRecreationalActivity : TypeValueChange()
+    object OnValueChangeValuationRecreationalActivity : TypeValueChange()
+    object OnValueChangeAbilitiesRecreationalActivity : TypeValueChange()
 
 
 }

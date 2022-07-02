@@ -9,8 +9,8 @@ val Teal200 = Color(0xFF03DAC5)
 
 
 val PurpleDark = Color(0xFF342b65)
-//val PurpleDarkAlt = Color(0xFF311B92)
-val PurpleDarkAlt = Color(0xFF3f10b8)
+val PurpleDarkAlt = Color(0xFF2D2557)
+//val PurpleDarkAlt = Color(0xFF342b65)
 val PurpleMedium = Color(0xFF6652BE)
 val PurpleMedium20 = Color(0x336652BE)
 val PurpleMediumDarker = Color(0xFF4A3C8B)

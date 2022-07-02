@@ -6,7 +6,6 @@ import com.unlam.feat.model.Position
 import com.unlam.feat.model.Valuation
 
 data class ResponseDataSport (
-val person: Person? = null,
 val positionList: List<Position>  = emptyList(),
 val levelList: List<Level> = emptyList(),
 val valuationList: List<Valuation> = emptyList(),

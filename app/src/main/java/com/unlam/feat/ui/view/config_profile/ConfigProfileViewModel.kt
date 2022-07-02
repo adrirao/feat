@@ -3,13 +3,16 @@ package com.unlam.feat.ui.view.config_profile
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.unlam.feat.R
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.event.new_event.NewEventEvents
-import com.unlam.feat.ui.view.event.new_event.NewEventState
+import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -22,6 +25,10 @@ constructor(
 ) : ViewModel() {
     private val _state = mutableStateOf(ConfigProfileState())
     val state: State<ConfigProfileState> = _state
+
+    init {
+        getSportList()
+    }
 
     fun onEvent(event: ConfigProfileEvents) {
         when (event) {
@@ -215,6 +222,44 @@ constructor(
                         )
 
                     }
+                    TypeValueChange.OnValueChangeSelectSport -> {
+                        getDataSportScreen(event.value.toInt())
+                    }
+                    TypeValueChange.OnValueChangePositionSoccer -> {
+                        _state.value = _state.value.copy(
+                            positionIdSoccer = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelSoccer -> {
+                        _state.value = _state.value.copy(
+                            levelIdSoccer = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationSoccer -> {
+                        _state.value = _state.value.copy(
+                            valuationIdSoccer = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesSoccer -> {
+                        _state.value = _state.value.copy(
+                            abilitiesSoccer = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeIdSoccer -> {
+                        if (event.valueOpt == null) {
+                            _state.value = _state.value.copy(
+                                idSoccer = event.valueOpt,
+                                positionIdSoccerError = event.valueOpt,
+                                levelIdSoccerError = event.valueOpt,
+                                valuationIdSoccerError = event.valueOpt,
+                                abilitiesSoccerError = event.valueOpt,
+                            )
+                        }else{
+                            _state.value = _state.value.copy(
+                                idSoccer = event.valueOpt
+                            )
+                        }
+                    }
 
                 }
             }
@@ -222,6 +267,16 @@ constructor(
                 _state.value = _state.value.copy(
 
                 )
+            }
+            ConfigProfileEvents.onClick(TypeClick.SaveSoccerData) -> {
+                if (_state.value.idSoccer != null) {
+                    _state.value = _state.value.copy(
+                        positionIdSoccerError = validateFieldIsNotEmpty(_state.value.positionIdSoccer.toString()),
+                        levelIdSoccerError = validateFieldIsNotEmpty(_state.value.levelIdSoccer.toString()),
+                        valuationIdSoccerError = validateFieldIsNotEmpty(_state.value.valuationIdSoccer.toString()),
+                        abilitiesSoccerError = validateFieldIsNotEmpty(_state.value.abilitiesSoccer)
+                    )
+                }
             }
             ConfigProfileEvents.onClick(TypeClick.Submit) -> {
                 validateLastName(_state.value.lastName)
@@ -268,12 +323,29 @@ constructor(
                         state.value.saturdayIsChecked
                     ),
 
-                )
-                validateAgeIsNotEmptyAndValid(_state.value.minAge,_state.value.maxAge)
-                validateWillingDistance(_state.value.willingDistance)
+                    )
+                if (_state.value.idSoccer != null) {
+                    _state.value = _state.value.copy(
+                        positionIdSoccerError = validateFieldIsNotEmpty(_state.value.positionIdSoccer.toString()),
+                        levelIdSoccerError = validateFieldIsNotEmpty(_state.value.levelIdSoccer.toString()),
+                        valuationIdSoccerError = validateFieldIsNotEmpty(_state.value.valuationIdSoccer.toString()),
+                        abilitiesSoccerError = validateFieldIsNotEmpty(_state.value.abilitiesSoccer)
+                    )
+                }
+
             }
 
         }
+    }
+
+    private fun validateFieldIsNotEmpty(field: String): ConfigProfileState.GenericError? {
+
+        val trimmedField = field.trim()
+        if (trimmedField.isBlank() || trimmedField == "null") {
+            return ConfigProfileState.GenericError.FieldEmpty
+
+        }
+        return null
     }
 
     private fun validateWillingDistance(willingDistance: String) {
@@ -285,6 +357,7 @@ constructor(
             return
         }
     }
+
     private fun validateAgeIsNotEmptyAndValid(minAge: String, maxAge: String) {
         val trimmedMinAge = minAge.trim()
         val trimmedMaxAge = maxAge.trim()
@@ -412,6 +485,51 @@ constructor(
             }
         }
         return null
+    }
+
+    private fun getSportList() {
+        featRepository.getGenericsSports().onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value =
+                        ConfigProfileState(
+                            error = result.message
+                                ?: "Error desconocido"
+                        )
+                }
+                is Result.Loading -> {
+                }
+                is Result.Success -> {
+                    _state.value = ConfigProfileState(sportsList = result.data ?: emptyList())
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getDataSportScreen(sportGenericId: Int) {
+
+        val uId = firebaseAuthRepository.getUserId()
+        featRepository.getDataSportScreen(sportGenericId).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value =
+                        state.value.copy(error = result.message ?: "Error Inesperado")
+                }
+                is Result.Loading -> {
+                    _state.value = state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = state.value.copy(
+                        levelList = result.data!!.levelList,
+                        positionList = result.data.positionList,
+                        valuationList = result.data.valuationList,
+                        isLoading = false
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
 }

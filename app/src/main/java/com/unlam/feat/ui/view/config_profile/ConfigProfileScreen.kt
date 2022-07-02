@@ -22,12 +22,14 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.R
+import com.unlam.feat.model.SportGeneric
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesEvent
+import okhttp3.internal.wait
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -40,6 +42,10 @@ fun ConfigProfileScreen(
         mutableStateOf(false)
     }
 
+    var idSport by remember {
+        mutableStateOf(0)
+    }
+
     val pagerState = rememberPagerState()
 
 
@@ -48,24 +54,50 @@ fun ConfigProfileScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        HorizontalPager(
-            count = 4,
-            state = pagerState
-        ) { position ->
-            when (position) {
-                0 -> PageOne(state, onEvent)
-                1 -> PageTwo(state, onEvent, openMap = {
-                    openMap = true
-                })
-                2 -> PageThree(state, onEvent)
-                3 -> PageFour(state, onEvent)
+        if (idSport == 0) {
+            HorizontalPager(
+                count = 5,
+                state = pagerState
+            ) { position ->
+                when (position) {
+                    0 -> PageOne(state, onEvent)
+                    1 -> PageTwo(state, onEvent, openMap = {
+                        openMap = true
+                    })
+                    2 -> PageThree(state, onEvent)
+                    3 -> PageFour(state, onEvent)
+                    4 -> PageFive(state, onEvent) { idSport = it }
+                }
             }
+            HorizontalPagerIndicator(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
+                pagerState = pagerState
+            )
+        } else if (idSport != 0) {
+            if (state.isLoading) {
+                FeatCircularProgress()
+            } else {
+                when (idSport) {
+                    1 -> {
+                        SportDataSoccer(state, onEvent) { idSport = it }
+                    }
+//                2 -> {
+//                    SportDataPadel(state, onEvent)
+//                }
+//                3 -> {
+//                    SportDataTennis(state, onEvent)
+//                }
+//                4 -> {
+//                    SportDataBasketball(state, onEvent)
+//                }
+//                5 -> {
+//                    SportDataRecreationalActivity(state, onEvent)
+//                }
+                }
+            }
+
         }
-        HorizontalPagerIndicator(
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            pagerState = pagerState
-        )
 
     }
     if (openMap) {
@@ -95,6 +127,7 @@ fun ConfigProfileScreen(
             )
         )
     }
+
 
 }
 
@@ -562,12 +595,14 @@ private fun PageFour(
         FeatText(
             modifier = Modifier.padding(start = 20.dp),
             text = when (state.ageError) {
-            ConfigProfileState.RangeAgeError.IsInvalidRange -> stringResource(R.string.invalid_range)
-            ConfigProfileState.RangeAgeError.MinAgeEmpty -> stringResource(R.string.min_age_empty)
-            ConfigProfileState.RangeAgeError.MaxAgeEmpty -> stringResource(R.string.max_age_empty)
-            ConfigProfileState.RangeAgeError.FieldEmpty -> stringResource(R.string.text_field_empty)
-            else -> "" },
-            fontSize = 15.sp, color = MaterialTheme.colors.error)
+                ConfigProfileState.RangeAgeError.IsInvalidRange -> stringResource(R.string.invalid_range)
+                ConfigProfileState.RangeAgeError.MinAgeEmpty -> stringResource(R.string.min_age_empty)
+                ConfigProfileState.RangeAgeError.MaxAgeEmpty -> stringResource(R.string.max_age_empty)
+                ConfigProfileState.RangeAgeError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                else -> ""
+            },
+            fontSize = 15.sp, color = MaterialTheme.colors.error
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -625,20 +660,417 @@ private fun PageFour(
             }
         )
 
-        FeatOutlinedButton(
-//            modifier = Modifier.align(Alignment.End),
-            textContent = "ACEPTAR",
-            contentColor = YellowColor,
-            backgroundColor = YellowColor,
-            textColor = PurpleDark,
-            onClick = {
-                onEvent(
-                    ConfigProfileEvents.onClick(
-                        TypeClick.Submit
-                    )
+    }
+}
+
+@Composable
+private fun PageFive(
+    state: ConfigProfileState,
+    onEvent: (ConfigProfileEvents) -> Unit,
+    onClick: (Int) -> Unit
+) {
+    FeatForm(
+        modifier = Modifier.padding(10.dp),
+        title = "Deportes:",
+        page = "5/5"
+    ) {
+        if (state.sportsList.isNotEmpty()) {
+            state.sportsList.forEach { sportGeneric ->
+                FeatSportCard(
+                    onClickCard = {
+                        onClick(sportGeneric.id)
+                        onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangeSelectSport,
+                                sportGeneric.id.toString()
+                            )
+                        )
+                    },
+                    sport = sportGeneric.description,
+                    modifier = Modifier
+                        .height(100.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    idSport = sportGeneric.id,
+                    isSelected = when(sportGeneric.id){
+                        1-> state.idSoccer != null
+//                        2->state.idSoccer != null
+//                        3-> state.idSoccer != null
+//                        4->state.idSoccer != null
+//                        5->state.idSoccer != null
+                        else -> false
+                    }
                 )
             }
-        )
+        }
 
     }
 }
+
+
+@Composable
+private fun SportDataSoccer(
+    state: ConfigProfileState,
+    onEvent: (ConfigProfileEvents) -> Unit,
+    onClick: (Int) -> Unit
+) {
+    onEvent(
+        ConfigProfileEvents.onValueChange(
+            TypeValueChange.OnValueChangeIdSoccer, "", "1"
+        )
+    )
+
+    FeatForm(
+        modifier = Modifier
+            .padding(10.dp, 30.dp)
+            .fillMaxSize(),
+        title = "Preferencias del deporte",
+        page = ""
+    ) {
+
+
+        Column {
+
+
+            val optionsPosition: MutableList<String> = mutableListOf<String>()
+            state.positionList.forEach { positionList ->
+                optionsPosition.add(positionList.description)
+            }
+            FeatOutlinedDropDown(
+                label = "Posición",
+                options = optionsPosition,
+                selectedText = { positionText ->
+                    state.positionList.forEach { position ->
+                        if (position.description == positionText) onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangePositionSoccer, position.id.toString()
+                            )
+                        )
+                    }
+                },
+                error = when (state.positionIdSoccerError) {
+                    ConfigProfileState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+
+            val optionsLevel: MutableList<String> = mutableListOf<String>()
+            state.levelList.forEach { levelList ->
+                optionsLevel.add(levelList.description)
+            }
+            FeatOutlinedDropDown(
+                label = "Nivel",
+                options = optionsLevel,
+                selectedText = { levelText ->
+                    state.levelList.forEach { level ->
+                        if (level.description == levelText) onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangeLevelSoccer, level.id.toString()
+                            )
+                        )
+                    }
+                },
+                error = when (state.levelIdSoccerError) {
+                    ConfigProfileState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+
+            val optionsValuation: MutableList<String> = mutableListOf<String>()
+            state.valuationList.forEach { valuationList ->
+                optionsValuation.add(valuationList.description)
+            }
+            FeatOutlinedDropDown(
+                label = "Grado de interés",
+                options = optionsValuation,
+                selectedText = { valuationText ->
+                    state.valuationList.forEach { valuation ->
+                        if (valuation.description == valuationText) onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangeValuationSoccer,
+                                valuation.id.toString()
+                            )
+                        )
+                    }
+                },
+                error = when (state.valuationIdSoccerError) {
+                    ConfigProfileState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+            FeatOutlinedTextField(
+                textLabel = "Aptitudes",
+                text = state.abilitiesSoccer,
+                onValueChange = { abilities ->
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeAbilitiesSoccer, abilities
+                        )
+                    )
+                },
+                maxLines = 4,
+                error = when (state.abilitiesSoccerError) {
+                    ConfigProfileState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                }
+            )
+
+            FeatSpacerMedium()
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                FeatOutlinedButton(
+                    textContent = "Cancelar",
+                    contentColor = RedColor,
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
+                ) {
+                    onEvent(
+                        ConfigProfileEvents.onValueChange(
+                            TypeValueChange.OnValueChangeIdSoccer, "", null
+                        )
+                    )
+                    onClick(0)
+                }
+
+                FeatOutlinedButton(
+                    textContent = "Aceptar",
+                    contentColor = GreenColor,
+                    backgroundColor = GreenColor90,
+                    textColor = PurpleDark
+                ) {
+                    onEvent(
+                        ConfigProfileEvents.onClick(
+                            TypeClick.SaveSoccerData
+                        )
+                    )
+                    if (state.valuationIdSoccer != null && state.levelIdSoccer != null &&
+                        state.abilitiesSoccer != "" && state.positionIdSoccer != null
+                    ) {
+                        onClick(0)
+                    }
+                }
+
+
+            }
+
+        }
+    }
+}
+
+//
+//@Composable
+//private fun SportDataBasketball(
+//    state: ConfigProfileState,
+//    onEvent: (ConfigProfileEvents) -> Unit
+//) {
+//    val optionsPosition: MutableList<String> = mutableListOf<String>()
+//    state.positionList.forEach { positionList ->
+//        optionsPosition.add(positionList.description)
+//    }
+//    FeatDropDown(label = "Posición", optionsPosition) { positionText ->
+//        state.positionList.forEach { position ->
+//            if (position.description == positionText) {
+//                onValueChange(SportDataEvent.SelectedPosition(position.id))
+//            }
+//        }
+//    }
+//
+//    val optionsLevel: MutableList<String> = mutableListOf<String>()
+//    state.levelList.forEach { levelList ->
+//        optionsLevel.add(levelList.description)
+//    }
+//    FeatDropDown(label = "Nivel", optionsLevel) { levelText ->
+//        state.levelList.forEach { level ->
+//            if (level.description == levelText) {
+//                onValueChange(SportDataEvent.SelectedLevel(level.id))
+//            }
+//        }
+//    }
+//
+//    val optionsValuation: MutableList<String> = mutableListOf<String>()
+//    state.valuationList.forEach { valuationList ->
+//        optionsValuation.add(valuationList.description)
+//    }
+//    FeatDropDown(label = "Grado de interés", optionsValuation) { valuationText ->
+//        state.valuationList.forEach { valuation ->
+//            if (valuation.description == valuationText) {
+//                onValueChange(SportDataEvent.SelectedValuation(valuation.id))
+//            }
+//        }
+//    }
+//
+//
+////    FeatTextField(
+////        textLabel = "Altura",
+////        keyboardType = KeyboardType.Number,
+////        text = "",
+////        onValueChange = {
+////
+////        }
+////    )
+//
+//    FeatTextField(
+//        textLabel = "Aptitudes",
+//        text = state.abilities,
+//        onValueChange = {
+//            onValueChange(SportDataEvent.EnteredAbilities(it))
+//        },
+//        maxLines = 4,
+//        singleLine = false,
+//        maxLength = 150
+//    )
+//}
+//
+//@Composable
+//private fun SportDataTennis(
+//    state: ConfigProfileState,
+//    onEvent: (ConfigProfileEvents) -> Unit
+//) {
+//    val optionsPosition: MutableList<String> = mutableListOf<String>()
+//    state.positionList.forEach { positionList ->
+//        optionsPosition.add(positionList.description)
+//    }
+//    FeatDropDown(label = "Posición", optionsPosition) { positionText ->
+//        state.positionList.forEach { position ->
+//            if (position.description == positionText) {
+//                onValueChange(SportDataEvent.SelectedPosition(position.id))
+//            }
+//        }
+//    }
+//
+//    val optionsLevel: MutableList<String> = mutableListOf<String>()
+//    state.levelList.forEach { levelList ->
+//        optionsLevel.add(levelList.description)
+//    }
+//    FeatDropDown(label = "Nivel", optionsLevel) { levelText ->
+//        state.levelList.forEach { level ->
+//            if (level.description == levelText) {
+//                onValueChange(SportDataEvent.SelectedLevel(level.id))
+//            }
+//        }
+//    }
+//    val optionsValuation: MutableList<String> = mutableListOf<String>()
+//    state.valuationList.forEach { valuationList ->
+//        optionsValuation.add(valuationList.description)
+//    }
+//    FeatDropDown(label = "Grado de interés", optionsValuation) { valuationText ->
+//        state.valuationList.forEach { valuation ->
+//            if (valuation.description == valuationText) {
+//                onValueChange(SportDataEvent.SelectedValuation(valuation.id))
+//            }
+//        }
+//    }
+//
+//    FeatTextField(
+//        textLabel = "Aptitudes",
+//        text = state.abilities,
+//        onValueChange = {
+//            onValueChange(SportDataEvent.EnteredAbilities(it))
+//        },
+//        maxLines = 4,
+//        singleLine = false,
+//        maxLength = 150
+//    )
+//}
+//
+//@Composable
+//private fun SportDataPadel(
+//    state: ConfigProfileState,
+//    onEvent: (ConfigProfileEvents) -> Unit
+//) {
+//    val optionsPosition: MutableList<String> = mutableListOf<String>()
+//    state.positionList.forEach { positionList ->
+//        optionsPosition.add(positionList.description)
+//    }
+//    FeatDropDown(label = "Posición", optionsPosition) { positionText ->
+//        state.positionList.forEach { position ->
+//            if (position.description == positionText) {
+//                onValueChange(SportDataEvent.SelectedPosition(position.id))
+//            }
+//        }
+//    }
+//
+//    val optionsLevel: MutableList<String> = mutableListOf<String>()
+//    state.levelList.forEach { levelList ->
+//        optionsLevel.add(levelList.description)
+//    }
+//    FeatDropDown(label = "Nivel", optionsLevel) { levelText ->
+//        state.levelList.forEach { level ->
+//            if (level.description == levelText) {
+//                onValueChange(SportDataEvent.SelectedLevel(level.id))
+//            }
+//        }
+//    }
+//    val optionsValuation: MutableList<String> = mutableListOf<String>()
+//    state.valuationList.forEach { valuationList ->
+//        optionsValuation.add(valuationList.description)
+//    }
+//    FeatDropDown(label = "Grado de interés", optionsValuation) { valuationText ->
+//        state.valuationList.forEach { valuation ->
+//            if (valuation.description == valuationText) {
+//                onValueChange(SportDataEvent.SelectedValuation(valuation.id))
+//            }
+//        }
+//    }
+//
+//    FeatTextField(
+//        textLabel = "Aptitudes",
+//        text = state.abilities,
+//        onValueChange = {
+//            onValueChange(SportDataEvent.EnteredAbilities(it))
+//        },
+//        maxLines = 4,
+//        singleLine = false,
+//        maxLength = 150
+//    )
+//}
+//
+//@Composable
+//private fun SportDataRecreationalActivity(
+//    state: ConfigProfileState,
+//    onEvent: (ConfigProfileEvents) -> Unit
+//) {
+//
+//
+//    state.positionList.forEach { positionList ->
+//        if (positionList.description == "No Aplica") {
+//            onValueChange(SportDataEvent.SelectedPosition(positionList.id))
+//        }
+//    }
+//    state.levelList.forEach { positionList ->
+//        if (positionList.description == "No Aplica") {
+//            onValueChange(SportDataEvent.SelectedLevel(positionList.id))
+//        }
+//    }
+//
+//
+//    val optionsValuation: MutableList<String> = mutableListOf<String>()
+//    state.valuationList.forEach { valuationList ->
+//        optionsValuation.add(valuationList.description)
+//    }
+//    FeatDropDown(label = "Grado de interés", optionsValuation) { valuationText ->
+//        state.valuationList.forEach { valuation ->
+//            if (valuation.description == valuationText) {
+//                onValueChange(SportDataEvent.SelectedValuation(valuation.id))
+//            }
+//        }
+//    }
+//
+//    FeatTextField(
+//        textLabel = "Aptitudes",
+//        text = state.abilities,
+//        onValueChange = {
+//            onValueChange(SportDataEvent.EnteredAbilities(it))
+//        },
+//        maxLines = 4,
+//        singleLine = false,
+//        maxLength = 150
+//    )
+//}

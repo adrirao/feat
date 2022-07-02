@@ -992,23 +992,20 @@ constructor(
     }
 
     override fun getDataSportScreen(
-        uId: String,
         sportGenericId: Int
     ): Flow<Result<ResponseDataSport>> = flow {
         try {
             emit(Result.Loading())
-            val responsePerson = featProvider.getPerson(uId).body()
             val responseLevels = featProvider.getAllLevelsBySportGeneric(sportGenericId).body()
             val responseValuations = featProvider.getValuations().body()
             val responsePositions =
                 featProvider.getAllPositionsBySportGeneric(sportGenericId).body()
 
 
-            if (responseLevels != null && responseValuations != null && responsePositions != null && responsePerson != null) {
+            if (responseLevels != null && responseValuations != null && responsePositions != null) {
                 emit(
                     Result.Success(
                         data = ResponseDataSport(
-                            person = responsePerson,
                             levelList = responseLevels,
                             positionList = responsePositions,
                             valuationList = responseValuations
