@@ -19,4 +19,8 @@ sealed class TypeClick {
     object ToggledRePassword : TypeClick()
 
     object SaveSoccerData : TypeClick()
+    object SaveBasketballData : TypeClick()
+    object SaveTennisData : TypeClick()
+    object SavePadelData : TypeClick()
+    object SaveRecreationalActivityData : TypeClick()
 }

@@ -52,11 +52,37 @@ data class ConfigProfileState(
     val maxAge: String = "",
     val notifications: Boolean = false,
     val willingDistance: String = "1",
+
     val idSoccer:String? = null,
     val abilitiesSoccer:String = "",
     val positionIdSoccer:Int? = null,
     val levelIdSoccer:Int? = null,
     val valuationIdSoccer:Int? = null,
+
+    val idBasketball:String? = null,
+    val abilitiesBasketball:String = "",
+    val positionIdBasketball:Int? = null,
+    val levelIdBasketball:Int? = null,
+    val valuationIdBasketball:Int? = null,
+
+    val idPadel:String? = null,
+    val abilitiesPadel:String = "",
+    val positionIdPadel:Int? = null,
+    val levelIdPadel:Int? = null,
+    val valuationIdPadel:Int? = null,
+
+    val idTennis:String? = null,
+    val abilitiesTennis:String = "",
+    val positionIdTennis:Int? = null,
+    val levelIdTennis:Int? = null,
+    val valuationIdTennis:Int? = null,
+
+    val idRecreationalActivity:String? = null,
+    val abilitiesRecreationalActivity:String = "",
+    val positionIdRecreationalActivity:Int? = null,
+    val levelIdRecreationalActivity:Int? = null,
+    val valuationIdRecreationalActivity:Int? = null,
+
 
 
     val error: String = "",
@@ -78,10 +104,31 @@ data class ConfigProfileState(
     val saturdayError: DayError? = null,
     val ageError: RangeAgeError? = null,
     val willingDistanceError: GenericError? = null,
+
     val abilitiesSoccerError:GenericError? = null,
     val positionIdSoccerError:GenericError? = null,
     val levelIdSoccerError:GenericError? = null,
     val valuationIdSoccerError:GenericError? = null,
+
+    val positionIdBasketballError:GenericError? = null,
+    val levelIdBasketballError:GenericError? = null,
+    val valuationIdBasketballError:GenericError? = null,
+    val abilitiesBasketballError:GenericError? = null,
+
+    val positionIdPadelError:GenericError? = null,
+    val levelIdPadelError:GenericError? = null,
+    val valuationIdPadelError:GenericError? = null,
+    val abilitiesPadelError:GenericError? = null,
+
+    val positionIdTennisError:GenericError? = null,
+    val levelIdTennisError:GenericError? = null,
+    val valuationIdTennisError:GenericError? = null,
+    val abilitiesTennisError:GenericError? = null,
+
+    val positionIdRecreationalActivityError:GenericError? = null,
+    val levelIdRecreationalActivityError:GenericError? = null,
+    val valuationIdRecreationalActivityError:GenericError? = null,
+    val abilitiesRecreationalActivityError:GenericError? = null,
 
 
 

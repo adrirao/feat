@@ -52,7 +52,11 @@ constructor(
                 uploadImage(event.image)
             }
             is ProfileEvent.SingOutUser -> {
+                _state.value = _state.value.copy(
+
+                )
                 firebaseAuthRepository.signOut()
+
             }
         }
     }

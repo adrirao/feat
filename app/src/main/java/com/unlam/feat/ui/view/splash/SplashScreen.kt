@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.FeatContent
 import com.unlam.feat.ui.util.Screen

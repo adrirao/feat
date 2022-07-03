@@ -261,6 +261,150 @@ constructor(
                         }
                     }
 
+                    TypeValueChange.OnValueChangePositionBasketball -> {
+                        _state.value = _state.value.copy(
+                            positionIdBasketball = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelBasketball -> {
+                        _state.value = _state.value.copy(
+                            levelIdBasketball = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationBasketball -> {
+                        _state.value = _state.value.copy(
+                            valuationIdBasketball = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesBasketball -> {
+                        _state.value = _state.value.copy(
+                            abilitiesBasketball = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeIdBasketball -> {
+                        if (event.valueOpt == null) {
+                            _state.value = _state.value.copy(
+                                idBasketball = event.valueOpt,
+                                positionIdBasketballError = event.valueOpt,
+                                levelIdBasketballError = event.valueOpt,
+                                valuationIdBasketballError = event.valueOpt,
+                                abilitiesBasketballError = event.valueOpt,
+                            )
+                        }else{
+                            _state.value = _state.value.copy(
+                                idBasketball = event.valueOpt
+                            )
+                        }
+                    }
+
+                    TypeValueChange.OnValueChangePositionPadel -> {
+                        _state.value = _state.value.copy(
+                            positionIdPadel = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelPadel -> {
+                        _state.value = _state.value.copy(
+                            levelIdPadel = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationPadel -> {
+                        _state.value = _state.value.copy(
+                            valuationIdPadel = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesPadel -> {
+                        _state.value = _state.value.copy(
+                            abilitiesPadel = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeIdPadel -> {
+                        if (event.valueOpt == null) {
+                            _state.value = _state.value.copy(
+                                idPadel = event.valueOpt,
+                                positionIdPadelError = event.valueOpt,
+                                levelIdPadelError = event.valueOpt,
+                                valuationIdPadelError = event.valueOpt,
+                                abilitiesPadelError = event.valueOpt,
+                            )
+                        }else{
+                            _state.value = _state.value.copy(
+                                idPadel = event.valueOpt
+                            )
+                        }
+                    }
+
+                    TypeValueChange.OnValueChangePositionTennis -> {
+                        _state.value = _state.value.copy(
+                            positionIdTennis = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelTennis -> {
+                        _state.value = _state.value.copy(
+                            levelIdTennis = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationTennis -> {
+                        _state.value = _state.value.copy(
+                            valuationIdTennis = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesTennis -> {
+                        _state.value = _state.value.copy(
+                            abilitiesTennis = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeIdTennis -> {
+                        if (event.valueOpt == null) {
+                            _state.value = _state.value.copy(
+                                idTennis = event.valueOpt,
+                                positionIdTennisError = event.valueOpt,
+                                levelIdTennisError = event.valueOpt,
+                                valuationIdTennisError = event.valueOpt,
+                                abilitiesTennisError = event.valueOpt,
+                            )
+                        }else{
+                            _state.value = _state.value.copy(
+                                idTennis = event.valueOpt
+                            )
+                        }
+                    }
+
+                    TypeValueChange.OnValueChangePositionRecreationalActivity-> {
+                        _state.value = _state.value.copy(
+                            positionIdRecreationalActivity = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelRecreationalActivity -> {
+                        _state.value = _state.value.copy(
+                            levelIdRecreationalActivity = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationRecreationalActivity -> {
+                        _state.value = _state.value.copy(
+                            valuationIdRecreationalActivity = event.value.toIntOrNull()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesRecreationalActivity -> {
+                        _state.value = _state.value.copy(
+                            abilitiesRecreationalActivity = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeIdRecreationalActivity -> {
+                        if (event.valueOpt == null) {
+                            _state.value = _state.value.copy(
+                                idRecreationalActivity = event.valueOpt,
+                                positionIdRecreationalActivityError = event.valueOpt,
+                                levelIdRecreationalActivityError = event.valueOpt,
+                                valuationIdRecreationalActivityError = event.valueOpt,
+                                abilitiesRecreationalActivityError = event.valueOpt,
+                            )
+                        }else{
+                            _state.value = _state.value.copy(
+                                idRecreationalActivity = event.valueOpt
+                            )
+                        }
+                    }
+
                 }
             }
             ConfigProfileEvents.onClick(TypeClick.DismissDialog) -> {
@@ -275,6 +419,46 @@ constructor(
                         levelIdSoccerError = validateFieldIsNotEmpty(_state.value.levelIdSoccer.toString()),
                         valuationIdSoccerError = validateFieldIsNotEmpty(_state.value.valuationIdSoccer.toString()),
                         abilitiesSoccerError = validateFieldIsNotEmpty(_state.value.abilitiesSoccer)
+                    )
+                }
+            }
+            ConfigProfileEvents.onClick(TypeClick.SaveBasketballData) -> {
+                if (_state.value.idBasketball != null) {
+                    _state.value = _state.value.copy(
+                        positionIdBasketballError = validateFieldIsNotEmpty(_state.value.positionIdBasketball.toString()),
+                        levelIdBasketballError = validateFieldIsNotEmpty(_state.value.levelIdBasketball.toString()),
+                        valuationIdBasketballError = validateFieldIsNotEmpty(_state.value.valuationIdBasketball.toString()),
+                        abilitiesBasketballError = validateFieldIsNotEmpty(_state.value.abilitiesBasketball)
+                    )
+                }
+            }
+            ConfigProfileEvents.onClick(TypeClick.SavePadelData) -> {
+                if (_state.value.idPadel != null) {
+                    _state.value = _state.value.copy(
+                        positionIdPadelError = validateFieldIsNotEmpty(_state.value.positionIdPadel.toString()),
+                        levelIdPadelError = validateFieldIsNotEmpty(_state.value.levelIdPadel.toString()),
+                        valuationIdPadelError = validateFieldIsNotEmpty(_state.value.valuationIdPadel.toString()),
+                        abilitiesPadelError = validateFieldIsNotEmpty(_state.value.abilitiesPadel)
+                    )
+                }
+            }
+            ConfigProfileEvents.onClick(TypeClick.SaveTennisData) -> {
+                if (_state.value.idTennis != null) {
+                    _state.value = _state.value.copy(
+                        positionIdTennisError = validateFieldIsNotEmpty(_state.value.positionIdTennis.toString()),
+                        levelIdTennisError = validateFieldIsNotEmpty(_state.value.levelIdTennis.toString()),
+                        valuationIdTennisError = validateFieldIsNotEmpty(_state.value.valuationIdTennis.toString()),
+                        abilitiesTennisError = validateFieldIsNotEmpty(_state.value.abilitiesTennis)
+                    )
+                }
+            }
+            ConfigProfileEvents.onClick(TypeClick.SaveRecreationalActivityData) -> {
+                if (_state.value.idRecreationalActivity != null) {
+                    _state.value = _state.value.copy(
+                        positionIdRecreationalActivityError = validateFieldIsNotEmpty(_state.value.positionIdRecreationalActivity.toString()),
+                        levelIdRecreationalActivityError = validateFieldIsNotEmpty(_state.value.levelIdRecreationalActivity.toString()),
+                        valuationIdRecreationalActivityError = validateFieldIsNotEmpty(_state.value.valuationIdRecreationalActivity.toString()),
+                        abilitiesRecreationalActivityError = validateFieldIsNotEmpty(_state.value.abilitiesRecreationalActivity)
                     )
                 }
             }

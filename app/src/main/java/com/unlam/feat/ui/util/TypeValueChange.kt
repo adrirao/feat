@@ -53,21 +53,25 @@ sealed class TypeValueChange {
     object OnValueChangeValuationSoccer : TypeValueChange()
     object OnValueChangeAbilitiesSoccer : TypeValueChange()
 
+    object OnValueChangeIdBasketball : TypeValueChange()
     object OnValueChangePositionBasketball : TypeValueChange()
     object OnValueChangeLevelBasketball : TypeValueChange()
     object OnValueChangeValuationBasketball : TypeValueChange()
     object OnValueChangeAbilitiesBasketball : TypeValueChange()
 
+    object OnValueChangeIdTennis : TypeValueChange()
     object OnValueChangePositionTennis : TypeValueChange()
     object OnValueChangeLevelTennis : TypeValueChange()
     object OnValueChangeValuationTennis : TypeValueChange()
     object OnValueChangeAbilitiesTennis : TypeValueChange()
 
+    object OnValueChangeIdPadel: TypeValueChange()
     object OnValueChangePositionPadel : TypeValueChange()
     object OnValueChangeLevelPadel : TypeValueChange()
     object OnValueChangeValuationPadel : TypeValueChange()
     object OnValueChangeAbilitiesPadel : TypeValueChange()
 
+    object OnValueChangeIdRecreationalActivity : TypeValueChange()
     object OnValueChangePositionRecreationalActivity : TypeValueChange()
     object OnValueChangeLevelRecreationalActivity : TypeValueChange()
     object OnValueChangeValuationRecreationalActivity : TypeValueChange()

@@ -264,11 +264,12 @@ fun FeatOutlinedDropDown(
     label: String,
     options: List<String>,
     selectedText: (String) -> Unit,
-    error: String = ""
+    error: String = "",
+    initialValue:String = ""
 ) {
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
+    var selectedText by remember { mutableStateOf(initialValue) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
