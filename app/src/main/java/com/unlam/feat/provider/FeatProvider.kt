@@ -52,6 +52,10 @@ interface FeatProvider {
     @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
     suspend fun getAllConfirmedOrAppliedByUser(@Path("uid") uid: String): Response<List<HomeEvent>>
 
+    @Headers("Content-type: application/json")
+    @POST("/events/getfilterEventForUser/{uid}")
+    suspend fun getfilterEventForUser(@Path("uid") uid: String, @Body requestFilterEvent: RequestFilterEvent): Response<List<Event>>
+
     //</editor-fold>
     //<editor-fold desc="Availabilities">
     @GET("/availabilities/")

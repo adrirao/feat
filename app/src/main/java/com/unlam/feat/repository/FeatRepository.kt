@@ -26,7 +26,7 @@ interface FeatRepository {
     fun setCanceled(req: RequestEventState): Flow<Result<String>>// @POST("/events/setCanceled")
     fun getAllEventsOfTheWeek(uId: String): Flow<Result<List<Event>>>//  @GET("/events/getAllEventsOfTheWeek/{uid}")
     fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<HomeEvent>>>//  @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
-
+    fun getfilterEventForUser(uId: String, req: RequestFilterEvent): Flow<Result<List<Event>>>// @POST("events/getfilterEventForUser/{uid}")
 
     //</editor-fold">
     //<editor-fold desc="Availabilities">
@@ -111,6 +111,7 @@ interface FeatRepository {
     fun getDataAddEvent(uId: String): Flow<Result<ResponseDataAddEvent>>
     fun getDataHomeEvent(uId: String): Flow<Result<ResponseDataHomeEvent>>
     fun getDataSearchEvent(idEvent: Int, uId: String): Flow<Result<ResponseDataSearchEvent>>
+    fun getSearchEvent(uId: String): Flow<Result<ResponseDataSearch>>
     //</editor-fold desc="Multiple EndPoints">
 
 
