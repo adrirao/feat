@@ -80,6 +80,9 @@ constructor(
                     }
                 }
             }
+            is SearchEvent.RefreshData ->{
+                getEventsSuggestedForUser()
+            }
             SearchEvent.onClick(TypeClick.Submit) ->{
                 filterEvents()
             }

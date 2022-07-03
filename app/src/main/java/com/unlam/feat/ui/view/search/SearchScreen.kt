@@ -40,16 +40,26 @@ fun SearchScreen(
             separator = true,
             verticalPadding = true
         )
-        FeatOutlinedButton(
-            modifier = Modifier.align(Alignment.Start),
-            textContent = "Filtros",
-            contentColor = YellowColor,
-            backgroundColor = YellowColor,
-            textColor = PurpleDark,
-            onClick = {
-                onClick(SearchEvent.ChangeDialog)
-            }
-        )
+        Row(){
+            FeatOutlinedButton(
+                textContent = "Filtros",
+                contentColor = YellowColor,
+                backgroundColor = YellowColor,
+                textColor = PurpleDark,
+                onClick = {
+                    onClick(SearchEvent.ChangeDialog)
+                }
+            )
+            FeatOutlinedButton(
+                textContent = "Reestablecer filtros",
+                contentColor = YellowColor,
+                backgroundColor = YellowColor,
+                textColor = PurpleDark,
+                onClick = {
+                    onClick(SearchEvent.RefreshData)
+                }
+            )
+        }
         LazyColumn(
             content = {
                 items(events) { event ->
