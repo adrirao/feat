@@ -85,6 +85,7 @@ constructor(
             }
             SearchEvent.OnClick(TypeClick.Submit) ->{
                 filterEvents()
+
             }
         }
     }
@@ -125,12 +126,14 @@ constructor(
     }
 
     fun filterEvents(){
-        val uId = firebaseAuthRepository.getUserId()
-        var distance: String? = null
-        if(state.value.distance != ""){
+
+        var distance: String? = null;
+
+        if(state.value.distance !== ""){
             distance = state.value.distance
         }
 
+        val uId = firebaseAuthRepository.getUserId()
         val request = RequestFilterEvent(
             sportGenericId = state.value.sportGeneric?.toInt(),
             sportId = state.value.sportId?.toInt(),
@@ -139,6 +142,8 @@ constructor(
             startTime = state.value.time_start,
             endTime = state.value.time_end
         )
+
+        Log.d("REQUEST", request.toString())
 
         featRepository.getFilterSearchEvent(uId,request).onEach { result ->
             when (result) {
@@ -151,10 +156,11 @@ constructor(
                     )
                 }
                 is Result.Success -> {
-                    result.data?.let { SearchState(sport = it.players, events = it.events) }!!
+                    _state.value = SearchState(events = result.data?.events!!, sport = result.data.players)
                 }
             }
         }.launchIn(viewModelScope)
+
 
     }
 }

@@ -213,6 +213,7 @@ fun FilerEvents(
                     textColor = PurpleDark,
                     onClick = {
                         onClick(SearchEvent.OnClick(TypeClick.Submit))
+                        onClick(SearchEvent.ChangeDialog)
                     }
                 )
             }

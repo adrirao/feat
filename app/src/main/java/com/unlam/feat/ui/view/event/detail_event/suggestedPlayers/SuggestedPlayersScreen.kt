@@ -161,6 +161,7 @@ fun FilerPlayers(
                     textColor = PurpleDark,
                     onClick = {
                         onClick(SuggestedPlayersEvent.OnClick(TypeClick.Submit))
+                        onClick(SuggestedPlayersEvent.ChangeDialog)
                     }
                 )
             }
