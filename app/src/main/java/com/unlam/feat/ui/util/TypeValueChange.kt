@@ -43,5 +43,7 @@ sealed class TypeValueChange {
     object OnValueChangeEndTimeSaturday : TypeValueChange()
     object OnValueChangeDay: TypeValueChange()
     object OnValueChangeDistance: TypeValueChange()
+    object OnValueChangeMinAge: TypeValueChange()
+    object OnValueChangeMaxAge: TypeValueChange()
 
 }

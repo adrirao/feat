@@ -119,7 +119,9 @@ fun FilerEvents(
 
 
     Dialog(
-        onDismissRequest = {}
+        onDismissRequest = {
+            onClick(SearchEvent.ChangeDialog)
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -210,8 +212,7 @@ fun FilerEvents(
                     backgroundColor = YellowColor,
                     textColor = PurpleDark,
                     onClick = {
-                        onClick(SearchEvent.onClick(TypeClick.Submit))
-                        onClick(SearchEvent.ChangeDialog)
+                        onClick(SearchEvent.OnClick(TypeClick.Submit))
                     }
                 )
             }

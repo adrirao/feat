@@ -1,5 +1,16 @@
 package com.unlam.feat.ui.view.event.detail_event.suggestedPlayers
 
-sealed class SuggestedPlayersEvent {
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.util.TypeValueChange
 
+sealed class SuggestedPlayersEvent {
+    object DismissDialog: SuggestedPlayersEvent()
+    object ChangeDialog: SuggestedPlayersEvent()
+    object RefreshData: SuggestedPlayersEvent()
+    data class onValueChange(
+        val typeValueChange: TypeValueChange,
+        val value: String,
+        val valueOpt: String? = null,
+    ): SuggestedPlayersEvent()
+    data class OnClick (val typeClick: TypeClick) : SuggestedPlayersEvent()
 }

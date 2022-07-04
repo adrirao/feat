@@ -81,9 +81,9 @@ constructor(
                 }
             }
             is SearchEvent.RefreshData ->{
-                getEventsSuggestedForUser()
+                getDataSearch()
             }
-            SearchEvent.onClick(TypeClick.Submit) ->{
+            SearchEvent.OnClick(TypeClick.Submit) ->{
                 filterEvents()
             }
         }
@@ -127,7 +127,7 @@ constructor(
     fun filterEvents(){
         val uId = firebaseAuthRepository.getUserId()
         var distance: String? = null
-        if(!state.value.distance.equals("")){
+        if(state.value.distance != ""){
             distance = state.value.distance
         }
 
@@ -140,8 +140,7 @@ constructor(
             endTime = state.value.time_end
         )
 
-        /*
-        featRepository.getfilterEventForUser(uId,request).onEach { result ->
+        featRepository.getFilterSearchEvent(uId,request).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value = SearchState(error = result.message ?: "Error Inesperado")
@@ -152,12 +151,10 @@ constructor(
                     )
                 }
                 is Result.Success -> {
-                    _state.value = _state.value.copy(
-                        events = result.data!!
-                    )
+                    result.data?.let { SearchState(sport = it.players, events = it.events) }!!
                 }
             }
-        }.launchIn(viewModelScope)*/
+        }.launchIn(viewModelScope)
 
     }
 }

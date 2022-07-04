@@ -1,12 +1,16 @@
 package com.unlam.feat.ui.view.event.detail_event.suggestedPlayers
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.event.detail_event.DetailEventState
+import com.unlam.feat.ui.view.search.SearchEvent
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +30,46 @@ constructor(
 
     init {
 
+    }
+
+    fun onEvent(event: SuggestedPlayersEvent) {
+        when (event) {
+            is SuggestedPlayersEvent.DismissDialog -> {
+                _state.value = _state.value.copy(
+                    error = ""
+                )
+            }
+            is SuggestedPlayersEvent.ChangeDialog -> {
+                _state.value = _state.value.copy(
+                    showDialog = !_state.value.showDialog
+                )
+            }
+            is SuggestedPlayersEvent.onValueChange -> {
+                when (event.typeValueChange) {
+                    TypeValueChange.OnValueChangeMinAge -> {
+                        _state.value = _state.value.copy(
+                            minAge = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeMaxAge -> {
+                        _state.value = _state.value.copy(
+                            maxAge = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeDistance -> {
+                        _state.value = _state.value.copy(
+                            distance = event.value
+                        )
+                    }
+                }
+            }
+            is SuggestedPlayersEvent.RefreshData ->{
+
+            }
+            SuggestedPlayersEvent.OnClick(TypeClick.Submit) ->{
+
+            }
+        }
     }
 
     fun getSuggestedPlayers(idEvent: Int) {

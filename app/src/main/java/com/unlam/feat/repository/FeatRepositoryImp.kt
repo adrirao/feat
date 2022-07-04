@@ -1193,6 +1193,33 @@ constructor(
         }
     }
 
+    override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>> = flow{
+        try {
+            emit(Result.Loading())
+            val filterEvents = featProvider.getfilterEventForUser(uId, req);
+            val responseGetPlayer = featProvider.getPlayersByUser(uId)
+
+            if(responseGetPlayer.code() in 200..299 && filterEvents.code() in 200..299){
+                emit(
+                    Result.Success(
+                        data = ResponseDataSearch(
+                            events = filterEvents.body()!!,
+                            players = responseGetPlayer.body()!!
+                        )
+                    )
+                )
+            }else{
+                emit(Result.Error(message = "Unknown Error"))
+            }
+
+
+        }catch (e: Exception) {
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
+
 //</editor-fold desc="Multiple EndPoints">
 }
 

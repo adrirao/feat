@@ -15,5 +15,5 @@ sealed class SearchEvent {
         val valueOpt: String? = null,
         val valueLocalTimeOpt: LocalTime? = null
     ): SearchEvent()
-    data class onClick (val typeClick: TypeClick) : SearchEvent()
+    data class OnClick (val typeClick: TypeClick) : SearchEvent()
 }

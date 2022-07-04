@@ -326,7 +326,8 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
         }
 
         SuggestedPlayers(
-            state
+            state,
+            onClick = suggestedPlayerViewModel::onEvent
         )
     }
 
