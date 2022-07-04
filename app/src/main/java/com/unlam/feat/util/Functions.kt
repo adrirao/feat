@@ -1,7 +1,11 @@
 package com.unlam.feat.util
 
+import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -40,5 +44,13 @@ fun getAddress(latLng: LatLng): Address {
     val geocoder = Geocoder(LocalContext.current)
     val list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
     return list[0]
+}
+
+fun Context.openAppSystemSettings() {
+    startActivity(Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = Uri.fromParts("package", packageName, null)
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    })
 }
 

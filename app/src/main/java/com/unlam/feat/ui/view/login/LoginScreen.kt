@@ -3,6 +3,7 @@ package com.unlam.feat.ui.view.login
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,6 +17,7 @@ import com.unlam.feat.ui.theme.GreenColor20
 import com.unlam.feat.ui.theme.GreenLight
 import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
@@ -25,6 +27,7 @@ fun LoginScreen(
     onValueChange: (LoginEvents.onValueChange) -> Unit,
     onClick: (LoginEvents.onClick) -> Unit
 ) {
+
     FeatContent {
         Box(
             modifier = Modifier
@@ -98,7 +101,7 @@ fun LoginScreen(
             ClickableText(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 style = TextStyle(color = GreenLight),
-                text = AnnotatedString("No tienes una cuenta?"),
+                text = AnnotatedString("¿No tienes una cuenta?"),
                 onClick = {
                     onClick(LoginEvents.onClick(TypeClick.GoToRegister))
                 }
