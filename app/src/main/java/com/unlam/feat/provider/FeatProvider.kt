@@ -129,6 +129,10 @@ interface FeatProvider {
     @POST("/players/setDismissedFromList")
     suspend fun setKickApply (@Body requestEventApply: RequestEventApply): Response<String>
 
+    @Headers("Content-type: application/json")
+    @POST("/players/filterPlayersForEvent/{eventId}")
+    suspend fun filterPlayersForEvent (@Path("eventId") eventId: Int ,@Body RequestFilterPlayers: RequestFilterPlayers): Response<List<Player>>
+
     //</editor-fold>
     //<editor-fold desc="Positions">
     @GET("/positions/")

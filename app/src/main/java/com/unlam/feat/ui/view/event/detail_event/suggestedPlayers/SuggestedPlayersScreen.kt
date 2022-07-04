@@ -54,7 +54,7 @@ fun SuggestedPlayers(
                     backgroundColor = YellowColor,
                     textColor = PurpleDark,
                     onClick = {
-                        onClick(SuggestedPlayersEvent.ChangeDialog)
+                        onClick(SuggestedPlayersEvent.RefreshData)
                     }
                 )
             }
@@ -114,6 +114,7 @@ fun FilerPlayers(
             ) {
                 Row(){
                     FeatOutlinedTextField(
+                        modifier = Modifier.width(100.dp),
                         text = state.minAge,
                         textLabel = "Edad Mínima",
                         keyboardType = KeyboardType.Number,
@@ -126,6 +127,7 @@ fun FilerPlayers(
                         }
                     )
                     FeatOutlinedTextField(
+                        modifier = Modifier.width(100.dp),
                         text = state.maxAge,
                         textLabel = "Edad Máxima",
                         keyboardType = KeyboardType.Number,

@@ -5,6 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.model.request.RequestFilterEvent
+import com.unlam.feat.model.request.RequestFilterPlayers
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
@@ -27,9 +29,9 @@ constructor(
 
     private val _state = mutableStateOf(SuggestedPlayersState())
     val state: State<SuggestedPlayersState> = _state
+    var eventId: Int = 0
 
     init {
-
     }
 
     fun onEvent(event: SuggestedPlayersEvent) {
@@ -64,15 +66,16 @@ constructor(
                 }
             }
             is SuggestedPlayersEvent.RefreshData ->{
-
+                getSuggestedPlayers(eventId)
             }
             SuggestedPlayersEvent.OnClick(TypeClick.Submit) ->{
-
+                filterPlayers()
             }
         }
     }
 
     fun getSuggestedPlayers(idEvent: Int) {
+        eventId = idEvent
         featRepository.getAllPlayersSuggestedForEvent(idEvent).onEach { result ->
             when (result) {
                 is Result.Error -> {
@@ -84,10 +87,49 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value = SuggestedPlayersState(
-                        players = result.data!!
+                        players = result.data!!,
                     )
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun filterPlayers(){
+        var distance: String? = null
+        if(state.value.distance != ""){
+            distance = state.value.distance
+        }
+        var minAge: String? = null
+        if(state.value.minAge != ""){
+            minAge = state.value.minAge
+        }
+        var maxAge: String? = null
+        if(state.value.maxAge != ""){
+            maxAge = state.value.maxAge
+        }
+
+        val request = RequestFilterPlayers(
+            distance = distance?.toInt(),
+            max_age = maxAge?.toInt(),
+            min_age = minAge?.toInt()
+        )
+
+        featRepository.filterPlayersForEvent(state.value.idEvent, request).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value =
+                        SuggestedPlayersState(error = result.message ?: "Error Inesperado")
+                }
+                is Result.Loading -> {
+                    _state.value = SuggestedPlayersState(isLoading = true)
+                }
+                is Result.Success -> {
+                    _state.value = SuggestedPlayersState(
+                        players = result.data?.players!!,
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+
     }
 }

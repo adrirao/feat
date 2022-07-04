@@ -58,6 +58,7 @@ interface FeatRepository {
     fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> // @GET("/players/getAllAppliedByEvent/{eventId}")
     fun createPlayer(req: RequestPlayer): Flow<Result<String>> // @POST("/players/create")
     fun setKickApply(req: RequestEventApply): Flow<Result<String>> //@PUT("/players/setDismissedFromList")
+    fun filterPlayersForEvent(eventId: Int, req: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> //@POST("/players/filterPlayersForEvent/{eventId}")
 
     //</editor-fold desc="Players">
     //<editor-fold desc="Positions">

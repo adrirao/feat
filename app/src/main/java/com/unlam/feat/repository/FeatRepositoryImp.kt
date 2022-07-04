@@ -566,6 +566,26 @@ constructor(
         }
     }
 
+    override fun filterPlayersForEvent(eventId: Int, req: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
+        try{
+            emit(Result.Loading())
+            val response = featProvider.filterPlayersForEvent(eventId, req)
+            if (response.code() in 200..299){
+                emit(
+                     Result.Success(
+                         data = ResponseFilterPlayers(
+                             players = response.body()!!
+                         )
+                     )
+                )
+            } else {
+                emit(Result.Error(message = "Unknown Error"))
+            }
+        }catch (e: Exception){
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
     //</editor-fold desc="Players">
     //<editor-fold desc="Positions">
 

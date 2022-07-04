@@ -318,6 +318,7 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
             suggestedPlayerViewModel.state
         }
         LaunchedEffect(key1 = true) {
+            state.idEvent = idEvent.toInt()
             suggestedPlayerViewModel.getSuggestedPlayers(idEvent.toInt())
         }
 
