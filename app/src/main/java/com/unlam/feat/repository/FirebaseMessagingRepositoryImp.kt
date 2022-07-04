@@ -22,4 +22,8 @@ constructor(
             isSuccess(token.toString())
         })
     }
+
+    override fun subscribeToTopic(nameTopic: String) {
+        firebaseMessaging.subscribeToTopic(nameTopic.replace(" ", ""))
+    }
 }

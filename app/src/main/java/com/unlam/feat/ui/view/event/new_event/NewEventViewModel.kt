@@ -4,10 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unlam.feat.di.ResourcesProvider
 import com.unlam.feat.model.request.RequestEvent
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseMessagingRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +22,9 @@ import com.unlam.feat.util.Result
 class NewEventViewModel
 @Inject
 constructor(
-    private val resourcesProvider: ResourcesProvider,
     private val featRepository: FeatRepositoryImp,
-    private val firebaseAuthRepository: FirebaseAuthRepositoryImp
+    private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    private val firebaseMessagingRepository: FirebaseMessagingRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(NewEventState())
     val state: State<NewEventState> = _state
@@ -154,7 +154,7 @@ constructor(
                 dateError = NewEventState.GenericError.FieldEmpty
             )
             return
-        }else if(date.isBefore(LocalDate.now())){
+        } else if (date.isBefore(LocalDate.now())) {
             _state.value = _state.value.copy(
                 dateError = NewEventState.DateError.DateInvalid
             )
@@ -287,6 +287,7 @@ constructor(
                     )
                 }
                 is Result.Success -> {
+                    firebaseMessagingRepository.subscribeToTopic(request.name)
                     _state.value = NewEventState(
                         newEventMessage = NewEventState.NewEventMessage.NewEventSuccess
                     )

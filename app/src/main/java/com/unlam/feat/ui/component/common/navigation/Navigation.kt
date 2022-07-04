@@ -7,12 +7,15 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
@@ -286,11 +289,11 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
 }
 
 private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
-        composable(Screen.Events.route) {
-            val eventViewModel: EventViewModel = hiltViewModel()
-            val state by remember {
-                eventViewModel.state
-            }
+    composable(Screen.Events.route) {
+        val eventViewModel: EventViewModel = hiltViewModel()
+        val state by remember {
+            eventViewModel.state
+        }
 
         EventScreen(
             state = state,
@@ -310,54 +313,54 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     }
 }
 
-    private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
-        composable(Screen.NewEvent.route) {
-            val newEventViewModel: NewEventViewModel = hiltViewModel()
-            val state by remember {
-                newEventViewModel.state
-            }
+private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
+    composable(Screen.NewEvent.route) {
+        val newEventViewModel: NewEventViewModel = hiltViewModel()
+        val state by remember {
+            newEventViewModel.state
+        }
 
-            when (state.newEventMessage) {
-                NewEventState.NewEventMessage.NewEventError -> {
-                    ErrorDialog(
-                        title = stringResource(R.string.text_error),
-                        desc = stringResource(R.string.desc_error)
-                    ) {
-                        newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
-                    }
+        when (state.newEventMessage) {
+            NewEventState.NewEventMessage.NewEventError -> {
+                ErrorDialog(
+                    title = stringResource(R.string.text_error),
+                    desc = stringResource(R.string.desc_error)
+                ) {
+                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
                 }
-                NewEventState.NewEventMessage.NewEventSuccess -> {
-                    SuccessDialog(
-                        title = stringResource(R.string.text_event_created),
-                        desc = stringResource(R.string.desc_event_created)
-                    ) {
-                        newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
+            }
+            NewEventState.NewEventMessage.NewEventSuccess -> {
+                SuccessDialog(
+                    title = stringResource(R.string.text_event_created),
+                    desc = stringResource(R.string.desc_event_created)
+                ) {
+                    newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
+                    navController.popBackStack()
+                    navController.navigate(Screen.Events.route)
+                }
+            }
+            else -> {}
+        }
+
+        NewEventScreen(
+            state = state,
+            onValueChange = { event ->
+                newEventViewModel.onEvent(event)
+            },
+            onClick = { event ->
+                when (event) {
+                    NewEventEvents.onClick(TypeClick.GoToEvent) -> {
                         navController.popBackStack()
                         navController.navigate(Screen.Events.route)
                     }
-                }
-                else -> {}
-            }
-
-            NewEventScreen(
-                state = state,
-                onValueChange = { event ->
-                    newEventViewModel.onEvent(event)
-                },
-                onClick = { event ->
-                    when (event) {
-                        NewEventEvents.onClick(TypeClick.GoToEvent) -> {
-                            navController.popBackStack()
-                            navController.navigate(Screen.Events.route)
-                        }
-                        NewEventEvents.onClick(TypeClick.Submit) -> {
-                            newEventViewModel.onEvent(event)
-                        }
+                    NewEventEvents.onClick(TypeClick.Submit) -> {
+                        newEventViewModel.onEvent(event)
                     }
                 }
-            )
-        }
+            }
+        )
     }
+}
 
 private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
     composable(Screen.Search.route) {
@@ -393,7 +396,7 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.EditProfilePersonalInformation.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferencies) {
                         navController.navigate(Screen.EditProfilePreferences.route)
-                    }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
+                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
                         navController.navigate(Screen.Login.route)
                     }
                 },
