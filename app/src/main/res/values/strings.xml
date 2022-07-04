@@ -58,5 +58,7 @@
     <string name="invalid_range">Edad minima es mayor a edad maxima</string>
     <string name="min_age_empty">Edad minima vacia</string>
     <string name="max_age_empty">Edad maxima vacia</string>
+    <string name="error_description_api_connection">Se produjo un error al querer conectar con el servidor.</string>
+    <string name="error_api_connection">Error de conexión con el servidor.</string>
 
 </resources>

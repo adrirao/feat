@@ -171,6 +171,14 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
                     loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
             }
+            LoginState.LoginMessage.ApiConnectionError -> {
+                ErrorDialog(
+                    title = stringResource(R.string.error_api_connection),
+                    desc = stringResource(R.string.error_description_api_connection)
+                ) {
+                    loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
+                }
+            }
             LoginState.LoginMessage.InvalidCredentials -> {
                 ErrorDialog(
                     title = stringResource(R.string.text_invalid_credential),
@@ -189,8 +197,15 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             }
             LoginState.LoginMessage.LoginSuccess -> {
                 loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
-                navController.popBackStack(Screen.Login.route, inclusive = true)
-                navController.navigate(Screen.Home.route)
+                if(state.isFirstLogin != null){
+                    if (!state.isFirstLogin!!) {
+                        navController.popBackStack(Screen.Login.route, inclusive = true)
+                        navController.navigate(Screen.Home.route)
+                    }else if(state.isFirstLogin!!){
+                        navController.popBackStack(Screen.Login.route, inclusive = true)
+                        navController.navigate(Screen.ConfigProfile.route)
+                    }
+                }
             }
         }
 

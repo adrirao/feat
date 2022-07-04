@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -117,7 +118,9 @@ fun SuccessDialog(
 fun ErrorDialog(
     title: String = "",
     desc: String = "",
-    onDismiss: () -> Unit = {}
+    enabledCancelButton:Boolean = true,
+    textContentAccept: String = "Aceptar",
+    onDismiss: () -> Unit = {},
 ) {
     Dialog(
         onDismissRequest = onDismiss
@@ -165,6 +168,7 @@ fun ErrorDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                         ) {
+                            if(enabledCancelButton){
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
                                 contentColor = RedColor,
@@ -174,15 +178,17 @@ fun ErrorDialog(
                                 width = 100.dp,
                                 height = 40.dp
                             )
+                            }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                textContent = "Aceptar",
+                                 modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                textContent = textContentAccept,
                                 contentColor = GreenColor,
-                                backgroundColor = GreenColor20,
-                                textColor = GreenColor,
+                                backgroundColor = GreenColor,
+                                textColor = PurpleDark,
                                 onClick = onDismiss,
-                                width = 100.dp,
-                                height = 40.dp
+                                width = if(enabledCancelButton) 100.dp else 250.dp,
+                                height = if(enabledCancelButton) 40.dp else 50.dp,
                             )
                         }
                     }

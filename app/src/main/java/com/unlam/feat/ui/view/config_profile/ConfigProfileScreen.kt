@@ -61,9 +61,7 @@ fun ConfigProfileScreen(
             ) { position ->
                 when (position) {
                     0 -> PageOne(state, onEvent)
-                    1 -> PageTwo(state, onEvent, openMap = {
-                        openMap = true
-                    })
+                    1 -> PageTwo(state, onEvent, openMap = { openMap = true })
                     2 -> PageThree(state, onEvent)
                     3 -> PageFour(state, onEvent)
                     4 -> PageFive(state, onEvent) { idSport = it }
@@ -110,6 +108,9 @@ fun ConfigProfileScreen(
                         it.longitude.toString()
                     )
                 )
+                openMap = false
+            },
+            failLocationPermissions = {
                 openMap = false
             }
         )

@@ -30,6 +30,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
 
+
     LaunchedEffect(key1 = true) {
         viewModel.state.collect() {
             if (it.isAuthenticate == true && it.isFirstLogin == true) {

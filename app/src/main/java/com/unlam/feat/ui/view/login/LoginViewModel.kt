@@ -7,19 +7,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.unlam.feat.util.Result
 
 @HiltViewModel
 class LoginViewModel
 @Inject
 constructor(
     private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    private val featRepository: FeatRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(LoginState())
     val state: State<LoginState> = _state
@@ -122,10 +127,7 @@ constructor(
         viewModelScope.launch {
             firebaseAuthRepository.authenticate(email, password) { isLogged, error ->
                 if (isLogged) {
-                    _state.value = _state.value.copy(
-                        loginMessage = LoginState.LoginMessage.LoginSuccess,
-                        isLoading = false
-                    )
+                    checkIsFirstLogin()
                 } else {
                     when (error) {
                         is FirebaseAuthInvalidUserException -> {
@@ -150,5 +152,39 @@ constructor(
                 }
             }
         }
+    }
+
+    private fun checkIsFirstLogin() {
+        val uId = firebaseAuthRepository.getUserId()
+        featRepository.getPerson(uId).onEach { result ->
+            when (result) {
+
+                is  Result.Success -> {
+                    if (result.data == null) {
+                        _state.value = _state.value.copy(
+                            isFirstLogin = true,
+                            loginMessage = LoginState.LoginMessage.LoginSuccess,
+                            isLoading = false
+                        )
+                    } else {
+                        _state.value = _state.value.copy(
+                            isFirstLogin = false,
+                            loginMessage = LoginState.LoginMessage.LoginSuccess,
+                            isLoading = false
+                        )
+                    }
+                }
+                is Result.Loading ->{
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        loginMessage = LoginState.LoginMessage.ApiConnectionError
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }
