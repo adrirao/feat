@@ -30,6 +30,7 @@ import com.unlam.feat.ui.view.config_profile.ConfigProfileScreen
 import com.unlam.feat.ui.view.config_profile.ConfigProfileViewModel
 import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.chat.ChatScreen
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
@@ -75,12 +76,13 @@ import com.unlam.feat.ui.view.splash.SplashScreen
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Splash.route) {
+    NavHost(navController = navController, startDestination = Screen.Chat.route) {
         //init app
         addRouteSplash(navController)
         addRouteLogin(navController)
         addRouteRegister(navController)
         addRouteConfigProfile(navController)
+        addRouteChat(navController)
 
         addRouteMain(navController)
         addRouteHome(navController)
@@ -103,6 +105,12 @@ fun Navigation(navController: NavHostController) {
 private fun NavGraphBuilder.addRouteSplash(navController: NavHostController) {
     composable(Screen.Splash.route) {
         SplashScreen(navController)
+    }
+}
+
+private fun NavGraphBuilder.addRouteChat(navController: NavHostController) {
+    composable(Screen.Chat.route) {
+        ChatScreen()
     }
 }
 
