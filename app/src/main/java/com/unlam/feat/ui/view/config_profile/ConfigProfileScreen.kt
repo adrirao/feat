@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GpsFixed
 import androidx.compose.runtime.*
@@ -643,7 +644,7 @@ private fun PageFour(
         }
         FeatOutlinedTextField(
             text = state.willingDistance,
-            textLabel = "Distancia",
+            textLabel = "Distancia busqueda",
             keyboardType = KeyboardType.Number,
             onValueChange = { distance ->
                 if (distance.length <= 2 && ((distance.toIntOrNull()) ?: 0) <= 30) {
@@ -675,36 +676,65 @@ private fun PageFive(
         title = "Deportes:",
         page = "5/5"
     ) {
-        if (state.sportsList.isNotEmpty()) {
-            state.sportsList.forEach { sportGeneric ->
-                FeatSportCard(
-                    onClickCard = {
-                        onClick(sportGeneric.id)
-                        onEvent(
-                            ConfigProfileEvents.onValueChange(
-                                TypeValueChange.OnValueChangeSelectSport,
-                                sportGeneric.id.toString()
+        Column {
+
+
+            if (state.sportsList.isNotEmpty()) {
+                state.sportsList.forEach { sportGeneric ->
+                    FeatSportCard(
+                        onClickCard = {
+                            onClick(sportGeneric.id)
+                            onEvent(
+                                ConfigProfileEvents.onValueChange(
+                                    TypeValueChange.OnValueChangeSelectSport,
+                                    sportGeneric.id.toString()
+                                )
                             )
-                        )
-                    },
-                    sport = sportGeneric.description,
+                        },
+                        sport = sportGeneric.description,
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        idSport = sportGeneric.id,
+                        isSelected = when (sportGeneric.id) {
+                            1 -> state.idSoccer != null
+                            2 -> state.idPadel != null
+                            3 -> state.idTennis != null
+                            4 -> state.idBasketball != null
+                            5 -> state.idRecreationalActivity != null
+                            else -> false
+                        }
+                    )
+                }
+            }
+
+            if (
+                (!state.idBasketball.isNullOrEmpty() ||
+                !state.idSoccer.isNullOrEmpty() ||
+                !state.idPadel.isNullOrEmpty() ||
+                !state.idTennis.isNullOrEmpty() ||
+                !state.idRecreationalActivity.isNullOrEmpty())
+                &&
+                (state.saturdayIsChecked||
+                state.mondayIsChecked||
+                state.wednesdayIsChecked||
+                state.thursdayIsChecked||
+                state.fridayIsChecked||
+                state.sundayIsChecked||
+                state.tuesdayIsChecked)) {
+                FeatOutlinedButton(
+                    contentColor = GreenColor,
+                    backgroundColor = GreenColor90,
+                    textColor = PurpleDark,
                     modifier = Modifier
-                        .height(100.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    idSport = sportGeneric.id,
-                    isSelected = when (sportGeneric.id) {
-                        1 -> state.idSoccer != null
-                        2 -> state.idPadel != null
-                        3 -> state.idTennis != null
-                        4 -> state.idBasketball != null
-                        5 -> state.idRecreationalActivity != null
-                        else -> false
-                    }
+                        .align(Alignment.End)
+                        .padding(top = 10.dp),
+                    textContent = "Guardar",
+                    onClick = { onEvent(ConfigProfileEvents.onClick(TypeClick.Submit)) }
                 )
             }
         }
-
     }
 }
 
