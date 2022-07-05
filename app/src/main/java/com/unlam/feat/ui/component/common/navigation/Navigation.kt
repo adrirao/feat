@@ -31,6 +31,7 @@ import com.unlam.feat.ui.view.config_profile.ConfigProfileViewModel
 import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.chat.ChatScreen
+import com.unlam.feat.ui.view.chat.ChatViewModel
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
@@ -110,7 +111,30 @@ private fun NavGraphBuilder.addRouteSplash(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteChat(navController: NavHostController) {
     composable(Screen.Chat.route) {
-        ChatScreen()
+        val chatViewModel: ChatViewModel = hiltViewModel()
+
+        val state by remember {
+            chatViewModel.state
+        }
+
+        LaunchedEffect(true) {
+            chatViewModel.getEvent(1)
+        }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.event != null) {
+            ChatScreen(state = state,
+                onEvent = {
+                    chatViewModel.onValueChange(it)
+                },
+                onClick = {
+                    chatViewModel.onClick(it)
+                }
+            )
+        }
     }
 }
 
@@ -208,11 +232,11 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             }
             LoginState.LoginMessage.LoginSuccess -> {
                 loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
-                if(state.isFirstLogin != null){
+                if (state.isFirstLogin != null) {
                     if (!state.isFirstLogin!!) {
                         navController.popBackStack(Screen.Login.route, inclusive = true)
                         navController.navigate(Screen.Home.route)
-                    }else if(state.isFirstLogin!!){
+                    } else if (state.isFirstLogin!!) {
                         navController.popBackStack(Screen.Login.route, inclusive = true)
                         navController.navigate(Screen.ConfigProfile.route)
                     }
