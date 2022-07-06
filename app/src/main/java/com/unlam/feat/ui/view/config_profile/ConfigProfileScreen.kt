@@ -36,6 +36,7 @@ import com.unlam.feat.ui.util.TypeValueChange
 fun ConfigProfileScreen(
     state: ConfigProfileState,
     onEvent: (ConfigProfileEvents) -> Unit,
+    onClick: () -> Unit
 ) {
     var openMap by remember {
         mutableStateOf(false)
@@ -47,12 +48,26 @@ fun ConfigProfileScreen(
 
     val pagerState = rememberPagerState()
 
+    if(state.isSuccessSubmitData){
+        InfoDialog(title = "Creado con exito", desc = "Su perfil se configuro con exito", onDismiss = {onClick()})
+    }
+    if(state.isErrorSubmitData){
+        ErrorDialog(
+            title = "Error",
+            desc = state.error,
+            enabledCancelButton = false,
+            onDismiss = {onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))}
+        )
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        if(state.isLoadingSubmitData){
+            FeatCircularProgress()
+        }
         if (idSport == 0) {
             HorizontalPager(
                 count = 5,

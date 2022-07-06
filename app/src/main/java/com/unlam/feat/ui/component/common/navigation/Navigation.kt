@@ -77,7 +77,7 @@ import com.unlam.feat.ui.view.splash.SplashScreen
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Chat.route) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
         //init app
         addRouteSplash(navController)
         addRouteLogin(navController)
@@ -329,11 +329,16 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
             state = state,
             onEvent = { event ->
                 configProfileViewModel.onEvent(event)
+            },
+            onClick = {
+                navController.popBackStack(Screen.Login.route, inclusive = true)
+                navController.navigate(Screen.Home.route)
             })
 
 
     }
 }
+
 
 private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     composable(Screen.Events.route) {

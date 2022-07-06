@@ -23,6 +23,9 @@ data class ConfigProfileState(
     val fridayIsChecked: Boolean = false,
     val saturdayIsChecked: Boolean = false,
     val isLoading: Boolean = false,
+    val isLoadingSubmitData: Boolean = false,
+    val isSuccessSubmitData:Boolean = false,
+    val isErrorSubmitData: Boolean = false,
 
 
     val lastName: String = "",
