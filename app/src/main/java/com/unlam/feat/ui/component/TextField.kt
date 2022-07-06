@@ -44,6 +44,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun FeatOutlinedTextField(
     modifier: Modifier = Modifier.fillMaxWidth(),
+    paddingValues: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 5.dp),
     text: String,
     textLabel: String,
     enabled: Boolean = true,
@@ -63,7 +64,7 @@ fun FeatOutlinedTextField(
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 20.dp, vertical = 5.dp),
+            .padding(paddingValues),
     ) {
         OutlinedTextField(
             modifier = modifier,
@@ -123,18 +124,19 @@ fun FeatOutlinedTextField(
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.End,
-                modifier = if(trailingIcon == null ){Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp)
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 15.dp)
-                    }else{
+                modifier = if (trailingIcon == null) {
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 15.dp)
+                } else {
                     Modifier
                         .padding(vertical = 5.dp)
                         .fillMaxWidth()
                         .align(Alignment.CenterEnd)
                         .padding(end = 40.dp)
-                    }
+                }
             )
         }
     }
@@ -206,7 +208,7 @@ fun FeatOutlinedTimePicker(
     label: String = "",
     titlePicker: String = "Default",
     error: String = "",
-    isErrorVisible:Boolean = true
+    isErrorVisible: Boolean = true
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -228,8 +230,8 @@ fun FeatOutlinedTimePicker(
             },
         enabled = false,
         textLabel = label,
-        error = if(isErrorVisible) error else "",
-        unFocusedColor =  if(error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
+        error = if (isErrorVisible) error else "",
+        unFocusedColor = if (error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
     )
     MaterialDialog(
         dialogState = dialogState,
@@ -265,7 +267,7 @@ fun FeatOutlinedDropDown(
     options: List<String>,
     selectedText: (String) -> Unit,
     error: String = "",
-    initialValue:String = ""
+    initialValue: String = ""
 ) {
 
     var expanded by remember { mutableStateOf(false) }

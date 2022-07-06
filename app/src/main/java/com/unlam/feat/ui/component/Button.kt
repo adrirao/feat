@@ -103,8 +103,8 @@ fun FeatOutlinedButtonIcon(
         },
         modifier = if (width == null) {
             modifier
-                .padding(horizontal = 20.dp, vertical = 5.dp)
-                .height(height)
+//                .padding(horizontal = 20.dp, vertical = 5.dp)
+//                .height(height)
         } else {
             modifier
                 .padding(horizontal = 20.dp, vertical = 5.dp)

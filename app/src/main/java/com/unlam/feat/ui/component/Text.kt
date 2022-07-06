@@ -33,7 +33,7 @@ fun FeatText(
     separator: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
-    fontWeight : FontWeight? = null,
+    fontWeight: FontWeight? = null,
     fontFamily: FontFamily? = null,
     fontStyle: FontStyle? = null,
     verticalPadding: Boolean = false
@@ -68,6 +68,7 @@ fun FeatHeader(
     color: Color = Color.White,
     maxLines: Int = Int.MAX_VALUE,
     icon: @Composable (() -> Unit)? = null,
+    fontWeight: FontWeight? = null,
     overflow: TextOverflow = TextOverflow.Clip,
 ) {
     Column(
@@ -85,6 +86,7 @@ fun FeatHeader(
                 color = color,
                 maxLines = maxLines,
                 overflow = overflow,
+                fontWeight = fontWeight
             )
             if (icon != null) {
                 icon()
@@ -107,8 +109,8 @@ fun FeatInfo(
     fontSize: TextUnit? = null,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
-    contentArrangement: Arrangement.Horizontal =  Arrangement.Start,
-    contentAlignment : Alignment.Vertical =  Alignment.CenterVertically,
+    contentArrangement: Arrangement.Horizontal = Arrangement.Start,
+    contentAlignment: Alignment.Vertical = Alignment.CenterVertically,
     @DrawableRes painter: Int? = null,
     icon: ImageVector? = null,
     iconColor: Color = GreenColor,
@@ -121,7 +123,7 @@ fun FeatInfo(
         horizontalArrangement = contentArrangement,
         verticalAlignment = contentAlignment
     ) {
-        if(painter != null){
+        if (painter != null) {
             Image(
                 painter = painterResource(id = painter),
                 contentDescription = null,
@@ -130,9 +132,9 @@ fun FeatInfo(
                     .size(iconSize)
                     .weight(1f)
             )
-        }else if(icon != null){
+        } else if (icon != null) {
             Icon(
-                imageVector = icon ,
+                imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier
                     .size(iconSize)
@@ -141,7 +143,9 @@ fun FeatInfo(
             )
         }
         FeatText(
-            modifier = Modifier.weight(4f).padding(horizontal = 10.dp),
+            modifier = Modifier
+                .weight(4f)
+                .padding(horizontal = 10.dp),
             text = textInfo,
             color = colorText ?: PurpleLight,
             fontSize = fontSize ?: MaterialTheme.typography.body1.fontSize,

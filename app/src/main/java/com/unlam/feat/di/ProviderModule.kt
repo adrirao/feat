@@ -1,6 +1,7 @@
 package com.unlam.feat.di
 
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
@@ -61,7 +62,7 @@ class ProviderModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseInstance() = Firebase.auth
+    fun provideFirebaseAuthInstance() = Firebase.auth
 
     @Provides
     @Singleton
@@ -70,5 +71,9 @@ class ProviderModule {
     @Provides
     @Singleton
     fun provideFirebaseStorageInstance() = FirebaseStorage.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestoreInstance() = Firebase.firestore
 }
 
