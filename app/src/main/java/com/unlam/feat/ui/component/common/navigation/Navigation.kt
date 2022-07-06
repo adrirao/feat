@@ -330,10 +330,21 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
             onEvent = { event ->
                 configProfileViewModel.onEvent(event)
             },
-            onClick = {
-                navController.popBackStack(Screen.Login.route, inclusive = true)
-                navController.navigate(Screen.Home.route)
-            })
+            onClick = { event ->
+                when (event) {
+                    EventEvents.onClick(TypeClick.GoToLogin) -> {
+                        FirebaseAuth.getInstance().signOut()
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    }
+                    EventEvents.onClick(TypeClick.GoToHome) -> {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
+
+            }
+        )
 
 
     }

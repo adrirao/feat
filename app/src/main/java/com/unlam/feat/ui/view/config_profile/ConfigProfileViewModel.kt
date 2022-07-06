@@ -757,7 +757,9 @@ constructor(
             when (result) {
                 is Result.Error -> {
                     _state.value = _state.value.copy(
-                        error = result.message!!
+                        error = result.message!!,
+                        isErrorSubmitData = true,
+                        isLoadingSubmitData = false
                     )
                 }
                 is Result.Loading -> {
@@ -767,7 +769,8 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value = _state.value.copy(
-                        isSuccessSubmitData = true
+                        isSuccessSubmitData = true,
+                        isLoadingSubmitData = false
                     )
                 }
             }

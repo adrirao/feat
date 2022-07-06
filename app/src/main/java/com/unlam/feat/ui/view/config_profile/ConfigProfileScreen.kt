@@ -28,7 +28,7 @@ import com.unlam.feat.ui.component.common.PermissionFlow
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-
+import com.unlam.feat.ui.view.event.EventEvents
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -36,7 +36,7 @@ import com.unlam.feat.ui.util.TypeValueChange
 fun ConfigProfileScreen(
     state: ConfigProfileState,
     onEvent: (ConfigProfileEvents) -> Unit,
-    onClick: () -> Unit
+    onClick: (EventEvents) -> Unit
 ) {
     var openMap by remember {
         mutableStateOf(false)
@@ -48,98 +48,104 @@ fun ConfigProfileScreen(
 
     val pagerState = rememberPagerState()
 
-    if(state.isSuccessSubmitData){
-        InfoDialog(title = "Creado con exito", desc = "Su perfil se configuro con exito", onDismiss = {onClick()})
+    if (state.isSuccessSubmitData) {
+        InfoDialog(
+            title = "Creado con exito",
+            desc = "Su perfil se configuro con exito",
+            onDismiss = { onClick(EventEvents.onClick(TypeClick.GoToHome)) })
     }
-    if(state.isErrorSubmitData){
+
+    if (state.isErrorSubmitData) {
         ErrorDialog(
             title = "Error",
             desc = state.error,
             enabledCancelButton = false,
-            onDismiss = {onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))}
+            onDismiss = { onClick(EventEvents.onClick(TypeClick.GoToLogin)) }
         )
     }
+
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if(state.isLoadingSubmitData){
+        if (state.isLoadingSubmitData) {
             FeatCircularProgress()
-        }
-        if (idSport == 0) {
-            HorizontalPager(
-                count = 5,
-                state = pagerState
-            ) { position ->
-                when (position) {
-                    0 -> PageOne(state, onEvent)
-                    1 -> PageTwo(state, onEvent, openMap = { openMap = true })
-                    2 -> PageThree(state, onEvent)
-                    3 -> PageFour(state, onEvent)
-                    4 -> PageFive(state, onEvent) { idSport = it }
-                }
-            }
-            HorizontalPagerIndicator(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
-                pagerState = pagerState
-            )
-        } else if (idSport != 0) {
-            if (state.isLoading) {
-                FeatCircularProgress()
-            } else {
-                when (idSport) {
-                    1 -> {
-                        SportDataSoccer(state, onEvent) { idSport = it }
-                    }
-                    2 -> {
-                        SportDataPadel(state, onEvent) { idSport = it }
-                    }
-                    3 -> {
-                        SportDataTennis(state, onEvent) { idSport = it }
-                    }
-                    4 -> {
-                        SportDataBasketball(state, onEvent) { idSport = it }
-                    }
-                    5 -> {
-                        SportDataRecreationalActivity(state, onEvent) { idSport = it }
+        } else {
+            if (idSport == 0) {
+                HorizontalPager(
+                    count = 5,
+                    state = pagerState
+                ) { position ->
+                    when (position) {
+                        0 -> PageOne(state, onEvent)
+                        1 -> PageTwo(state, onEvent, openMap = { openMap = true })
+                        2 -> PageThree(state, onEvent)
+                        3 -> PageFour(state, onEvent)
+                        4 -> PageFive(state, onEvent) { idSport = it }
                     }
                 }
+                HorizontalPagerIndicator(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter),
+                    pagerState = pagerState
+                )
+            } else if (idSport != 0) {
+                if (state.isLoading) {
+                    FeatCircularProgress()
+                } else {
+                    when (idSport) {
+                        1 -> {
+                            SportDataSoccer(state, onEvent) { idSport = it }
+                        }
+                        2 -> {
+                            SportDataPadel(state, onEvent) { idSport = it }
+                        }
+                        3 -> {
+                            SportDataTennis(state, onEvent) { idSport = it }
+                        }
+                        4 -> {
+                            SportDataBasketball(state, onEvent) { idSport = it }
+                        }
+                        5 -> {
+                            SportDataRecreationalActivity(state, onEvent) { idSport = it }
+                        }
+                    }
+                }
+
             }
 
-        }
 
-    }
-    if (openMap) {
-        FeatMap(
-            setLocation = {
+            if (openMap) {
+                FeatMap(
+                    setLocation = {
+                        onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangePosition,
+                                it.latitude.toString(),
+                                it.longitude.toString()
+                            )
+                        )
+                        openMap = false
+                    },
+                )
+            }
+            if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
+                val address = Geocoder(LocalContext.current).getFromLocation(
+                    state.latitude.toDouble(),
+                    state.longitude.toDouble(),
+                    1
+                )
                 onEvent(
                     ConfigProfileEvents.onValueChange(
-                        TypeValueChange.OnValueChangePosition,
-                        it.latitude.toString(),
-                        it.longitude.toString()
+                        TypeValueChange.OnValueChangeAddress,
+                        address[0].getAddressLine(0)
                     )
                 )
-                openMap = false
-            },
-        )
+            }
+        }
     }
-    if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
-        val address = Geocoder(LocalContext.current).getFromLocation(
-            state.latitude.toDouble(),
-            state.longitude.toDouble(),
-            1
-        )
-        onEvent(
-            ConfigProfileEvents.onValueChange(
-                TypeValueChange.OnValueChangeAddress,
-                address[0].getAddressLine(0)
-            )
-        )
-    }
-
 
 
 }
@@ -278,10 +284,12 @@ private fun PageTwo(
         mutableStateOf(false)
     }
 
-    PermissionFlow(permissionState,
+    PermissionFlow(
+        permissionState,
         shouldShowRationale,
         exactLocationPermission,
-        locationPermissionDenied)
+        locationPermissionDenied
+    )
 
     FeatForm(
         modifier = Modifier.padding(10.dp),
@@ -319,9 +327,9 @@ private fun PageTwo(
                                 permissionState.permissions.size == permissionState.revokedPermissions.size
                             if (permissionState.allPermissionsGranted) {
                                 openMap()
-                            }else if (!permissionState.permissionRequested) {
+                            } else if (!permissionState.permissionRequested) {
                                 permissionState.launchMultiplePermissionRequest()
-                            }else if (!allPermissionsRevoked) {
+                            } else if (!allPermissionsRevoked) {
                                 exactLocationPermission.value = true
                             } else if (permissionState.shouldShowRationale) {
                                 shouldShowRationale.value = true
@@ -755,18 +763,19 @@ private fun PageFive(
 
             if (
                 (!state.idBasketball.isNullOrEmpty() ||
-                !state.idSoccer.isNullOrEmpty() ||
-                !state.idPadel.isNullOrEmpty() ||
-                !state.idTennis.isNullOrEmpty() ||
-                !state.idRecreationalActivity.isNullOrEmpty())
+                        !state.idSoccer.isNullOrEmpty() ||
+                        !state.idPadel.isNullOrEmpty() ||
+                        !state.idTennis.isNullOrEmpty() ||
+                        !state.idRecreationalActivity.isNullOrEmpty())
                 &&
-                (state.saturdayIsChecked||
-                state.mondayIsChecked||
-                state.wednesdayIsChecked||
-                state.thursdayIsChecked||
-                state.fridayIsChecked||
-                state.sundayIsChecked||
-                state.tuesdayIsChecked)) {
+                (state.saturdayIsChecked ||
+                        state.mondayIsChecked ||
+                        state.wednesdayIsChecked ||
+                        state.thursdayIsChecked ||
+                        state.fridayIsChecked ||
+                        state.sundayIsChecked ||
+                        state.tuesdayIsChecked)
+            ) {
                 FeatOutlinedButton(
                     contentColor = GreenColor,
                     backgroundColor = GreenColor90,
