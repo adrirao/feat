@@ -613,8 +613,11 @@ constructor(
         } else return
         val minAge = if (_state.value.ageError == null) _state.value.minAge else return
         val maxAge = if (_state.value.ageError == null) _state.value.maxAge else return
-//        val notifications = if (_state.value.notificationsError == null) _state.value.notifications else return
+//      val notifications = if (_state.value.notificationsError == null) _state.value.notifications else return
         val willingDistance = if (_state.value.willingDistanceError == null) _state.value.willingDistance else return
+        if (state.value.idSoccer != null) {
+            val abilitiesSoccer = if (state.value.abilitiesSoccerError == null) _state.value.abilitiesPadel else return
+        }
 
 
     }

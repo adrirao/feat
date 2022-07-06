@@ -281,7 +281,7 @@ private fun PageTwo(
                 onValueChange = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeLastName,
+                            TypeValueChange.OnValueChangeAddressAlias,
                             it
                         )
                     )
