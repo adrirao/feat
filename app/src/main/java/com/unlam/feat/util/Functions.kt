@@ -1,5 +1,7 @@
 package com.unlam.feat.util
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.Address
@@ -8,9 +10,15 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.common.internal.service.Common
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.unlam.feat.ui.component.ErrorDialog
 import retrofit2.Response
 
 fun <T, Y> logging(request: T, response: Response<Y>) {
@@ -53,4 +61,5 @@ fun Context.openAppSystemSettings() {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })
 }
+
 

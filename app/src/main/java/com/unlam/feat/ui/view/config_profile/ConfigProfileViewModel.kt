@@ -616,6 +616,7 @@ constructor(
 //        val notifications = if (_state.value.notificationsError == null) _state.value.notifications else return
         val willingDistance = if (_state.value.willingDistanceError == null) _state.value.willingDistance else return
 
+
     }
 
 
@@ -778,8 +779,6 @@ constructor(
     }
 
     private fun getDataSportScreen(sportGenericId: Int) {
-
-        val uId = firebaseAuthRepository.getUserId()
         featRepository.getDataSportScreen(sportGenericId).onEach { result ->
             when (result) {
                 is Result.Error -> {
