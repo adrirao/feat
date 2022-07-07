@@ -45,17 +45,17 @@ class ProviderModule {
                 if(it.contentLength() != 0L) retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations).convert(it) else null
             }
         }
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build()
+//        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+//            .connectTimeout(1, TimeUnit.MINUTES)
+//            .readTimeout(60, TimeUnit.SECONDS)
+//            .writeTimeout(60, TimeUnit.SECONDS)
+//            .build()
 
         return Retrofit.Builder()
             .addConverterFactory(nullOnEmptyConverterFactory)
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(baseUrl)
-            .client(okHttpClient)
+//            .client(okHttpClient)
             .build()
 
 

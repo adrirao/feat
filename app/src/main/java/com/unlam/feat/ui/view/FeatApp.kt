@@ -1,5 +1,7 @@
 package com.unlam.feat.ui.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +22,7 @@ import com.unlam.feat.ui.component.common.navigation.Navigation
 import com.unlam.feat.ui.component.common.navigation.NavigationItem
 import com.unlam.feat.ui.util.Screen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun FeatApp(
     navController: NavHostController,

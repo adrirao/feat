@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.view.config_profile
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,13 +9,16 @@ import com.unlam.feat.R
 import com.unlam.feat.model.request.RequestPersonTransaction
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.event.new_event.NewEventState
+import com.unlam.feat.ui.view.profile.ProfileEvent
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -23,7 +27,8 @@ import javax.inject.Inject
 class ConfigProfileViewModel @Inject
 constructor(
     private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
-    private val featRepository: FeatRepositoryImp
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(ConfigProfileState())
     val state: State<ConfigProfileState> = _state
@@ -224,6 +229,12 @@ constructor(
                         )
 
                     }
+                    TypeValueChange.OnValueChangeNotifications -> {
+                        _state.value = _state.value.copy(
+                            notifications = event.valueBooleanOpt!!
+                        )
+
+                    }
                     TypeValueChange.OnValueChangeSelectSport -> {
                         getDataSportScreen(event.value.toInt())
                     }
@@ -406,12 +417,19 @@ constructor(
                             )
                         }
                     }
-
                 }
+
+            }
+            is ConfigProfileEvents.UploadImage -> {
+                uploadImage(event.image)
+            }
+            ConfigProfileEvents.SingOutUser -> {
+                firebaseAuthRepository.signOut()
             }
             ConfigProfileEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
-                    isErrorSubmitData = false
+                    isErrorSubmitData = false,
+                    takePhoto = true
                 )
             }
             ConfigProfileEvents.onClick(TypeClick.SaveSoccerData) -> {
@@ -968,5 +986,10 @@ constructor(
             }
         }.launchIn(viewModelScope)
     }
-
+    private  fun uploadImage(image: Bitmap) {
+        viewModelScope.launch {
+            val uId = firebaseAuthRepository.getUserId()
+            firebaseStorageRepository.putFile(image, uId)
+        }
+    }
 }

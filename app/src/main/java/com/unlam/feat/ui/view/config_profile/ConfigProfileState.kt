@@ -1,5 +1,8 @@
 package com.unlam.feat.ui.view.config_profile
 
+import android.net.Uri
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.unlam.feat.model.Level
 import com.unlam.feat.model.Position
 import com.unlam.feat.model.SportGeneric
@@ -26,7 +29,8 @@ data class ConfigProfileState(
     val isLoadingSubmitData: Boolean = false,
     val isSuccessSubmitData:Boolean = false,
     val isErrorSubmitData: Boolean = false,
-
+    val takePhoto:Boolean = false,
+    val image: String? = "",
 
     val lastName: String = "",
     val name: String = "",
