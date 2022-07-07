@@ -126,6 +126,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(sportGenericError = null)
     }
 
     private fun validateSport(sport: String) {
@@ -136,6 +137,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(sportError = null)
     }
 
     private fun validateName(name: String) {
@@ -146,6 +148,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(nameError = null)
     }
 
     private fun validateDate(date: LocalDate?) {
@@ -159,6 +162,7 @@ constructor(
                 dateError = NewEventState.DateError.DateInvalid
             )
         }
+        _state.value = _state.value.copy(dateError = null)
     }
 
     private fun validateStartTime(startTime: LocalTime?) {
@@ -168,6 +172,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(startTimeError = null)
     }
 
     private fun validateEndTime(endTime: LocalTime?) {
@@ -177,6 +182,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(endTimeError = null)
     }
 
     private fun validatePeriodicity(periodicity: String) {
@@ -187,6 +193,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(periodicityError = null)
     }
 
     private fun validateDescription(description: String) {
@@ -197,6 +204,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(descriptionError = null)
     }
 
     private fun validateOrganizer(organizer: String) {
@@ -207,6 +215,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(organizerError = null)
     }
 
     private fun validateAddress(address: String) {
@@ -217,6 +226,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(addressError = null)
     }
 
     private fun getEvents() {

@@ -267,7 +267,7 @@ fun FeatSportCard(
                 textSport = sport,
                 shape = shape,
                 sportDescription = sportDescription,
-                routeImage = R.drawable.recreational_activity,
+                routeImage = R.drawable.recreational_activity_white,
                 isSelected
             )
         }

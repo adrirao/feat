@@ -32,6 +32,7 @@ import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.view.chat.ChatScreen
 import com.unlam.feat.ui.view.chat.ChatViewModel
+import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
@@ -77,7 +78,7 @@ import com.unlam.feat.ui.view.splash.SplashScreen
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
         //init app
         addRouteSplash(navController)
         addRouteLogin(navController)
@@ -318,6 +319,7 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostController) {
     composable(Screen.ConfigProfile.route) {
         val configProfileViewModel: ConfigProfileViewModel = hiltViewModel()
@@ -329,11 +331,27 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
             state = state,
             onEvent = { event ->
                 configProfileViewModel.onEvent(event)
-            })
+            },
+            onClick = { event ->
+                when (event) {
+                    ConfigProfileEvents.onClick(TypeClick.GoToLogin) -> {
+//                        FirebaseAuth.getInstance().signOut()
+//                        navController.popBackStack()
+//                        navController.navigate(Screen.Login.route)
+                    }
+                    ConfigProfileEvents.onClick(TypeClick.GoToHome) -> {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
+
+            }
+        )
 
 
     }
 }
+
 
 private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
     composable(Screen.Events.route) {

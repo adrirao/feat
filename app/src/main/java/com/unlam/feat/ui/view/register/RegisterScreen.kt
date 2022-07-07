@@ -1,11 +1,16 @@
 package com.unlam.feat.ui.view.register
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -28,8 +33,18 @@ fun RegisterScreen(
         contentAlignment = Alignment.Center
     ) {
         Column {
-            FeatText(text = "Registro")
-            FeatSpacerMedium()
+            Image(
+                painter = painterResource(R.drawable.ic_isologotype_3),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(150.dp)
+                    .height(75.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+//            FeatText(text = "Registro")
+//            FeatSpacerMedium()
             FeatForm {
                 FeatOutlinedTextField(
                     text = state.textEmail,

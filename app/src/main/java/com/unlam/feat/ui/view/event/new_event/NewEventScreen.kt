@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.view.event.new_event
 
+import android.Manifest
 import android.location.Geocoder
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,8 +20,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.component.common.PermissionFlow
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
@@ -198,6 +202,7 @@ private fun PageOne(
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun PageTwo(
     state: NewEventState,
@@ -209,6 +214,25 @@ private fun PageTwo(
     state.periodicityList.map {
         periodicityList.add(it.description)
     }
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
+    val shouldShowRationale = remember {
+        mutableStateOf(false)
+    }
+    val exactLocationPermission = remember {
+        mutableStateOf(false)
+    }
+    val locationPermissionDenied = remember {
+        mutableStateOf(false)
+    }
+    PermissionFlow(permissionState,
+        shouldShowRationale,
+        exactLocationPermission,
+        locationPermissionDenied)
 
     FeatForm(
         modifier = Modifier.padding(10.dp),
@@ -300,7 +324,19 @@ private fun PageTwo(
                         imageVector = Icons.Outlined.GpsFixed,
                         contentDescription = "Ubicacion",
                         modifier = Modifier.clickable {
-                            openMap()
+                            val allPermissionsRevoked =
+                                permissionState.permissions.size == permissionState.revokedPermissions.size
+                            if (permissionState.allPermissionsGranted) {
+                                openMap()
+                            }else if (!permissionState.permissionRequested) {
+                                permissionState.launchMultiplePermissionRequest()
+                            }else if (!allPermissionsRevoked) {
+                                exactLocationPermission.value = true
+                            } else if (permissionState.shouldShowRationale) {
+                                shouldShowRationale.value = true
+                            } else if (allPermissionsRevoked) {
+                                locationPermissionDenied.value = true
+                            }
                         },
                         tint = PurpleLight,
                     )

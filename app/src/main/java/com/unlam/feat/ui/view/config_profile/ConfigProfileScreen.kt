@@ -1,44 +1,83 @@
 package com.unlam.feat.ui.view.config_profile
 
+import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.location.Geocoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.GpsFixed
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import com.unlam.feat.R
-import com.unlam.feat.model.SportGeneric
 import com.unlam.feat.ui.component.*
+import com.unlam.feat.ui.component.common.PermissionFlow
+import com.unlam.feat.ui.component.common.TakePicture
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.event.new_event.NewEventEvents
-import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesEvent
-import okhttp3.internal.wait
+import com.unlam.feat.ui.view.event.EventEvents
+import com.unlam.feat.ui.view.profile.ProfileEvent
+import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalPagerApi::class)
+@RequiresApi(Build.VERSION_CODES.P)
+@OptIn(ExperimentalPagerApi::class, ExperimentalPermissionsApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun ConfigProfileScreen(
     state: ConfigProfileState,
     onEvent: (ConfigProfileEvents) -> Unit,
+    onClick: (ConfigProfileEvents) -> Unit,
 ) {
+    var imageUrl by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val image = ImageRequest.Builder(LocalContext.current)
+        .data(state.image)
+        .build()
+    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
+    var isCameraSelected = false
+
+    var isPermissionRequested by rememberSaveable { mutableStateOf(false) }
+
     var openMap by remember {
         mutableStateOf(false)
     }
@@ -49,85 +88,239 @@ fun ConfigProfileScreen(
 
     val pagerState = rememberPagerState()
 
+//    val launcher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.GetContent()
+//    ) { uri: Uri? ->
+//        imageUrl = uri
+//    }
+
+
+
+//    val cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?> =
+//        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+//            bitmap.value = it
+//            onEvent(ConfigProfileEvents.UploadImage(it!!))
+//
+//        }
+    val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUrl = uri
+    }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) {
+        bitmap.value = it
+        onEvent(ConfigProfileEvents.UploadImage(it!!))
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            if (isCameraSelected) {
+                cameraLauncher.launch()
+            } else {
+                galleryLauncher.launch("image/*")
+            }
+            coroutineScope.launch {
+                bottomSheetModalState.hide()
+            }
+        } else {
+            Toast.makeText(context, "Permission Denied!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+
+
+    if (state.isSuccessSubmitData) {
+        InfoDialog(
+            title = "Creado con exito",
+            desc = "Su perfil se configuro con exito",
+            onDismiss = { onClick(ConfigProfileEvents.onClick(TypeClick.GoToHome)) })
+    }
+
+    if (state.isErrorSubmitData) {
+        ErrorDialog(
+            title = "Error",
+            desc = state.error,
+            enabledCancelButton = false,
+            onDismiss = {
+                onEvent(ConfigProfileEvents.SingOutUser)
+                onClick(ConfigProfileEvents.onClick(TypeClick.GoToLogin))
+                onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))
+            }
+        )
+    }
+
+
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (idSport == 0) {
-            HorizontalPager(
-                count = 5,
-                state = pagerState
-            ) { position ->
-                when (position) {
-                    0 -> PageOne(state, onEvent)
-                    1 -> PageTwo(state, onEvent, openMap = { openMap = true })
-                    2 -> PageThree(state, onEvent)
-                    3 -> PageFour(state, onEvent)
-                    4 -> PageFive(state, onEvent) { idSport = it }
-                }
-            }
-            HorizontalPagerIndicator(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
-                pagerState = pagerState
-            )
-        } else if (idSport != 0) {
-            if (state.isLoading) {
-                FeatCircularProgress()
-            } else {
-                when (idSport) {
-                    1 -> {
-                        SportDataSoccer(state, onEvent) { idSport = it }
-                    }
-                    2 -> {
-                        SportDataPadel(state, onEvent) { idSport = it }
-                    }
-                    3 -> {
-                        SportDataTennis(state, onEvent) { idSport = it }
-                    }
-                    4 -> {
-                        SportDataBasketball(state, onEvent) { idSport = it }
-                    }
-                    5 -> {
-                        SportDataRecreationalActivity(state, onEvent) { idSport = it }
+        if (state.isLoadingSubmitData) {
+            FeatCircularProgress()
+        } else if (state.takePhoto) {
+            Box {
+
+                imageUrl?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        LaunchedEffect(key1 = imageUrl) {
+                            bitmap.value =
+                                MediaStore.Images.Media.getBitmap(
+                                    context.contentResolver,
+                                    it
+                                )
+                            val source =
+                                ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                            onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
+                        }
+                    } else {
+                        LaunchedEffect(key1 = imageUrl) {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+
+                            onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
+                        }
                     }
                 }
+                FeatHeader(text = "Por favor, elige una foto para tu perfil.")
+
+                if (bitmap.value != null) {
+                    Image(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                            .size(200.dp),
+                        bitmap = bitmap.value!!.asImageBitmap(),
+                        contentDescription = "Gallery Image",
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    if(state.image!!.isNotEmpty()){
+                        SubcomposeAsyncImage(
+                            model = state.image,
+                            loading= {
+                                FeatCircularProgress()
+                            },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                .size(200.dp),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                    }else{
+                        Image(
+                            painter = painterResource(id = (R.drawable.ic_launcher_foreground)),
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                .size(200.dp),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+                Row(){
+                    FeatOutlinedButton(textContent = "Galeria") {
+                        galleryLauncher.launch("image/*")
+                    }
+                    FeatOutlinedButton(textContent = "Camara") {
+                        if (isPermissionRequested && cameraPermission.hasPermission) {
+                            cameraLauncher.launch()
+                            isPermissionRequested = false
+                        }
+                        if (!cameraPermission.hasPermission) {
+                            cameraPermission.launchPermissionRequest()
+                            isPermissionRequested = true
+                        } else
+                            cameraLauncher.launch()
+                    }
+
+                }
+            }
+        } else {
+            if (idSport == 0) {
+                HorizontalPager(
+                    count = 5,
+                    state = pagerState
+                ) { position ->
+                    when (position) {
+                        0 -> PageOne(state, onEvent)
+                        1 -> PageTwo(state, onEvent, openMap = { openMap = true })
+                        2 -> PageThree(state, onEvent)
+                        3 -> PageFour(state, onEvent)
+                        4 -> PageFive(state, onEvent) { idSport = it }
+                    }
+                }
+                HorizontalPagerIndicator(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter),
+                    pagerState = pagerState
+                )
+            } else if (idSport != 0) {
+                if (state.isLoading) {
+                    FeatCircularProgress()
+                } else {
+                    when (idSport) {
+                        1 -> {
+                            SportDataSoccer(state, onEvent) { idSport = it }
+                        }
+                        2 -> {
+                            SportDataPadel(state, onEvent) { idSport = it }
+                        }
+                        3 -> {
+                            SportDataTennis(state, onEvent) { idSport = it }
+                        }
+                        4 -> {
+                            SportDataBasketball(state, onEvent) { idSport = it }
+                        }
+                        5 -> {
+                            SportDataRecreationalActivity(state, onEvent) { idSport = it }
+                        }
+                    }
+                }
+
             }
 
-        }
 
-    }
-    if (openMap) {
-        FeatMap(
-            setLocation = {
+            if (openMap) {
+                FeatMap(
+                    setLocation = {
+                        onEvent(
+                            ConfigProfileEvents.onValueChange(
+                                TypeValueChange.OnValueChangePosition,
+                                it.latitude.toString(),
+                                it.longitude.toString()
+                            )
+                        )
+                        openMap = false
+                    },
+                )
+            }
+            if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
+                val address = Geocoder(LocalContext.current).getFromLocation(
+                    state.latitude.toDouble(),
+                    state.longitude.toDouble(),
+                    1
+                )
                 onEvent(
                     ConfigProfileEvents.onValueChange(
-                        TypeValueChange.OnValueChangePosition,
-                        it.latitude.toString(),
-                        it.longitude.toString()
+                        TypeValueChange.OnValueChangeAddress,
+                        address[0].getAddressLine(0)
                     )
                 )
-                openMap = false
-            },
-            failLocationPermissions = {
-                openMap = false
             }
-        )
-    }
-    if (state.latitude.isNotEmpty() && state.longitude.isNotEmpty()) {
-        val address = Geocoder(LocalContext.current).getFromLocation(
-            state.latitude.toDouble(),
-            state.longitude.toDouble(),
-            1
-        )
-        onEvent(
-            ConfigProfileEvents.onValueChange(
-                TypeValueChange.OnValueChangeAddress,
-                address[0].getAddressLine(0)
-            )
-        )
+        }
     }
 
 
@@ -244,12 +437,36 @@ private fun PageOne(
 
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun PageTwo(
     state: ConfigProfileState,
     onEvent: (ConfigProfileEvents) -> Unit,
     openMap: () -> Unit
 ) {
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
+    val shouldShowRationale = remember {
+        mutableStateOf(false)
+    }
+    val exactLocationPermission = remember {
+        mutableStateOf(false)
+    }
+    val locationPermissionDenied = remember {
+        mutableStateOf(false)
+    }
+
+    PermissionFlow(
+        permissionState,
+        shouldShowRationale,
+        exactLocationPermission,
+        locationPermissionDenied
+    )
+
     FeatForm(
         modifier = Modifier.padding(10.dp),
         title = "Direcciónes:",
@@ -263,7 +480,7 @@ private fun PageTwo(
                 onValueChange = {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
-                            TypeValueChange.OnValueChangeLastName,
+                            TypeValueChange.OnValueChangeAddressAlias,
                             it
                         )
                     )
@@ -273,7 +490,6 @@ private fun PageTwo(
                     else -> ""
                 }
             )
-
             FeatOutlinedTextField(
                 text = state.address,
                 textLabel = stringResource(R.string.location),
@@ -283,7 +499,19 @@ private fun PageTwo(
                         imageVector = Icons.Outlined.GpsFixed,
                         contentDescription = stringResource(R.string.location),
                         modifier = Modifier.clickable {
-                            openMap()
+                            val allPermissionsRevoked =
+                                permissionState.permissions.size == permissionState.revokedPermissions.size
+                            if (permissionState.allPermissionsGranted) {
+                                openMap()
+                            } else if (!permissionState.permissionRequested) {
+                                permissionState.launchMultiplePermissionRequest()
+                            } else if (!allPermissionsRevoked) {
+                                exactLocationPermission.value = true
+                            } else if (permissionState.shouldShowRationale) {
+                                shouldShowRationale.value = true
+                            } else if (allPermissionsRevoked) {
+                                locationPermissionDenied.value = true
+                            }
                         },
                         tint = PurpleLight,
                     )
@@ -661,6 +889,17 @@ private fun PageFour(
                 else -> ""
             }
         )
+        FeatCheckbox(
+            checked = state.notifications,
+            label = "Notificaciones",
+            onCheckedChange = {
+                onEvent(
+                    ConfigProfileEvents.onValueChange(
+                        TypeValueChange.OnValueChangeNotifications, "", valueBooleanOpt = it
+                    )
+                )
+            },
+        )
 
     }
 }
@@ -711,18 +950,19 @@ private fun PageFive(
 
             if (
                 (!state.idBasketball.isNullOrEmpty() ||
-                !state.idSoccer.isNullOrEmpty() ||
-                !state.idPadel.isNullOrEmpty() ||
-                !state.idTennis.isNullOrEmpty() ||
-                !state.idRecreationalActivity.isNullOrEmpty())
+                        !state.idSoccer.isNullOrEmpty() ||
+                        !state.idPadel.isNullOrEmpty() ||
+                        !state.idTennis.isNullOrEmpty() ||
+                        !state.idRecreationalActivity.isNullOrEmpty())
                 &&
-                (state.saturdayIsChecked||
-                state.mondayIsChecked||
-                state.wednesdayIsChecked||
-                state.thursdayIsChecked||
-                state.fridayIsChecked||
-                state.sundayIsChecked||
-                state.tuesdayIsChecked)) {
+                (state.saturdayIsChecked ||
+                        state.mondayIsChecked ||
+                        state.wednesdayIsChecked ||
+                        state.thursdayIsChecked ||
+                        state.fridayIsChecked ||
+                        state.sundayIsChecked ||
+                        state.tuesdayIsChecked)
+            ) {
                 FeatOutlinedButton(
                     contentColor = GreenColor,
                     backgroundColor = GreenColor90,
@@ -737,6 +977,7 @@ private fun PageFive(
         }
     }
 }
+
 
 
 @Composable

@@ -1,18 +1,24 @@
 package com.unlam.feat.ui.view.config_profile
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.R
+import com.unlam.feat.model.request.RequestPersonTransaction
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.event.new_event.NewEventState
+import com.unlam.feat.ui.view.profile.ProfileEvent
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -21,7 +27,8 @@ import javax.inject.Inject
 class ConfigProfileViewModel @Inject
 constructor(
     private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
-    private val featRepository: FeatRepositoryImp
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(ConfigProfileState())
     val state: State<ConfigProfileState> = _state
@@ -222,6 +229,12 @@ constructor(
                         )
 
                     }
+                    TypeValueChange.OnValueChangeNotifications -> {
+                        _state.value = _state.value.copy(
+                            notifications = event.valueBooleanOpt!!
+                        )
+
+                    }
                     TypeValueChange.OnValueChangeSelectSport -> {
                         getDataSportScreen(event.value.toInt())
                     }
@@ -254,7 +267,7 @@ constructor(
                                 valuationIdSoccerError = event.valueOpt,
                                 abilitiesSoccerError = event.valueOpt,
                             )
-                        }else{
+                        } else {
                             _state.value = _state.value.copy(
                                 idSoccer = event.valueOpt
                             )
@@ -290,7 +303,7 @@ constructor(
                                 valuationIdBasketballError = event.valueOpt,
                                 abilitiesBasketballError = event.valueOpt,
                             )
-                        }else{
+                        } else {
                             _state.value = _state.value.copy(
                                 idBasketball = event.valueOpt
                             )
@@ -326,7 +339,7 @@ constructor(
                                 valuationIdPadelError = event.valueOpt,
                                 abilitiesPadelError = event.valueOpt,
                             )
-                        }else{
+                        } else {
                             _state.value = _state.value.copy(
                                 idPadel = event.valueOpt
                             )
@@ -362,14 +375,14 @@ constructor(
                                 valuationIdTennisError = event.valueOpt,
                                 abilitiesTennisError = event.valueOpt,
                             )
-                        }else{
+                        } else {
                             _state.value = _state.value.copy(
                                 idTennis = event.valueOpt
                             )
                         }
                     }
 
-                    TypeValueChange.OnValueChangePositionRecreationalActivity-> {
+                    TypeValueChange.OnValueChangePositionRecreationalActivity -> {
                         _state.value = _state.value.copy(
                             positionIdRecreationalActivity = event.value.toIntOrNull()
                         )
@@ -398,18 +411,25 @@ constructor(
                                 valuationIdRecreationalActivityError = event.valueOpt,
                                 abilitiesRecreationalActivityError = event.valueOpt,
                             )
-                        }else{
+                        } else {
                             _state.value = _state.value.copy(
                                 idRecreationalActivity = event.valueOpt
                             )
                         }
                     }
-
                 }
+
+            }
+            is ConfigProfileEvents.UploadImage -> {
+                uploadImage(event.image)
+            }
+            ConfigProfileEvents.SingOutUser -> {
+                firebaseAuthRepository.signOut()
             }
             ConfigProfileEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
-
+                    isErrorSubmitData = false,
+                    takePhoto = true
                 )
             }
             ConfigProfileEvents.onClick(TypeClick.SaveSoccerData) -> {
@@ -470,7 +490,7 @@ constructor(
                 validateSex(_state.value.sex)
                 validateAddress(_state.value.address)
                 validateAddressAlias(_state.value.addressAlias)
-                validateAgeIsNotEmptyAndValid(_state.value.minAge,_state.value.maxAge)
+                validateAgeIsNotEmptyAndValid(_state.value.minAge, _state.value.maxAge)
                 _state.value = _state.value.copy(
                     sundayError = validateDayIsValidRange(
                         state.value.startTimeSunday,
@@ -559,62 +579,221 @@ constructor(
     }
 
 
-    private fun createPerson(){
+    private fun createPerson() {
         val name = if (_state.value.nameError == null) _state.value.name else return
         val lastName = if (_state.value.lastNameError == null) _state.value.lastName else return
-        val dateOfBirth = if (_state.value.dateOfBirthError == null) _state.value.dateOfBirth else return
+        val dateOfBirth =
+            if (_state.value.dateOfBirthError == null) _state.value.dateOfBirth else return
         val nickname = if (_state.value.nicknameError == null) _state.value.nickname else return
         val sex = if (_state.value.sexError == null) _state.value.sex else return
         val latitude = if (_state.value.latitudeError == null) _state.value.latitude else return
         val longitude = if (_state.value.longitudeError == null) _state.value.longitude else return
         val address = if (_state.value.addressError == null) _state.value.address else return
-        val addressAlias = if (_state.value.addressAliasError == null) _state.value.addressAlias else return
-        val startTime1 = if (state.value.sundayError == null) {
+        val addressAlias =
+            if (_state.value.addressAliasError == null) _state.value.addressAlias else return
+        val startTimeSunday = if (state.value.sundayError == null) {
             if (state.value.startTimeSunday != null) _state.value.startTimeSunday.toString() else null
         } else return
-        val endTime1 = if (state.value.sundayError == null) {
+        val endTimeSunday = if (state.value.sundayError == null) {
             if (state.value.endTimeSunday != null) _state.value.endTimeSunday.toString() else null
         } else return
-        val startTime2 = if (state.value.mondayError == null) {
+        val startTimeMonday = if (state.value.mondayError == null) {
             if (state.value.startTimeMonday != null) _state.value.startTimeMonday.toString() else null
         } else return
-        val endTime2 = if (state.value.mondayError == null) {
+        val endTimeMonday = if (state.value.mondayError == null) {
             if (state.value.endTimeMonday != null) _state.value.endTimeMonday.toString() else null
         } else return
-        val startTime3 = if (state.value.tuesdayError == null) {
+        val startTimeTuesday = if (state.value.tuesdayError == null) {
             if (state.value.startTimeTuesday != null) _state.value.startTimeTuesday.toString() else null
         } else return
-        val endTime3 = if (state.value.tuesdayError == null) {
+        val endTimeTuesday = if (state.value.tuesdayError == null) {
             if (state.value.endTimeTuesday != null) _state.value.endTimeTuesday.toString() else null
         } else return
-        val startTime4 = if (state.value.wednesdayError == null) {
+        val startTimeWednesday = if (state.value.wednesdayError == null) {
             if (state.value.startTimeWednesday != null) _state.value.startTimeWednesday.toString() else null
         } else return
-        val endTime4 = if (state.value.wednesdayError == null) {
+        val endTimeWednesday = if (state.value.wednesdayError == null) {
             if (state.value.endTimeWednesday != null) _state.value.endTimeWednesday.toString() else null
         } else return
-        val startTime5 = if (state.value.thursdayError == null) {
+        val startTimeThursday = if (state.value.thursdayError == null) {
             if (state.value.startTimeThursday != null) _state.value.startTimeThursday.toString() else null
         } else return
-        val endTime5 = if (state.value.thursdayError == null) {
+        val endTimeThursday = if (state.value.thursdayError == null) {
             if (state.value.endTimeThursday != null) _state.value.endTimeThursday.toString() else null
         } else return
-        val startTime6 = if (state.value.fridayError == null) {
+        val startTimeFriday = if (state.value.fridayError == null) {
             if (state.value.startTimeFriday != null) _state.value.startTimeFriday.toString() else null
         } else return
-        val endTime6 = if (state.value.fridayError == null) {
+        val endTimeFriday = if (state.value.fridayError == null) {
             if (state.value.endTimeFriday != null) _state.value.endTimeFriday.toString() else null
         } else return
-        val startTime7 = if (state.value.saturdayError == null) {
+        val startTimeSaturday = if (state.value.saturdayError == null) {
             if (state.value.startTimeSaturday != null) _state.value.startTimeSaturday.toString() else null
         } else return
-        val endTime7 = if (state.value.saturdayError == null) {
+        val endTimeSaturday = if (state.value.saturdayError == null) {
             if (state.value.endTimeSaturday != null) _state.value.endTimeSaturday.toString() else null
         } else return
         val minAge = if (_state.value.ageError == null) _state.value.minAge else return
         val maxAge = if (_state.value.ageError == null) _state.value.maxAge else return
-//        val notifications = if (_state.value.notificationsError == null) _state.value.notifications else return
-        val willingDistance = if (_state.value.willingDistanceError == null) _state.value.willingDistance else return
+        val notifications =
+            if (_state.value.notifications != null) _state.value.notifications else return
+        val willingDistance =
+            if (_state.value.willingDistanceError == null) _state.value.willingDistance else return
+
+
+        val abilitiesSoccer = if (state.value.abilitiesSoccerError == null) {
+            if (state.value.idSoccer != null) _state.value.abilitiesSoccer else null
+        } else return
+        val positionIdSoccer = if (state.value.positionIdSoccerError == null) {
+            if (state.value.idSoccer != null) _state.value.positionIdSoccer else null
+        } else return
+        val levelIdSoccer = if (state.value.levelIdSoccerError == null) {
+            if (state.value.idSoccer != null) _state.value.levelIdSoccer else null
+        } else return
+        val valuationIdSoccer = if (state.value.valuationIdSoccerError == null) {
+            if (state.value.idSoccer != null) _state.value.valuationIdSoccer else null
+        } else return
+
+        val abilitiesBasketball = if (state.value.abilitiesBasketballError == null) {
+            if (state.value.idBasketball != null) _state.value.abilitiesBasketball else null
+        } else return
+        val positionIdBasketball = if (state.value.positionIdBasketballError == null) {
+            if (state.value.idBasketball != null) _state.value.positionIdBasketball else null
+        } else return
+        val levelIdBasketball = if (state.value.levelIdBasketballError == null) {
+            if (state.value.idBasketball != null) _state.value.levelIdBasketball else null
+        } else return
+        val valuationIdBasketball = if (state.value.valuationIdBasketballError == null) {
+            if (state.value.idBasketball != null) _state.value.valuationIdBasketball else null
+        } else return
+
+        val abilitiesPadel = if (state.value.abilitiesPadelError == null) {
+            if (state.value.idPadel != null) _state.value.abilitiesPadel else null
+        } else return
+        val positionIdPadel = if (state.value.positionIdPadelError == null) {
+            if (state.value.idPadel != null) _state.value.positionIdPadel else null
+        } else return
+        val levelIdPadel = if (state.value.levelIdPadelError == null) {
+            if (state.value.idPadel != null) _state.value.levelIdPadel else null
+        } else return
+        val valuationIdPadel = if (state.value.valuationIdPadelError == null) {
+            if (state.value.idPadel != null) _state.value.valuationIdPadel else null
+        } else return
+
+        val abilitiesTennis = if (state.value.abilitiesTennisError == null) {
+            if (state.value.idTennis != null) _state.value.abilitiesTennis else null
+        } else return
+        val positionIdTennis = if (state.value.positionIdTennisError == null) {
+            if (state.value.idTennis != null) _state.value.positionIdTennis else null
+        } else return
+        val levelIdTennis = if (state.value.levelIdTennisError == null) {
+            if (state.value.idTennis != null) _state.value.levelIdTennis else null
+        } else return
+        val valuationIdTennis = if (state.value.valuationIdTennisError == null) {
+            if (state.value.idTennis != null) _state.value.valuationIdTennis else null
+        } else return
+
+        val abilitiesRecreationalActivity =
+            if (state.value.abilitiesRecreationalActivityError == null) {
+                if (state.value.idRecreationalActivity != null) _state.value.abilitiesRecreationalActivity else null
+            } else return
+        val positionIdRecreationalActivity =
+            if (state.value.positionIdRecreationalActivityError == null) {
+                if (state.value.idRecreationalActivity != null) _state.value.positionIdRecreationalActivity else null
+            } else return
+        val levelIdRecreationalActivity =
+            if (state.value.levelIdRecreationalActivityError == null) {
+                if (state.value.idRecreationalActivity != null) _state.value.levelIdRecreationalActivity else null
+            } else return
+        val valuationIdRecreationalActivity =
+            if (state.value.valuationIdRecreationalActivityError == null) {
+                if (state.value.idRecreationalActivity != null) _state.value.valuationIdRecreationalActivity else null
+            } else return
+
+        val userUid = firebaseAuthRepository.getUserId()
+        val request = RequestPersonTransaction(
+            userUid = userUid,
+            lastName = lastName,
+            name = name,
+            dateOfBirth = dateOfBirth.toString(),
+            nickname = nickname,
+            sex = sex,
+            latitude = latitude,
+            longitude = longitude,
+            address = address,
+            addressAlias = addressAlias,
+            startTimeSunday = startTimeSunday.toString(),
+            endTimeSunday = endTimeSunday.toString(),
+            startTimeMonday = startTimeMonday.toString(),
+            endTimeMonday = endTimeMonday.toString(),
+            startTimeTuesday = startTimeTuesday.toString(),
+            endTimeTuesday = endTimeTuesday.toString(),
+            startTimeWednesday = startTimeWednesday.toString(),
+            endTimeWednesday = endTimeWednesday.toString(),
+            startTimeThursday = startTimeThursday.toString(),
+            endTimeThursday = endTimeThursday.toString(),
+            startTimeFriday = startTimeFriday.toString(),
+            endTimeFriday = endTimeFriday.toString(),
+            startTimeSaturday = startTimeSaturday.toString(),
+            endTimeSaturday = endTimeSaturday.toString(),
+            minAge = minAge,
+            maxAge = maxAge,
+            notifications = notifications,
+            willingDistance = willingDistance,
+            idSoccer = state.value.idSoccer,
+            abilitiesSoccer = abilitiesSoccer,
+            positionIdSoccer = positionIdSoccer,
+            levelIdSoccer = levelIdSoccer,
+            valuationIdSoccer = valuationIdSoccer,
+
+            idBasketball = state.value.idBasketball,
+            abilitiesBasketball = abilitiesBasketball,
+            positionIdBasketball = positionIdBasketball,
+            levelIdBasketball = levelIdBasketball,
+            valuationIdBasketball = valuationIdBasketball,
+
+            idPadel = state.value.idPadel,
+            abilitiesPadel = abilitiesPadel,
+            positionIdPadel = positionIdPadel,
+            levelIdPadel = levelIdPadel,
+            valuationIdPadel = valuationIdPadel,
+
+            idTennis = state.value.idTennis,
+            abilitiesTennis = abilitiesTennis,
+            positionIdTennis = positionIdTennis,
+            levelIdTennis = levelIdTennis,
+            valuationIdTennis = valuationIdTennis,
+
+            idRecreationalActivity = state.value.idRecreationalActivity,
+            abilitiesRecreationalActivity = abilitiesRecreationalActivity,
+            positionIdRecreationalActivity = positionIdRecreationalActivity,
+            levelIdRecreationalActivity = levelIdRecreationalActivity,
+            valuationIdRecreationalActivity = valuationIdRecreationalActivity,
+        )
+
+        featRepository.createPersonTransaction(request).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        error = result.message!!,
+                        isErrorSubmitData = true,
+                        isLoadingSubmitData = false
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoadingSubmitData = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = _state.value.copy(
+                        isSuccessSubmitData = true,
+                        isLoadingSubmitData = false
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+
 
     }
 
@@ -671,6 +850,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(lastNameError = null)
     }
 
     private fun validateName(name: String) {
@@ -681,6 +861,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(nameError = null)
     }
 
     private fun validateDateOfBirth(date: LocalDate?) {
@@ -689,11 +870,12 @@ constructor(
                 dateOfBirthError = ConfigProfileState.GenericError.FieldEmpty
             )
             return
-        } else if (date.isBefore(LocalDate.now())) {
+        } else if (!date.isBefore(LocalDate.now().minusYears(16))) {
             _state.value = _state.value.copy(
                 dateOfBirthError = ConfigProfileState.DateError.DateInvalid
             )
         }
+        _state.value = _state.value.copy(dateOfBirthError = null)
     }
 
     private fun validateNickname(name: String) {
@@ -704,6 +886,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(nicknameError = null)
     }
 
     private fun validateSex(name: String) {
@@ -714,6 +897,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(sexError = null)
     }
 
     private fun validateAddress(address: String) {
@@ -724,6 +908,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(addressError = null)
     }
 
     private fun validateAddressAlias(address: String) {
@@ -734,6 +919,7 @@ constructor(
             )
             return
         }
+        _state.value = _state.value.copy(addressAliasError = null)
     }
 
     private fun validateDayIsValidRange(
@@ -778,8 +964,6 @@ constructor(
     }
 
     private fun getDataSportScreen(sportGenericId: Int) {
-
-        val uId = firebaseAuthRepository.getUserId()
         featRepository.getDataSportScreen(sportGenericId).onEach { result ->
             when (result) {
                 is Result.Error -> {
@@ -802,5 +986,10 @@ constructor(
             }
         }.launchIn(viewModelScope)
     }
-
+    private  fun uploadImage(image: Bitmap) {
+        viewModelScope.launch {
+            val uId = firebaseAuthRepository.getUserId()
+            firebaseStorageRepository.putFile(image, uId)
+        }
+    }
 }

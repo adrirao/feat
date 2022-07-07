@@ -181,6 +181,10 @@ interface FeatProvider {
     @Headers("Content-type: application/json")
     @PUT("/persons/update_personal_information")
     suspend fun updatePersonPersonalInformation(@Body requestUpdatePersonPersonalInformation: RequestUpdatePersonPersonalInformation): Response<String>
+
+    @Headers("Content-type: application/json")
+    @POST("/persons/createPersonTransaction")
+    suspend fun createPersonTransaction(@Body requestPerson: RequestPersonTransaction): Response<String>
     //</editor-fold>
 
     //<editor-fold desc="Valuations">

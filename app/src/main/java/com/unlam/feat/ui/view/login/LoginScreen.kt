@@ -1,11 +1,14 @@
 package com.unlam.feat.ui.view.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -35,8 +38,17 @@ fun LoginScreen(
             contentAlignment = Alignment.Center
         ) {
             Column {
-                FeatText(text = "Login")
-                FeatSpacerMedium()
+                Image(
+                    painter = painterResource(R.drawable.ic_isologotype_3),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(150.dp)
+                        .height(75.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+
                 FeatForm {
                     FeatOutlinedTextField(
                         text = state.textEmail,

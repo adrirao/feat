@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">feat</string>
     <string name="text_login">Login</string>
-    <string name="text_register">Register</string>
+    <string name="text_register">Registrar</string>
     <string name="text_get_in">Get in</string>
     <string name="text_email">Email</string>
-    <string name="text_re_email">Verify Email</string>
-    <string name="text_password">Password</string>
-    <string name="text_re_password">Verify Password</string>
+    <string name="text_re_email">Verificar Email</string>
+    <string name="text_password">Contraseña</string>
+    <string name="text_re_password">Verificar Contraseña</string>
     <string name="text_password_visible_content_description">Password Visible</string>
     <string name="text_password_hidden_content_description">Password Hidden</string>
     <string name="text_user_already_exist">Usuario Existente</string>
