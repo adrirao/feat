@@ -108,28 +108,33 @@ constructor(
             maxAge = state.value.maxAge
         }
 
-        val request = RequestFilterPlayers(
+        val requestFilterPlayers = RequestFilterPlayers(
+            eventId= state.value.idEvent,
             distance = distance?.toInt(),
             max_age = maxAge?.toInt(),
             min_age = minAge?.toInt()
         )
 
-        featRepository.filterPlayersForEvent(state.value.idEvent, request).onEach { result ->
-            when (result) {
-                is Result.Error -> {
-                    _state.value =
-                        SuggestedPlayersState(error = result.message ?: "Error Inesperado")
+        if(requestFilterPlayers.distance == null && requestFilterPlayers.max_age == null && requestFilterPlayers.min_age == null){
+            getSuggestedPlayers(eventId)
+        }else {
+            featRepository.filterPlayersForEvent(requestFilterPlayers).onEach { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _state.value =
+                            SuggestedPlayersState(error = result.message ?: "Error Inesperado")
+                    }
+                    is Result.Loading -> {
+                        _state.value = SuggestedPlayersState(isLoading = true)
+                    }
+                    is Result.Success -> {
+                        _state.value = SuggestedPlayersState(
+                            players = result.data?.players!!,
+                        )
+                    }
                 }
-                is Result.Loading -> {
-                    _state.value = SuggestedPlayersState(isLoading = true)
-                }
-                is Result.Success -> {
-                    _state.value = SuggestedPlayersState(
-                        players = result.data?.players!!,
-                    )
-                }
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
+        }
 
     }
 }

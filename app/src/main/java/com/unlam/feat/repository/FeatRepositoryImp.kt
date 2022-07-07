@@ -254,7 +254,7 @@ constructor(
     override fun getfilterEventForUser(uId: String, req: RequestFilterEvent): Flow<Result<List<Event>>> = flow{
         try {
             emit(Result.Loading())
-            val response = featProvider.getfilterEventForUser(req, uId)
+            val response = featProvider.getfilterEventForUser(req)
             if (response.code() in 200..299) {
                 emit(Result.Success(data = response.body()))
             } else {
@@ -566,10 +566,10 @@ constructor(
         }
     }
 
-    override fun filterPlayersForEvent(eventId: Int, req: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
+    override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
         try{
             emit(Result.Loading())
-            val response = featProvider.filterPlayersForEvent(eventId, req)
+            val response = featProvider.filterPlayersForEvent(requestFilterPlayers)
             if (response.code() in 200..299){
                 emit(
                      Result.Success(
@@ -1216,7 +1216,7 @@ constructor(
     override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>> = flow{
         try {
             emit(Result.Loading())
-            val filterEvents = featProvider.getfilterEventForUser(req, uId);
+            val filterEvents = featProvider.getfilterEventForUser(req);
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
 
             if(responseGetPlayer.code() in 200..299 && filterEvents.code() in 200..299){

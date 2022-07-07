@@ -135,6 +135,7 @@ constructor(
 
         val uId = firebaseAuthRepository.getUserId()
         val request = RequestFilterEvent(
+            uid=uId,
             sportGenericId = state.value.sportGeneric?.toInt(),
             sportId = state.value.sportId?.toInt(),
             dayId = state.value.day?.toInt(),
@@ -143,9 +144,8 @@ constructor(
             endTime = state.value.time_end
         )
 
-        Log.d("REQUEST", request.toString())
 
-        featRepository.getFilterSearchEvent(uId,request).onEach { result ->
+        featRepository.getFilterSearchEvent(request).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value = SearchState(error = result.message ?: "Error Inesperado")
