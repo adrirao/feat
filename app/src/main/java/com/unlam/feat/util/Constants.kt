@@ -7,6 +7,7 @@ object Constants {
     const val MIN_USERNAME_LENGTH = 1
     const val MIN_PASSWORD_LENGTH = 1
     const val FEAT_URL_BASE = BuildConfig.HOST_DIR
+    const val CHANNEL_ID = "HEADS_UP_NOTIFICATIONS"
 
     object Sports {
         const val TENNIS_SINGLE = "Tenis Single"

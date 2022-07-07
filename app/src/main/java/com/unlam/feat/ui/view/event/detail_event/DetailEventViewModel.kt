@@ -9,6 +9,7 @@ import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.model.request.RequestEventState
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseFirestoreRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,8 +21,9 @@ import com.unlam.feat.util.logging
 class DetailEventViewModel
 @Inject
 constructor(
-    val featRepository: FeatRepositoryImp,
-    val firebaseAuthRepository: FirebaseAuthRepositoryImp
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    private val firebaseFirestoreRepository: FirebaseFirestoreRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(DetailEventState())
     val state: State<DetailEventState> = _state
@@ -205,6 +207,7 @@ constructor(
                         successTitle = "Evento confirmado",
                         successDescription = "El evento se ha confirmado con exito"
                     )
+                    firebaseFirestoreRepository.createChatEvent(_state.value.event!!.id)
                 }
                 is Result.Loading -> {
                     _state.value = _state.value.copy(

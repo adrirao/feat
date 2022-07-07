@@ -77,7 +77,7 @@ import com.unlam.feat.ui.view.splash.SplashScreen
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screen.Chat.route) {
+    NavHost(navController = navController, startDestination = Screen.Login.route) {
         //init app
         addRouteSplash(navController)
         addRouteLogin(navController)

@@ -16,7 +16,7 @@ constructor(
     private val firebaseFirestore: FirebaseFirestore
 ) : FirebaseFirestoreRepository {
     override fun createChatEvent(eventId: Int) {
-        TODO("Not yet implemented")
+        firebaseFirestore.collection("chats").document(eventId.toString())
     }
 
     override fun sendMessage(eventId: Int, message: Message) {
