@@ -518,21 +518,22 @@ constructor(
         }
     }
 
-    override fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> = flow {
-        try {
-            emit(Result.Loading())
-            val response = featProvider.getAllPlayersAppliedByEvent(eventId)
-            if (response.code() in 200..299) {
-                emit(Result.Success(data = response.body()))
-            } else {
-                logging(request = eventId, response = response)
-                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+    override fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.getAllPlayersAppliedByEvent(eventId)
+                if (response.code() in 200..299) {
+                    emit(Result.Success(data = response.body()))
+                } else {
+                    logging(request = eventId, response = response)
+                    emit(Result.Error(message = Messages.UNKNOW_ERROR))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage)
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-        } catch (e: Exception) {
-            logging(e.localizedMessage)
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
 
     override fun createPlayer(req: RequestPlayer): Flow<Result<String>> = flow {
         try {
@@ -788,21 +789,22 @@ constructor(
             }
         }
 
-    override fun createPersonTransaction(req: RequestPersonTransaction): Flow<Result<String>> = flow {
-        try {
-            emit(Result.Loading())
-            val response = featProvider.createPersonTransaction(req)
-            if (response.code() in 200..299) {
-                emit(Result.Success(data = Messages.SUCCESS_CREATED))
-            } else {
-                logging(request = req, response = response)
-                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+    override fun createPersonTransaction(req: RequestPersonTransaction): Flow<Result<String>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.createPersonTransaction(req)
+                if (response.code() in 200..299) {
+                    emit(Result.Success(data = Messages.SUCCESS_CREATED))
+                } else {
+                    logging(request = req, response = response)
+                    emit(Result.Error(message = Messages.UNKNOW_ERROR))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage)
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-        } catch (e: Exception) {
-            logging(e.localizedMessage)
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
 
 
     //</editor-fold desc="Persons">
@@ -1010,24 +1012,28 @@ constructor(
     ): Flow<Result<ResponseDataSport>> = flow {
         try {
             emit(Result.Loading())
-            val responseLevels = featProvider.getAllLevelsBySportGeneric(sportGenericId).body()
-            val responseValuations = featProvider.getValuations().body()
+            val responseLevels = featProvider.getAllLevelsBySportGeneric(sportGenericId)
+            val responseValuations = featProvider.getValuations()
             val responsePositions =
-                featProvider.getAllPositionsBySportGeneric(sportGenericId).body()
+                featProvider.getAllPositionsBySportGeneric(sportGenericId)
 
 
-            if (responseLevels != null && responseValuations != null && responsePositions != null) {
+            if (responseLevels.code() in 200..299 && responseValuations.code() in 200..299 && responsePositions.code() in 200..299) {
                 emit(
                     Result.Success(
                         data = ResponseDataSport(
-                            levelList = responseLevels,
-                            positionList = responsePositions,
-                            valuationList = responseValuations
+                            levelList = responseLevels.body() ?: listOf(),
+                            positionList = responsePositions.body() ?: listOf(),
+                            valuationList = responseValuations.body() ?: listOf()
                         )
                     )
                 )
             } else {
-                emit(Result.Error(message = "Unknown Error"))
+                loggingSingle(message = "Request", obj = sportGenericId)
+                loggingSingle(message = "Response", obj = responseLevels.raw())
+                loggingSingle(message = "Response", obj = responsePositions.raw())
+                loggingSingle(message = "Response", obj = responseValuations.raw())
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
             logging(e.localizedMessage)
@@ -1042,8 +1048,14 @@ constructor(
         try {
             emit(Result.Loading())
             val response = featProvider.getAddressesByUser(uId)
-            Log.e("rao", response.toString())
-            emit(Result.Success(data = response.body() ?: listOf()))
+            if(response.code() in 200..299){
+                emit(Result.Success(data = response.body() ?: listOf()))
+            }else{
+                loggingSingle(message = "Request", obj = uId)
+                loggingSingle(message = "Request", obj = response.raw())
+
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
         } catch (e: Exception) {
             logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
@@ -1053,10 +1065,14 @@ constructor(
     override fun updateAddress(req: RequestAddress): Flow<Result<String>> = flow {
         try {
             emit(Result.Loading())
-            val response = featProvider.updateAddress(req).code()
-            if (response in 200..299) emit(Result.Success(data = "Actualizado con exito")) else emit(
-                Result.Error("Algo malo ocurrio.")
-            )
+            val response = featProvider.updateAddress(req)
+            if (response.code() in 200..299) {
+                emit(Result.Success(data = "Actualizado con exito"))
+            } else {
+                loggingSingle("Request",req)
+                loggingSingle("Response",response.raw())
+                emit(Result.Error("Algo malo ocurrio."))
+            }
         } catch (e: Exception) {
             logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
