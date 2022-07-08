@@ -3,23 +3,16 @@
 package com.unlam.feat.ui.component.common.navigation
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import com.unlam.feat.R
-import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
 import com.unlam.feat.ui.component.ErrorDialog
@@ -482,6 +475,7 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
         val descOrigen = it.arguments?.getString("descOrigen") ?: ""
         val detailEventHomeViewModel: DetailEventHomeViewModel = hiltViewModel()
         val state by remember { detailEventHomeViewModel.state }
+        val qualifications = detailEventHomeViewModel.qualifications
 
         LaunchedEffect(key1 = true) {
             detailEventHomeViewModel.getDataDetailEvent(idEvent.toInt())
@@ -491,11 +485,17 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
             FeatCircularProgress()
         }
 
-        if (state.event != null && state.players != null) {
+        if (state.event != null && state.players != null && qualifications.isNotEmpty()) {
             DetailEventHomeScreen(
                 state,
+                qualifications,
                 descOrigen = descOrigen,
-                onClick = {}
+                onClick = {
+                          detailEventHomeViewModel.qualifyPlayers()
+                    },
+                changeQualification = {
+                    detailEventHomeViewModel.updateOneItem(it)
+                }
             )
         }
     }

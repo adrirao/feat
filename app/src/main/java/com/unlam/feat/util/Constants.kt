@@ -9,6 +9,12 @@ object Constants {
     const val FEAT_URL_BASE = BuildConfig.HOST_DIR
     const val CHANNEL_ID = "HEADS_UP_NOTIFICATIONS"
 
+    object StateEvent {
+        const val PENDING = "PENDIENTE APLICACION"
+        const val CONFIRMED = "CONFIRMADO"
+        const val FINALIZED = "FINALIZADO"
+    }
+
     object Sports {
         const val TENNIS_SINGLE = "Tenis Single"
         const val TENNIS_DOUBLES = "Tenis Doubles"

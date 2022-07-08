@@ -36,7 +36,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -53,7 +53,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -70,7 +70,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -86,7 +86,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -102,7 +102,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -118,7 +118,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -134,7 +134,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -150,7 +150,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -166,7 +166,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -182,7 +182,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -198,7 +198,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -214,7 +214,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -230,7 +230,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -246,7 +246,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -266,7 +266,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -283,7 +283,7 @@ constructor(
             }
 
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -299,7 +299,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -317,7 +317,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -333,7 +333,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -349,7 +349,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -365,7 +365,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -383,7 +383,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -399,7 +399,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -415,7 +415,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -433,7 +433,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -449,7 +449,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -465,7 +465,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -481,7 +481,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -497,7 +497,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -513,7 +513,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -530,7 +530,7 @@ constructor(
                     emit(Result.Error(message = Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {
-                logging(e.localizedMessage)
+                logging(e.localizedMessage!!.toString())
                 emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
         }
@@ -546,7 +546,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -565,7 +565,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -581,7 +581,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -597,7 +597,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -613,7 +613,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -631,7 +631,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -647,7 +647,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -663,7 +663,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -682,7 +682,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -698,7 +698,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -715,7 +715,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -735,7 +735,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -751,7 +751,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -767,7 +767,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -784,7 +784,7 @@ constructor(
                     emit(Result.Error(message = Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {
-                logging(e.localizedMessage)
+                logging(e.localizedMessage!!.toString())
                 emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
         }
@@ -801,7 +801,7 @@ constructor(
                     emit(Result.Error(message = Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {
-                logging(e.localizedMessage)
+                logging(e.localizedMessage!!.toString())
                 emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
         }
@@ -820,7 +820,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -838,7 +838,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -856,7 +856,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -874,7 +874,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -890,7 +890,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -906,7 +906,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -922,7 +922,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -966,7 +966,7 @@ constructor(
                     emit(Result.Error(message = Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {
-                logging(e.localizedMessage)
+                logging(e.localizedMessage!!.toString())
                 emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
         }
@@ -1002,7 +1002,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1036,7 +1036,7 @@ constructor(
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1048,16 +1048,16 @@ constructor(
         try {
             emit(Result.Loading())
             val response = featProvider.getAddressesByUser(uId)
-            if(response.code() in 200..299){
+            if (response.code() in 200..299) {
                 emit(Result.Success(data = response.body() ?: listOf()))
-            }else{
+            } else {
                 loggingSingle(message = "Request", obj = uId)
                 loggingSingle(message = "Request", obj = response.raw())
 
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1069,12 +1069,12 @@ constructor(
             if (response.code() in 200..299) {
                 emit(Result.Success(data = "Actualizado con exito"))
             } else {
-                loggingSingle("Request",req)
-                loggingSingle("Response",response.raw())
+                loggingSingle("Request", req)
+                loggingSingle("Response", response.raw())
                 emit(Result.Error("Algo malo ocurrio."))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1087,7 +1087,7 @@ constructor(
                 Result.Error("Algo malo ocurrio.")
             )
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1114,10 +1114,28 @@ constructor(
             }
 
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
+
+    override fun qualifyPlayers(requestQualifyPlayers: RequestQualifyPlayers): Flow<Result<String>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.qualifyPlayers(requestQualifyPlayers)
+                if (response.code() in 200..299) {
+                    emit(Result.Success(data = "Actualizado con exito"))
+                } else {
+                    loggingSingle("Request", requestQualifyPlayers)
+                    loggingSingle("Response", response.raw())
+                    emit(Result.Error("Algo malo ocurrio."))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage!!.toString())
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+            }
+        }
 
     //</editor-fold desc="Addresses">
 
@@ -1147,7 +1165,7 @@ constructor(
                 emit(Result.Error(message = "Unknown Error"))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
@@ -1173,7 +1191,7 @@ constructor(
                 emit(Result.Error(message = "Unknown Error"))
             }
         } catch (e: Exception) {
-            logging(e.localizedMessage)
+            logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
