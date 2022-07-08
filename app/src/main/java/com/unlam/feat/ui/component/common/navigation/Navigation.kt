@@ -180,7 +180,7 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
                         is HomeEvents.onClick -> {
                             if (event.typeClick == TypeClick.GoToDetailEvent) {
                                 navController.navigate(
-                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}/${event.descOrigen}"
                                 )
                             }
                         }
@@ -475,10 +475,11 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostController) {
     composable(
-        route = Screen.DetailEventHome.route + "/{idEvent}",
+        route = Screen.DetailEventHome.route + "/{idEvent}/{descOrigen}",
         arguments = Screen.DetailEventHome.arguments ?: listOf()
     ) {
         val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val descOrigen = it.arguments?.getString("descOrigen") ?: ""
         val detailEventHomeViewModel: DetailEventHomeViewModel = hiltViewModel()
         val state by remember { detailEventHomeViewModel.state }
 
@@ -493,6 +494,7 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
         if (state.event != null && state.players != null) {
             DetailEventHomeScreen(
                 state,
+                descOrigen = descOrigen,
                 onClick = {}
             )
         }

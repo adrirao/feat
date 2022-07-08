@@ -23,6 +23,7 @@ sealed class Screen(
     object SearchEventDetail : Screen("search_event_detail", listOf(
         navArgument("idEvent") { type = NavType.StringType }
     ))
+
     object Search : Screen("search_screen")
     object Invitation : Screen("invite_screen")
 
@@ -40,14 +41,16 @@ sealed class Screen(
     object SportData : Screen("sport_data_screen")
     object NewEvent : Screen("event_new_screen")
     object DetailEventHome : Screen("event_detail_home_screen", listOf(
-        navArgument("idEvent") { type = NavType.StringType }
+        navArgument("idEvent") { type = NavType.StringType },
+        navArgument("descOrigen") { type = NavType.StringType }
     ))
+
     object DetailEventMyEvent : Screen("event_detail_my_event_screen", listOf(
         navArgument("idEvent") { type = NavType.StringType }
     ))
 
     object Chat : Screen("chat_screen")
-    object EditProfileAddress: Screen("edit_profile_address_screen")
-    object EditProfilePersonalInformation: Screen("edit_personal_information_screen")
-    object EditProfilePreferences: Screen("edit_profile_preferences_screen")
+    object EditProfileAddress : Screen("edit_profile_address_screen")
+    object EditProfilePersonalInformation : Screen("edit_personal_information_screen")
+    object EditProfilePreferences : Screen("edit_profile_preferences_screen")
 }

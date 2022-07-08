@@ -24,6 +24,7 @@ import com.unlam.feat.ui.theme.*
 @Composable
 fun DetailEventHomeScreen(
     state: DetailEventHomeState,
+    descOrigen: String,
     onClick: (DetailEventHomeEvent) -> Unit
 ) {
 
@@ -49,6 +50,7 @@ fun DetailEventHomeScreen(
             when (position) {
                 0 -> PageOne(
                     state = state,
+                    descOrigen = descOrigen,
                     onClick = {
                         onClick(DetailEventHomeEvent.DismissDialog)
                     }
@@ -82,6 +84,7 @@ fun DetailEventHomeScreen(
 @Composable
 fun PageOne(
     state: DetailEventHomeState,
+    descOrigen: String,
     onClick: () -> Unit
 ) {
     val event = state.event!!
@@ -92,14 +95,16 @@ fun PageOne(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 content = {
-                    FeatOutlinedButton(
-                        modifier = Modifier.weight(1f),
-                        contentColor = GreenColor,
-                        backgroundColor = GreenColor90,
-                        textColor = PurpleDark,
-                        textContent = "Participar",
-                        onClick = { onClick() }
-                    )
+                    if (descOrigen != "CONFIRMADO") {
+                        FeatOutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            contentColor = GreenColor,
+                            backgroundColor = GreenColor90,
+                            textColor = PurpleDark,
+                            textContent = "Participar",
+                            onClick = { onClick() }
+                        )
+                    }
                 }
             )
         }
