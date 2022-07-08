@@ -953,17 +953,14 @@ constructor(
                         )
                     )
                 } else {
-                    val listResponse = listOf(
-                        responseEvent,
-                        responsePlayersConfirmed,
-                        responsePlayersApplied,
-                        responsePlayersSuggested,
-                        responsePlayer
-                    )
-                    val listReq = listOf(
-                        uId, idEvent
-                    )
-                    loggingMult(listReq, listResponse)
+                    loggingSingle(message = "Request", obj = uId)
+                    loggingSingle(message = "Request", obj = idEvent)
+                    loggingSingle(message = "Response", obj = responseEvent.raw())
+                    loggingSingle(message = "Response", obj = responsePlayersConfirmed.raw())
+                    loggingSingle(message = "Response", obj = responsePlayersApplied.raw())
+                    loggingSingle(message = "Response", obj = responsePlayersSuggested.raw())
+                    loggingSingle(message = "Response", obj = responsePlayer.raw())
+
                     emit(Result.Error(message = Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {
@@ -995,10 +992,11 @@ constructor(
                     )
                 )
             } else {
-                loggingMult(
-                    listOf(idEvent, uId),
-                    listOf(responsePlayers, responseEvent, responsePlayersConfirmed)
-                )
+                loggingSingle(message = "Request", obj = idEvent)
+                loggingSingle(message = "Request", obj = uId)
+                loggingSingle(message = "Response", obj = responsePlayers.raw())
+                loggingSingle(message = "Response", obj = responseEvent.raw())
+                loggingSingle(message = "Response", obj = responsePlayersConfirmed.raw())
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
         } catch (e: Exception) {

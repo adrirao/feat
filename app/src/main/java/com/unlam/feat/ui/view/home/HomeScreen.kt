@@ -95,7 +95,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp)
-                                .padding(horizontal = 10.dp),
+                                .padding(horizontal = 10.dp, vertical = 10.dp),
                             event = event,
                             onClick = {
                                 onClick(HomeEvents.onClick(TypeClick.GoToDetailEvent, event.id))
