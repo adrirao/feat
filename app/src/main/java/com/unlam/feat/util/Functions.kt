@@ -1,7 +1,5 @@
 package com.unlam.feat.util
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.Address
@@ -10,41 +8,43 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.common.internal.service.Common
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.unlam.feat.ui.component.ErrorDialog
 import retrofit2.Response
 
 fun <T, Y> logging(request: T, response: Response<Y>) {
     val TAG = "FeatLog"
     val gson = Gson()
-    Log.e(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
-    Log.e(TAG, "Response => ${gson.toJson(response.raw())}")
-    Log.e(TAG, "Request => ${gson.toJson(request)}")
-    Log.e(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
+    Log.d(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
+    Log.d(TAG, "Response => ${gson.toJson(response.raw())}")
+    Log.d(TAG, "Request => ${gson.toJson(request)}")
+    Log.d(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
 }
 
-fun <T, Y> loggingMult(request: List<T>, response: List<Y>) {
+fun <T> loggingSingle(message: String, obj: T) {
     val TAG = "FeatLog"
     val gson = Gson()
-    Log.e(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
-    Log.e(TAG, "Response => ${gson.toJson(response)}")
-    Log.e(TAG, "Request => ${gson.toJson(request)}")
-    Log.e(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
+    Log.d(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
+    Log.d(TAG, "$message => ${obj.toString()}")
+    Log.d(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
 }
 
-fun logging(message:String){
+fun <T, Y> loggingMult(requests: List<T>, responses: List<Response<Y>>) {
     val TAG = "FeatLog"
     val gson = Gson()
-    Log.e(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
-    Log.e(TAG, "Message => ${gson.toJson(message)}")
-    Log.e(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
+    Log.d(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
+    Log.d(TAG, "Responses => ${responses.forEach { res -> gson.toJson(res.raw()) }}")
+    Log.d(TAG, "Requests => ${requests.forEach { req -> req.toString() }}")
+    Log.d(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
+}
+
+fun logging(message: String) {
+    val TAG = "FeatLog"
+    val gson = Gson()
+    Log.d(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
+    Log.d(TAG, "Message => ${gson.toJson(message)}")
+    Log.d(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
 }
 
 @Composable

@@ -124,5 +124,9 @@ interface FeatRepository {
     //<editor-fold desc="Profile">
     fun getDetailProfile(uId: String): Flow<Result<ResponseDetailProfile>>
     //</editor-fold desc="Profile">
+
+    //<editor-fold desc="Qualifications">
+    fun qualifyPlayers(requestQualifyPlayers: RequestQualifyPlayers) : Flow<Result<String>>
+    //</editor-fold desc="Qualifications">
 }
 

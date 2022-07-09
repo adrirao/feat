@@ -227,6 +227,10 @@ interface FeatProvider {
     @POST("/eventApplies/create")
     suspend fun createInvitation(@Body requestCreateInvitation: RequestCreateInvitation): Response<String>
 
+    @Headers("Content-type: application/json")
+    @POST("/califications/qualifyPlayers")
+    suspend fun qualifyPlayers(@Body requestQualifyPlayers : RequestQualifyPlayers): Response<String>
+
 //    //</editor-fold>
 
 }

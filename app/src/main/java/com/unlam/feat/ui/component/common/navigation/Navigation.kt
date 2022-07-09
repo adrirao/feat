@@ -173,7 +173,7 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
                         is HomeEvents.onClick -> {
                             if (event.typeClick == TypeClick.GoToDetailEvent) {
                                 navController.navigate(
-                                    route = Screen.DetailEventHome.route + "/${event.idEvent}"
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}/${event.descOrigen}"
                                 )
                             }
                         }
@@ -468,12 +468,14 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostController) {
     composable(
-        route = Screen.DetailEventHome.route + "/{idEvent}",
+        route = Screen.DetailEventHome.route + "/{idEvent}/{descOrigen}",
         arguments = Screen.DetailEventHome.arguments ?: listOf()
     ) {
         val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val descOrigen = it.arguments?.getString("descOrigen") ?: ""
         val detailEventHomeViewModel: DetailEventHomeViewModel = hiltViewModel()
         val state by remember { detailEventHomeViewModel.state }
+        val qualifications = detailEventHomeViewModel.qualifications
 
         LaunchedEffect(key1 = true) {
             detailEventHomeViewModel.getDataDetailEvent(idEvent.toInt())
@@ -483,10 +485,17 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
             FeatCircularProgress()
         }
 
-        if (state.event != null && state.players != null) {
+        if (state.event != null && state.players != null && qualifications.isNotEmpty()) {
             DetailEventHomeScreen(
                 state,
-                onClick = {}
+                qualifications,
+                descOrigen = descOrigen,
+                onClick = {
+                          detailEventHomeViewModel.qualifyPlayers()
+                    },
+                changeQualification = {
+                    detailEventHomeViewModel.updateOneItem(it)
+                }
             )
         }
     }
