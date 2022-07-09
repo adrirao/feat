@@ -1,5 +1,8 @@
 package com.unlam.feat.ui.view.event.detail_event
 
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.profile.ProfileEvent
+
 
 sealed class DetailEventEvent {
     object DismissDialog : DetailEventEvent()
@@ -18,6 +21,13 @@ sealed class DetailEventEvent {
 
 //    object InvitePlayer : DetailEventEvent()
     data class InvitePlayer(val userId: Int) : DetailEventEvent()
+
+
+    data class NavigateTo(val typeNavigate : TypeNavigate): DetailEventEvent(){
+        sealed class TypeNavigate{
+            data class NavigateToSuggestedPlayers(val userId: Int?) : TypeNavigate()
+        }
+    }
 
 
 }

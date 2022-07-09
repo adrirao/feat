@@ -76,9 +76,9 @@ sealed class TypeValueChange {
     object OnValueChangeLevelRecreationalActivity : TypeValueChange()
     object OnValueChangeValuationRecreationalActivity : TypeValueChange()
     object OnValueChangeAbilitiesRecreationalActivity : TypeValueChange()
-
     object OnValueChangePickedImage: TypeValueChange()
-
+    object OnValueChangeDay: TypeValueChange()
+    object OnValueChangeDistance: TypeValueChange()
 
 
 }

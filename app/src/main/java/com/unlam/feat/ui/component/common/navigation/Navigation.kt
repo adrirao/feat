@@ -32,6 +32,8 @@ import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
+import com.unlam.feat.ui.view.event.detail_event.suggestedPlayers.SuggestedPlayers
+import com.unlam.feat.ui.view.event.detail_event.suggestedPlayers.SuggestedPlayersViewModel
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.event.new_event.NewEventScreen
 import com.unlam.feat.ui.view.event.new_event.NewEventState
@@ -95,6 +97,7 @@ fun Navigation(navController: NavHostController) {
         addRouteDetailEventHome(navController)
         addRouteDetailEventMyEvent(navController)
         addRouteDetailSearchEvent(navController)
+        addRouteSuggestedPlayers(navController)
 
         addRouteEditPersonalInformation(navController)
         addRouteEditPreferences(navController)
@@ -375,6 +378,30 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
         )
     }
 }
+private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostController) {
+    composable(route = Screen.SuggestedPlayers.route + "/{idEvent}",
+        arguments = Screen.SuggestedPlayers.arguments ?: listOf()){
+        val idEvent = it.arguments?.getString("idEvent") ?: ""
+        val suggestedPlayerViewModel: SuggestedPlayersViewModel = hiltViewModel()
+        val state by remember {
+            suggestedPlayerViewModel.state
+        }
+        LaunchedEffect(key1 = true) {
+            state.idEvent = idEvent.toInt()
+            suggestedPlayerViewModel.getSuggestedPlayers(idEvent.toInt())
+        }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        SuggestedPlayers(
+            state,
+            onClick = suggestedPlayerViewModel::onEvent
+        )
+    }
+
+}
 
 private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
     composable(Screen.NewEvent.route) {
@@ -579,6 +606,9 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
                 state = state,
                 onClick = { event ->
                     detailEventViewModel.onEvent(event)
+                },
+                navigateTo = {
+                    navController.navigate(Screen.SuggestedPlayers.route + "/${state.event.id}")
                 }
             )
         }

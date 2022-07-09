@@ -52,6 +52,10 @@ interface FeatProvider {
     @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
     suspend fun getAllConfirmedOrAppliedByUser(@Path("uid") uid: String): Response<List<HomeEvent>>
 
+    @Headers("Content-type: application/json")
+    @POST("/events/getfilterEventForUser")
+    suspend fun getfilterEventForUser(@Body requestFilterEvent: RequestFilterEvent): Response<List<Event>>
+
     //</editor-fold>
     //<editor-fold desc="Availabilities">
     @GET("/availabilities/")
@@ -124,6 +128,10 @@ interface FeatProvider {
     @Headers("Content-type: application/json")
     @POST("/players/setDismissedFromList")
     suspend fun setKickApply(@Body requestEventApply: RequestEventApply): Response<String>
+
+    @Headers("Content-type: application/json")
+    @POST("/players/filterPlayersForEvent")
+    suspend fun filterPlayersForEvent (@Body requestFilterPlayers: RequestFilterPlayers): Response<List<Player>>
 
     //</editor-fold>
     //<editor-fold desc="Positions">

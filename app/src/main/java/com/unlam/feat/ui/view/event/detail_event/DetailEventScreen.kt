@@ -22,14 +22,18 @@ import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerDetail
 import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
+import com.unlam.feat.ui.view.profile.ProfileEvent
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DetailEventMyEventScreen(
     state: DetailEventState,
-    onClick: (DetailEventEvent) -> Unit
+    onClick: (DetailEventEvent) -> Unit,
+    navigateTo: (DetailEventEvent.NavigateTo.TypeNavigate) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -77,7 +81,9 @@ fun DetailEventMyEventScreen(
             if (pagerState.currentPage != 0) {
                 FeatOutlinedButtonIcon(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    icon = Icons.Outlined.PersonAdd, onClick = { nextPage = true },
+                    icon = Icons.Outlined.PersonAdd, onClick = {
+                        navigateTo(DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(state.event?.id))
+                    },
                     height = 70.dp,
                     width = 70.dp,
                     contentColor = GreenColor,

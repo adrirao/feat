@@ -49,6 +49,10 @@ sealed class Screen(
         navArgument("idEvent") { type = NavType.StringType }
     ))
 
+    object SuggestedPlayers : Screen("suggested_players", listOf(
+        navArgument("idEvent") { type = NavType.StringType }
+    ))
+
     object Chat : Screen("chat_screen")
     object EditProfileAddress : Screen("edit_profile_address_screen")
     object EditProfilePersonalInformation : Screen("edit_personal_information_screen")

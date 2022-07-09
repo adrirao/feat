@@ -28,7 +28,7 @@ interface FeatRepository {
     fun setCanceled(req: RequestEventState): Flow<Result<String>>// @POST("/events/setCanceled")
     fun getAllEventsOfTheWeek(uId: String): Flow<Result<List<Event>>>//  @GET("/events/getAllEventsOfTheWeek/{uid}")
     fun getAllConfirmedOrAppliedByUser(uId: String): Flow<Result<List<HomeEvent>>>//  @GET("/events/getAllConfirmedOrAppliedByUser/{uid}")
-
+    fun getfilterEventForUser(uId: String, req: RequestFilterEvent): Flow<Result<List<Event>>>// @POST("events/getfilterEventForUser/{uid}")
 
     //</editor-fold">
     //<editor-fold desc="Availabilities">
@@ -55,11 +55,12 @@ interface FeatRepository {
     fun getPlayer(id: Int): Flow<Result<Player>> // @GET("/players/{id}")
     fun getPlayersByUser(userUid: String): Flow<Result<List<Player>>> // @GET("/players/getAllByUser/{userUid}")
     fun getAllByPerson(personId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllByPerson/{personId}")
-    fun getAllPlayersSuggestedForEvent(eventId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllPlayersSuggestedForEvent/{eventId}")
+    fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> // @GET("/players/getAllPlayersSuggestedForEvent/{eventId}")
     fun getAllPlayersConfirmedByEvent(eventId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllConfirmedByEvent/{eventId}")
     fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> // @GET("/players/getAllAppliedByEvent/{eventId}")
     fun createPlayer(req: RequestPlayer): Flow<Result<String>> // @POST("/players/create")
     fun setKickApply(req: RequestEventApply): Flow<Result<String>> //@PUT("/players/setDismissedFromList")
+    fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> //@POST("/players/filterPlayersForEvent/{eventId}")
 
     //</editor-fold desc="Players">
     //<editor-fold desc="Positions">
@@ -114,6 +115,8 @@ interface FeatRepository {
     fun getDataAddEvent(uId: String): Flow<Result<ResponseDataAddEvent>>
     fun getDataHomeEvent(uId: String): Flow<Result<ResponseDataHomeEvent>>
     fun getDataSearchEvent(idEvent: Int, uId: String): Flow<Result<ResponseDataSearchEvent>>
+    fun getSearchEvent(uId: String): Flow<Result<ResponseDataSearch>>
+    fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>>
     //</editor-fold desc="Multiple EndPoints">
 
 

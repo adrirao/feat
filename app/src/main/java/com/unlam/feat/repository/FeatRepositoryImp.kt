@@ -252,6 +252,22 @@ constructor(
         }
     }
 
+    override fun getfilterEventForUser(uId: String, req: RequestFilterEvent): Flow<Result<List<Event>>> = flow{
+        try {
+            emit(Result.Loading())
+            val response = featProvider.getfilterEventForUser(req)
+            if (response.code() in 200..299) {
+                emit(Result.Success(data = response.body()))
+            } else {
+                logging(request = uId, response = response)
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
+        } catch (e: Exception) {
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
 
     //</editor-fold desc="Events">
     //<editor-fold desc="Availabilities">
@@ -487,12 +503,16 @@ constructor(
         }
     }
 
-    override fun getAllPlayersSuggestedForEvent(eventId: Int): Flow<Result<List<Player>>> = flow {
+    override fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> = flow {
         try {
             emit(Result.Loading())
-            val response = featProvider.getAllPlayersSuggestedForEvent(eventId)
+            val response = featProvider.getAllPlayersSuggestedForEvent(eventId);
+            val person = featProvider.getPerson(uId).body()
             if (response.code() in 200..299) {
-                emit(Result.Success(data = response.body()))
+                emit(Result.Success(data = ResponseDataSuggestedPlayers(
+                    players = response.body(),
+                    person = person
+                )))
             } else {
                 logging(request = eventId, response = response)
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
@@ -552,6 +572,26 @@ constructor(
         }
     }
 
+    override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
+        try{
+            emit(Result.Loading())
+            val response = featProvider.filterPlayersForEvent(requestFilterPlayers)
+            if (response.code() in 200..299){
+                emit(
+                     Result.Success(
+                         data = ResponseFilterPlayers(
+                             players = response.body()!!
+                         )
+                     )
+                )
+            } else {
+                emit(Result.Error(message = "Unknown Error"))
+            }
+        }catch (e: Exception){
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
     //</editor-fold desc="Players">
     //<editor-fold desc="Positions">
 
@@ -1228,6 +1268,58 @@ constructor(
             }
         } catch (e: Exception) {
             logging(e.localizedMessage!!.toString())
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
+    override fun getSearchEvent(uId: String): Flow<Result<ResponseDataSearch>> = flow {
+        try {
+            emit(Result.Loading())
+            val responseGetSuggestedEvent = featProvider.getEventsSuggestedForUser(uId);
+            val responseGetPlayer = featProvider.getPlayersByUser(uId)
+
+            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299){
+                emit(
+                    Result.Success(
+                        data = ResponseDataSearch(
+                            events = responseGetSuggestedEvent.body()!!,
+                            players = responseGetPlayer.body()!!
+                        )
+                    )
+                )
+            }else{
+                emit(Result.Error(message = "Unknown Error"))
+            }
+
+
+        }catch (e: Exception) {
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
+    override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>> = flow{
+        try {
+            emit(Result.Loading())
+            val filterEvents = featProvider.getfilterEventForUser(req);
+            val responseGetPlayer = featProvider.getPlayersByUser(uId)
+
+            if(responseGetPlayer.code() in 200..299 && filterEvents.code() in 200..299){
+                emit(
+                    Result.Success(
+                        data = ResponseDataSearch(
+                            events = filterEvents.body()!!,
+                            players = responseGetPlayer.body()!!
+                        )
+                    )
+                )
+            }else{
+                emit(Result.Error(message = "Unknown Error"))
+            }
+
+
+        }catch (e: Exception) {
+            logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
