@@ -123,7 +123,7 @@ interface FeatProvider {
 
     @Headers("Content-type: application/json")
     @POST("/players/setDismissedFromList")
-    suspend fun setKickApply (@Body requestEventApply: RequestEventApply): Response<String>
+    suspend fun setKickApply(@Body requestEventApply: RequestEventApply): Response<String>
 
     //</editor-fold>
     //<editor-fold desc="Positions">
@@ -200,6 +200,7 @@ interface FeatProvider {
     @Headers("Content-type: application/json")
     @POST("/addresses/create")
     suspend fun addAddress(@Body requestAddress: RequestAddress): Response<String>
+
     //</editor-fold>
     //<editor-fold desc="EventApplies">
     @Headers("Content-type: application/json")
@@ -208,7 +209,7 @@ interface FeatProvider {
 
     @Headers("Content-type: application/json")
     @POST("/eventApplies/setDeniedApply")
-    suspend fun setDeniedApply (@Body requestEventApply: RequestEventApply): Response<String>
+    suspend fun setDeniedApply(@Body requestEventApply: RequestEventApply): Response<String>
 
     //<editor-fold desc="Addresses">
     @GET("/addresses/{id}")
@@ -229,7 +230,14 @@ interface FeatProvider {
 
     @Headers("Content-type: application/json")
     @POST("/califications/qualifyPlayers")
-    suspend fun qualifyPlayers(@Body requestQualifyPlayers : RequestQualifyPlayers): Response<String>
+    suspend fun qualifyPlayers(@Body requestQualifyPlayers: RequestQualifyPlayers): Response<String>
+
+    @GET("/califications/findAllByPlayer/{id}")
+    suspend fun findAllQualificationsByPlayer(@Path("id") id: String): Response<List<Qualification>>
+
+    @GET("/califications/findAllByUser/{id}")
+    suspend fun findAllQualificationsByUser(@Path("id") id: String): Response<List<Qualification>>
+
 
 //    //</editor-fold>
 

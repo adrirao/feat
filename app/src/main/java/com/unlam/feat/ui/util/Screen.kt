@@ -53,4 +53,8 @@ sealed class Screen(
     object EditProfileAddress : Screen("edit_profile_address_screen")
     object EditProfilePersonalInformation : Screen("edit_personal_information_screen")
     object EditProfilePreferences : Screen("edit_profile_preferences_screen")
+    object InfoPlayer : Screen(
+        "info_player_screen",
+        listOf(navArgument("idPlayer") { type = NavType.StringType })
+    )
 }

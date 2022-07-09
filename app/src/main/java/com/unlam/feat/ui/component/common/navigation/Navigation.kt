@@ -38,8 +38,12 @@ import com.unlam.feat.ui.view.event.new_event.NewEventViewModel
 import com.unlam.feat.ui.view.home.HomeEvents
 import com.unlam.feat.ui.view.home.HomeScreen
 import com.unlam.feat.ui.view.home.HomeViewModel
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeEvent
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeScreen
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeViewModel
+import com.unlam.feat.ui.view.info_player.InfoPlayerScreen
+import com.unlam.feat.ui.view.info_player.InfoPlayerState
+import com.unlam.feat.ui.view.info_player.InfoPlayerViewModel
 import com.unlam.feat.ui.view.invitation.InvitationScreen
 import com.unlam.feat.ui.view.invitation.InvitationViewModel
 import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationEvent
@@ -94,6 +98,7 @@ fun Navigation(navController: NavHostController) {
         addRouteEditPersonalInformation(navController)
         addRouteEditPreferences(navController)
         addRouteDetailInvitation(navController)
+        addRouteInfoPlayer(navController)
     }
 }
 
@@ -435,6 +440,32 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
+private fun NavGraphBuilder.addRouteInfoPlayer(navController: NavHostController) {
+    composable(
+        route = Screen.InfoPlayer.route + "/{idPlayer}",
+        arguments = Screen.InfoPlayer.arguments ?: listOf()
+    ) {
+        val idPlayer = it.arguments?.getString("idPlayer")
+        val infoPlayerViewModel: InfoPlayerViewModel = hiltViewModel()
+        val state by remember {
+            infoPlayerViewModel.state
+        }
+
+        LaunchedEffect(true) {
+            infoPlayerViewModel.getInfoPlayer(idPlayer!!)
+        }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.person != null && state.qualifications != null) {
+            InfoPlayerScreen(state = state)
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
 private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
     composable(Screen.Profile.route) {
         val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -490,9 +521,14 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                 state,
                 qualifications,
                 descOrigen = descOrigen,
-                onClick = {
-                          detailEventHomeViewModel.qualifyPlayers()
-                    },
+                onClick = { event ->
+                    when (event) {
+                        is DetailEventHomeEvent.OnClickCardPlayer -> {
+                            navController.navigate(Screen.InfoPlayer.route + "/${event.idPlayer}")
+                        }
+                        else -> detailEventHomeViewModel.qualifyPlayers()
+                    }
+                },
                 changeQualification = {
                     detailEventHomeViewModel.updateOneItem(it)
                 }

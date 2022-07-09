@@ -124,13 +124,13 @@ fun FeatInfo(
         verticalAlignment = contentAlignment
     ) {
         if (painter != null) {
-            Image(
+            Icon(
                 painter = painterResource(id = painter),
                 contentDescription = null,
-                contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(iconSize)
-                    .weight(1f)
+                    .weight(1f),
+                tint = iconColor
             )
         } else if (icon != null) {
             Icon(

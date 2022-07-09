@@ -70,7 +70,8 @@ fun DetailEventHomeScreen(
                     state,
                     qualifications,
                     descOrigen,
-                    changeQualification = changeQualification
+                    changeQualification = changeQualification,
+                    onClick = { onClick(DetailEventHomeEvent.OnClickCardPlayer(it)) }
                 )
             }
         }
@@ -92,7 +93,7 @@ fun DetailEventHomeScreen(
                 contentColor = PurpleMedium,
                 backgroundColor = PurpleMedium20
             )
-        } else if (pagerState.currentPage == 1 && descOrigen == Constants.StateEvent.FINALIZED) {
+        } else if (pagerState.currentPage == 1 && descOrigen == Constants.StateEvent.CONFIRMED) {
             FeatOutlinedButtonIcon(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 icon = Icons.Outlined.Add,
@@ -145,7 +146,8 @@ fun PageTwo(
     state: DetailEventHomeState,
     qualifications: List<Qualification>,
     descOrigen: String,
-    changeQualification: (Qualification) -> Unit
+    changeQualification: (Qualification) -> Unit,
+    onClick: (Int) -> Unit
 ) {
     val players = state.players!!
 
@@ -177,6 +179,9 @@ fun PageTwo(
                                 val qualification =
                                     qualifications.find { qualificationFiltered -> qualificationFiltered.id == player.id }
                                 CardPlayerCalification(
+                                    modifier = Modifier.clickable {
+                                          onClick(player.id)
+                                    },
                                     player = player,
                                     content = {
                                         Row(

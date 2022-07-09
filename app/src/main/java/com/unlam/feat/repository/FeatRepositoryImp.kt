@@ -8,6 +8,7 @@ import com.unlam.feat.model.response.ResponseDataSport
 import com.unlam.feat.model.response.ResponseDetailEvent
 import com.unlam.feat.model.response.ResponseDetailProfile
 import com.unlam.feat.provider.FeatProvider
+import com.unlam.feat.ui.view.info_player.InfoPlayerState
 import com.unlam.feat.util.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -1136,6 +1137,41 @@ constructor(
                 emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
         }
+
+    override fun findAllQualificationsByPlayer(
+        id: String,
+        uId: String
+    ): Flow<Result<ResponseInfoPlayer>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val responseQualifications = featProvider.findAllQualificationsByPlayer(id)
+                val responseUser = featProvider.getPerson(uId)
+                if (responseQualifications.code() in 200..299 && responseUser.code() in 200..299) {
+                    emit(
+                        Result.Success(
+                            data = ResponseInfoPlayer(
+                                qualifications = responseQualifications.body(),
+                                person = responseUser.body()
+                            )
+                        )
+                    )
+                } else {
+                    loggingSingle("Request", id)
+                    loggingSingle("Request", uId)
+                    loggingSingle("Response", responseQualifications.raw())
+                    loggingSingle("Response", responseUser.raw())
+                    emit(Result.Error(Messages.UNKNOW_ERROR))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage!!.toString())
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+            }
+        }
+
+    override fun findAllQualificationsByUser(id: String): Flow<Result<List<Qualification>>> {
+        TODO("Not yet implemented")
+    }
 
     //</editor-fold desc="Addresses">
 

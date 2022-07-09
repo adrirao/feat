@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import coil.request.ImageRequest
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject

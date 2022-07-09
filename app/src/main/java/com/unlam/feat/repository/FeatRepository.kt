@@ -8,6 +8,8 @@ import com.unlam.feat.model.response.ResponseDetailEvent
 import com.unlam.feat.model.response.ResponseDetailProfile
 import com.unlam.feat.model.response.*
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+import retrofit2.http.Path
 
 
 interface FeatRepository {
@@ -83,7 +85,7 @@ interface FeatRepository {
     fun createPerson(req: RequestPerson): Flow<Result<String>> // @POST("/persons/create")
     fun updatePerson(req: RequestUpdatePerson): Flow<Result<String>> // @PUT("/persons/update")
     fun updatePersonPersonalInformation(req: RequestUpdatePersonPersonalInformation): Flow<Result<String>>
-    fun createPersonTransaction(req: RequestPersonTransaction):Flow<Result<String>>
+    fun createPersonTransaction(req: RequestPersonTransaction): Flow<Result<String>>
     //</editor-fold desc="Persons">
 
     //<editor-fold desc="SportsGenerics">
@@ -126,7 +128,10 @@ interface FeatRepository {
     //</editor-fold desc="Profile">
 
     //<editor-fold desc="Qualifications">
-    fun qualifyPlayers(requestQualifyPlayers: RequestQualifyPlayers) : Flow<Result<String>>
+    fun qualifyPlayers(requestQualifyPlayers: RequestQualifyPlayers): Flow<Result<String>>
+    fun findAllQualificationsByPlayer(id: String, uId: String): Flow<Result<ResponseInfoPlayer>>
+    fun findAllQualificationsByUser(id: String): Flow<Result<List<Qualification>>>
+
     //</editor-fold desc="Qualifications">
 }
 
