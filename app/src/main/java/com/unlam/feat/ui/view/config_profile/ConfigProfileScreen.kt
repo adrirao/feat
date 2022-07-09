@@ -1,6 +1,7 @@
 package com.unlam.feat.ui.view.config_profile
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.location.Geocoder
@@ -33,9 +34,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -48,7 +51,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.PermissionFlow
-import com.unlam.feat.ui.component.common.TakePicture
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
@@ -67,56 +69,33 @@ fun ConfigProfileScreen(
     onEvent: (ConfigProfileEvents) -> Unit,
     onClick: (ConfigProfileEvents) -> Unit,
 ) {
-    var imageUrl by remember { mutableStateOf<Uri?>(null) }
+
     val context = LocalContext.current
-    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-    val image = ImageRequest.Builder(LocalContext.current)
-        .data(state.image)
-        .build()
-    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
-    var isCameraSelected = false
-
-    var isPermissionRequested by rememberSaveable { mutableStateOf(false) }
-
-    var openMap by remember {
-        mutableStateOf(false)
-    }
-
-    var idSport by remember {
-        mutableStateOf(0)
-    }
-
-    val pagerState = rememberPagerState()
-
-//    val launcher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.GetContent()
-//    ) { uri: Uri? ->
-//        imageUrl = uri
-//    }
-
-
-
-//    val cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?> =
-//        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-//            bitmap.value = it
-//            onEvent(ConfigProfileEvents.UploadImage(it!!))
-//
-//        }
-    val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val bottomSheetModalState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-
+    var isCameraSelected = false
+    var imageUri: Uri? = null
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val saveEnable = remember { mutableStateOf<Boolean>(false) }
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        imageUrl = uri
+        imageUri = uri
+        val source =
+            imageUri?.let { ImageDecoder.createSource(context.contentResolver, it) }
+        bitmap.value = source?.let { ImageDecoder.decodeBitmap(it) }
+        saveEnable.value = true
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
-    ) {
-        bitmap.value = it
-        onEvent(ConfigProfileEvents.UploadImage(it!!))
+    ) { btm: Bitmap? ->
+        bitmap.value = btm
+        imageUri = null
+        saveEnable.value = true
     }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -130,9 +109,21 @@ fun ConfigProfileScreen(
                 bottomSheetModalState.hide()
             }
         } else {
-            Toast.makeText(context, "Permission Denied!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "No se han otorgado los permisos", Toast.LENGTH_SHORT).show()
         }
     }
+
+    var openMap by remember {
+        mutableStateOf(false)
+    }
+
+    var idSport by remember {
+        mutableStateOf(0)
+    }
+
+    val pagerState = rememberPagerState()
+
+
 
 
 
@@ -168,84 +159,224 @@ fun ConfigProfileScreen(
         if (state.isLoadingSubmitData) {
             FeatCircularProgress()
         } else if (state.takePhoto) {
-            Box {
 
-                imageUrl?.let {
-                    if (Build.VERSION.SDK_INT < 28) {
-                        LaunchedEffect(key1 = imageUrl) {
-                            bitmap.value =
-                                MediaStore.Images.Media.getBitmap(
-                                    context.contentResolver,
-                                    it
-                                )
-                            val source =
-                                ImageDecoder.createSource(context.contentResolver, it)
-                            bitmap.value = ImageDecoder.decodeBitmap(source)
-                            onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
-                        }
-                    } else {
-                        LaunchedEffect(key1 = imageUrl) {
-                            val source = ImageDecoder.createSource(context.contentResolver, it)
-                            bitmap.value = ImageDecoder.decodeBitmap(source)
-
-                            onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
-                        }
-                    }
-                }
-                FeatHeader(text = "Por favor, elige una foto para tu perfil.")
-
-                if (bitmap.value != null) {
-                    Image(
+            ModalBottomSheetLayout(
+                sheetContent = {
+                    Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(50))
-                            .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                            .size(200.dp),
-                        bitmap = bitmap.value!!.asImageBitmap(),
-                        contentDescription = "Gallery Image",
-                        contentScale = ContentScale.Crop
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .background(PurpleDark)
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            FeatText(
+                                text = "Subir desde...",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp),
+                                fontSize = 20.sp,
+                                color = GreenColor,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            Divider(
+                                modifier = Modifier
+                                    .height(1.dp)
+                                    .background(GreenColor)
+                            )
+                            FeatText(
+                                text = "Camara",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        when (PackageManager.PERMISSION_GRANTED) {
+                                            ContextCompat.checkSelfPermission(
+                                                context, Manifest.permission.CAMERA
+                                            ) -> {
+                                                cameraLauncher.launch()
+                                                coroutineScope.launch {
+                                                    bottomSheetModalState.hide()
+                                                }
+                                            }
+                                            else -> {
+                                                isCameraSelected = true
+                                                permissionLauncher.launch(Manifest.permission.CAMERA)
+                                            }
+                                        }
+                                    }
+                                    .padding(15.dp),
+                                color = PurpleLight,
+                                fontSize = 18.sp,
+                            )
+                            Divider(
+                                modifier = Modifier
+                                    .height(1.dp)
+                                    .fillMaxWidth()
+                                    .background(PurpleMedium)
+                            )
+                            FeatText(
+                                text = "Galeria",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        when (PackageManager.PERMISSION_GRANTED) {
+                                            ContextCompat.checkSelfPermission(
+                                                context, Manifest.permission.READ_EXTERNAL_STORAGE
+                                            ) -> {
+                                                galleryLauncher.launch("image/*")
+                                                coroutineScope.launch {
+                                                    bottomSheetModalState.hide()
+                                                }
+                                            }
+                                            else -> {
+                                                isCameraSelected = false
+                                                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                            }
+                                        }
+                                    }
+                                    .padding(15.dp),
+                                color = PurpleLight,
+                                fontSize = 18.sp,
+                            )
+                        }
+                    }
+                },
+                sheetState = bottomSheetModalState,
+                sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+                sheetElevation = 0.dp,
+                scrimColor = PurpleDark.copy(alpha = 0f)
+            ) {
+                Column {
+                    FeatText(
+                        modifier = Modifier.padding(
+                            start = 10.dp,
+                            top = 35.dp,
+                            end = 10.dp,
+                            bottom = 5.dp
+                        ),
+                        text = "Por favor, elegi una foto para tu perfil",
+                        fontSize = MaterialTheme.typography.h6.fontSize,
+                        color = PurpleLight,
+                        maxLines = 1
                     )
-                } else {
-                    if(state.image!!.isNotEmpty()){
-                        SubcomposeAsyncImage(
-                            model = state.image,
-                            loading= {
-                                FeatCircularProgress()
-                            },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                .size(200.dp),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
-                    }else{
-                        Image(
-                            painter = painterResource(id = (R.drawable.ic_launcher_foreground)),
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                .size(200.dp),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
+                    Divider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .background(GreenColor)
+
+                    )
+
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(vertical = 50.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Box {
+                        if (bitmap.value != null) {
+                            Image(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                    .size(250.dp),
+                                bitmap = bitmap.value!!.asImageBitmap(),
+                                contentDescription = "Gallery Image",
+                                contentScale = ContentScale.Crop
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(15.dp)
+                                    .clip(RoundedCornerShape(50))
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            if (!bottomSheetModalState.isVisible) {
+                                                bottomSheetModalState.show()
+                                            } else {
+                                                bottomSheetModalState.hide()
+                                            }
+                                        }
+                                    }
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(50))
+                                        .background(PurpleDark)
+                                        .padding(10.dp)
+                                        .size(30.dp),
+                                    imageVector = Icons.Outlined.CameraAlt,
+                                    tint = GreenColor,
+                                    contentDescription = null
+                                )
+                            }
+                        } else {
+                            Image(
+                                painter = painterResource(id = (R.drawable.ic_launcher_foreground)),
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .border(3.dp, PurpleLight, RoundedCornerShape(50))
+                                    .size(250.dp),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(15.dp)
+                                    .clip(RoundedCornerShape(50))
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            if (!bottomSheetModalState.isVisible) {
+                                                bottomSheetModalState.show()
+                                            } else {
+                                                bottomSheetModalState.hide()
+                                            }
+                                        }
+                                    }
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(50))
+                                        .background(PurpleDark)
+                                        .padding(10.dp)
+                                        .size(30.dp),
+                                    imageVector = Icons.Outlined.CameraAlt,
+                                    tint = GreenColor,
+                                    contentDescription = null
+                                )
+                            }
+                        }
                     }
                 }
-                Row(){
-                    FeatOutlinedButton(textContent = "Galeria") {
-                        galleryLauncher.launch("image/*")
-                    }
-                    FeatOutlinedButton(textContent = "Camara") {
-                        if (isPermissionRequested && cameraPermission.hasPermission) {
-                            cameraLauncher.launch()
-                            isPermissionRequested = false
-                        }
-                        if (!cameraPermission.hasPermission) {
-                            cameraPermission.launchPermissionRequest()
-                            isPermissionRequested = true
-                        } else
-                            cameraLauncher.launch()
-                    }
 
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    FeatOutlinedButton(
+                        textContent = "Guardar",
+                        onClick = {
+                            onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        shape = RoundedCornerShape(8.dp),
+                        contentColor = GreenColor,
+                        backgroundColor = GreenColor,
+                        textColor = PurpleDark,
+                        enabled = saveEnable.value
+                    )
                 }
             }
         } else {

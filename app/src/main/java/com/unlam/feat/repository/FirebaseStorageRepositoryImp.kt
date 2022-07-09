@@ -24,6 +24,7 @@ constructor(
         val data = baos.toByteArray()
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.putBytes(data)
+
     }
 
     override fun getFile(uId: String, isSuccess: (Uri) -> Unit) {
