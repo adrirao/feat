@@ -12,7 +12,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.auth.FirebaseAuth
 import com.unlam.feat.R
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
@@ -31,7 +30,6 @@ import com.unlam.feat.ui.view.event.EventEvents
 import com.unlam.feat.ui.view.event.EventScreen
 import com.unlam.feat.ui.view.event.EventViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
-import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.event.detail_event.suggestedPlayers.SuggestedPlayers
 import com.unlam.feat.ui.view.event.detail_event.suggestedPlayers.SuggestedPlayersViewModel
 import com.unlam.feat.ui.view.event.new_event.NewEventEvents
@@ -45,7 +43,6 @@ import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeEvent
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeScreen
 import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeViewModel
 import com.unlam.feat.ui.view.info_player.InfoPlayerScreen
-import com.unlam.feat.ui.view.info_player.InfoPlayerState
 import com.unlam.feat.ui.view.info_player.InfoPlayerViewModel
 import com.unlam.feat.ui.view.invitation.InvitationScreen
 import com.unlam.feat.ui.view.invitation.InvitationViewModel
@@ -69,6 +66,7 @@ import com.unlam.feat.ui.view.register.RegisterEvents
 import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
+import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
 import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
@@ -602,6 +600,7 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
         }
 
         if (state.event != null && state.playersApplied != null && state.playersConfirmed != null && state.playersSuggested != null) {
+
             DetailEventMyEventScreen(
                 state = state,
                 onClick = { event ->

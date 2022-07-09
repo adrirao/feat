@@ -10,7 +10,6 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -22,10 +21,7 @@ import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerDetail
 import com.unlam.feat.ui.theme.*
-import com.unlam.feat.ui.util.TypeClick
-import com.unlam.feat.ui.view.event.EventEvents
-import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
-import com.unlam.feat.ui.view.profile.ProfileEvent
+
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalPagerApi::class)

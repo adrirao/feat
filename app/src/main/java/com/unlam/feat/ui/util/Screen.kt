@@ -31,14 +31,6 @@ sealed class Screen(
         navArgument("idEvent") { type = NavType.StringType }
     ))
 
-    object ConfigProfilePersonalData : Screen("config_profile_personal_data_screen")
-    object ConfigProfileAddress : Screen("config_profile_address_screen")
-    object ConfigProfileAvailability : Screen("config_profile_availability_screen")
-    object ConfigProfileAdditionalInformation :
-        Screen("config_profile_additional_information_screen")
-
-    object ConfigSport : Screen("config_sport_screen")
-    object SportData : Screen("sport_data_screen")
     object NewEvent : Screen("event_new_screen")
     object DetailEventHome : Screen("event_detail_home_screen", listOf(
         navArgument("idEvent") { type = NavType.StringType },

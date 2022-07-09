@@ -1,6 +1,5 @@
 package com.unlam.feat.ui.view.search
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,16 +13,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unlam.feat.R
-import com.unlam.feat.model.Day
 import com.unlam.feat.model.Event
-import com.unlam.feat.model.Player
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.FeatEventCard
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.YellowColor
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 
 @Composable
 fun SearchScreen(
@@ -94,6 +90,8 @@ fun SearchScreen(
         FilerEvents(state= state,onClick = onClick, onValueChange = {event -> searchViewModel.onEvent(event)})
     }
 }
+
+
 
 @Composable
 fun FilerEvents(
@@ -193,18 +191,18 @@ fun FilerEvents(
                         isErrorVisible = false
                     )
                 }
-                    FeatOutlinedTextField(
-                        text = state.distance,
-                        textLabel = "Distancia",
-                        keyboardType = KeyboardType.Number,
-                        onValueChange = {
-                            onValueChange(
-                                SearchEvent.onValueChange(
-                                    TypeValueChange.OnValueChangeDistance, it
-                                )
+                FeatOutlinedTextField(
+                    text = state.distance,
+                    textLabel = "Distancia",
+                    keyboardType = KeyboardType.Number,
+                    onValueChange = {
+                        onValueChange(
+                            SearchEvent.onValueChange(
+                                TypeValueChange.OnValueChangeDistance, it
                             )
-                        }
-                    )
+                        )
+                    }
+                )
                 FeatOutlinedButton(
                     modifier = Modifier.align(Alignment.End),
                     textContent = "Filtrar",
