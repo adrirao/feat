@@ -181,7 +181,7 @@ fun ErrorDialog(
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                 modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
                                 textContent = textContentAccept,
                                 contentColor = GreenColor,
                                 backgroundColor = GreenColor,
@@ -211,6 +211,8 @@ fun ErrorDialog(
 fun InfoDialog(
     title: String,
     desc: String,
+    enabledCancelButton:Boolean = true,
+    textContentAccept: String = "Aceptar",
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -259,6 +261,7 @@ fun InfoDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                         ) {
+                            if(enabledCancelButton){
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
                                 contentColor = RedColor,
@@ -268,9 +271,11 @@ fun InfoDialog(
                                 width = 100.dp,
                                 height = 40.dp
                             )
+                            }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                textContent = "Aceptar",
+                                modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                textContent = textContentAccept,
                                 contentColor = GreenColor,
                                 backgroundColor = GreenColor20,
                                 textColor = GreenColor,

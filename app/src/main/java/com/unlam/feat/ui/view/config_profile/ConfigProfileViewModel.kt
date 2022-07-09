@@ -426,10 +426,15 @@ constructor(
             ConfigProfileEvents.SingOutUser -> {
                 firebaseAuthRepository.signOut()
             }
+            ConfigProfileEvents.onClick(TypeClick.GoToTakePhoto) -> {
+                _state.value = _state.value.copy(
+                    takePhoto = true
+                )
+            }
             ConfigProfileEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
                     isErrorSubmitData = false,
-                    takePhoto = true
+                    isSuccessSubmitData = false
                 )
             }
             ConfigProfileEvents.onClick(TypeClick.SaveSoccerData) -> {
@@ -591,6 +596,7 @@ constructor(
         val address = if (_state.value.addressError == null) _state.value.address else return
         val addressAlias =
             if (_state.value.addressAliasError == null) _state.value.addressAlias else return
+
         val startTimeSunday = if (state.value.sundayError == null) {
             if (state.value.startTimeSunday != null) _state.value.startTimeSunday.toString() else null
         } else return
@@ -722,20 +728,20 @@ constructor(
             longitude = longitude,
             address = address,
             addressAlias = addressAlias,
-            startTimeSunday = startTimeSunday.toString(),
-            endTimeSunday = endTimeSunday.toString(),
-            startTimeMonday = startTimeMonday.toString(),
-            endTimeMonday = endTimeMonday.toString(),
-            startTimeTuesday = startTimeTuesday.toString(),
-            endTimeTuesday = endTimeTuesday.toString(),
-            startTimeWednesday = startTimeWednesday.toString(),
-            endTimeWednesday = endTimeWednesday.toString(),
-            startTimeThursday = startTimeThursday.toString(),
-            endTimeThursday = endTimeThursday.toString(),
-            startTimeFriday = startTimeFriday.toString(),
-            endTimeFriday = endTimeFriday.toString(),
-            startTimeSaturday = startTimeSaturday.toString(),
-            endTimeSaturday = endTimeSaturday.toString(),
+            startTimeSunday = if (startTimeSunday != null) startTimeSunday.toString() else null,
+            endTimeSunday = if (endTimeSunday != null) endTimeSunday.toString() else null,
+            startTimeMonday = if (startTimeMonday != null) startTimeMonday.toString() else null,
+            endTimeMonday = if (endTimeMonday != null) endTimeMonday.toString() else null,
+            startTimeTuesday = if (startTimeTuesday != null) startTimeTuesday.toString() else null,
+            endTimeTuesday = if (endTimeTuesday != null) endTimeTuesday.toString() else null,
+            startTimeWednesday = if (startTimeWednesday != null) startTimeWednesday.toString() else null,
+            endTimeWednesday = if (endTimeWednesday != null) endTimeWednesday.toString() else null,
+            startTimeThursday = if (startTimeThursday != null) startTimeThursday.toString() else null,
+            endTimeThursday = if (endTimeThursday != null) endTimeThursday.toString() else null,
+            startTimeFriday = if (startTimeFriday != null) startTimeFriday.toString() else null,
+            endTimeFriday = if (endTimeFriday != null) endTimeFriday.toString() else null,
+            startTimeSaturday = if (startTimeSaturday != null) startTimeSaturday.toString() else null,
+            endTimeSaturday = if (endTimeSaturday != null) endTimeSaturday.toString() else null,
             minAge = minAge,
             maxAge = maxAge,
             notifications = notifications,
@@ -986,7 +992,8 @@ constructor(
             }
         }.launchIn(viewModelScope)
     }
-    private  fun uploadImage(image: Bitmap) {
+
+    private fun uploadImage(image: Bitmap) {
         viewModelScope.launch {
             val uId = firebaseAuthRepository.getUserId()
             firebaseStorageRepository.putFile(image, uId)

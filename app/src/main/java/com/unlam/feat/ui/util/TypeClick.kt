@@ -4,6 +4,7 @@ sealed class TypeClick {
     object GoToRegister : TypeClick()
     object GoToLogin : TypeClick()
     object GoToHome : TypeClick()
+    object GoToTakePhoto: TypeClick()
     object GoToInfoEvent : TypeClick()
     object GoToNewEvent : TypeClick()
     object GoToEvent:TypeClick()
