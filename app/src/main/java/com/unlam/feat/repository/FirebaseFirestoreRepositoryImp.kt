@@ -1,6 +1,7 @@
 package com.unlam.feat.repository
 
 import com.google.firebase.firestore.*
+import com.unlam.feat.model.Chat
 import com.unlam.feat.ui.view.chat.Message
 import com.unlam.feat.util.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +17,8 @@ constructor(
     private val firebaseFirestore: FirebaseFirestore
 ) : FirebaseFirestoreRepository {
     override fun createChatEvent(eventId: Int) {
-        firebaseFirestore.collection("chats").document(eventId.toString())
+        val chat = Chat(id = eventId)
+        firebaseFirestore.collection("chats").document(eventId.toString()).set(chat)
     }
 
     override fun sendMessage(eventId: Int, message: Message) {
