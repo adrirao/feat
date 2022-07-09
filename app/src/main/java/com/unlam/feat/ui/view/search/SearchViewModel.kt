@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import com.unlam.feat.util.Result
+import java.time.LocalTime
 
 @HiltViewModel
 class SearchViewModel
@@ -32,8 +33,6 @@ constructor(
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    //val marker = mutableStateOf(com.unlam.feat.presentation.component.map.Marker())
 
     init {
         getDataSearch()
@@ -128,9 +127,28 @@ constructor(
     fun filterEvents(){
 
         var distance: String? = null;
-
         if(state.value.distance !== ""){
             distance = state.value.distance
+        }
+        var sportGeneric: String? = null;
+        if(state.value.sportGeneric !== null){
+            sportGeneric = state.value.sportGeneric
+        }
+        var sportId: String? = null;
+        if(state.value.sportId !== null){
+            sportId = state.value.sportId
+        }
+        var dayId: String? = null;
+        if(state.value.day !== null){
+            dayId = state.value.day
+        }
+        var startTime: LocalTime? = null;
+        if(state.value.time_start !== null){
+            startTime = state.value.time_start
+        }
+        var endTime: LocalTime? = null;
+        if(state.value.time_end !== null){
+            endTime = state.value.time_end
         }
 
         val uId = firebaseAuthRepository.getUserId()
@@ -145,22 +163,27 @@ constructor(
         )
 
 
-        featRepository.getFilterSearchEvent(request).onEach { result ->
-            when (result) {
-                is Result.Error -> {
-                    _state.value = SearchState(error = result.message ?: "Error Inesperado")
+        if(request.sportGenericId == null && request.sportId == null && request.dayId == null && request.distance == null
+            && request.startTime == null && request.endTime == null){
+            getDataSearch()
+        }else {
+            featRepository.getFilterSearchEvent(uId, request).onEach { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _state.value = SearchState(error = result.message ?: "Error Inesperado")
+                    }
+                    is Result.Loading -> {
+                        _state.value = _state.value.copy(
+                            isLoading = true
+                        )
+                    }
+                    is Result.Success -> {
+                        _state.value =
+                            SearchState(events = result.data?.events!!, sport = result.data.players)
+                    }
                 }
-                is Result.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
-                }
-                is Result.Success -> {
-                    _state.value = SearchState(events = result.data?.events!!, sport = result.data.players)
-                }
-            }
-        }.launchIn(viewModelScope)
-
+            }.launchIn(viewModelScope)
+        }
 
     }
 }

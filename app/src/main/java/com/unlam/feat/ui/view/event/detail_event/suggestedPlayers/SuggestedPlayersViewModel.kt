@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.model.Person
 import com.unlam.feat.model.request.RequestFilterEvent
 import com.unlam.feat.model.request.RequestFilterPlayers
 import com.unlam.feat.repository.FeatRepositoryImp
@@ -30,6 +31,7 @@ constructor(
     private val _state = mutableStateOf(SuggestedPlayersState())
     val state: State<SuggestedPlayersState> = _state
     var eventId: Int = 0
+    var person: Person? = null
 
     init {
     }
@@ -76,7 +78,8 @@ constructor(
 
     fun getSuggestedPlayers(idEvent: Int) {
         eventId = idEvent
-        featRepository.getAllPlayersSuggestedForEvent(idEvent).onEach { result ->
+        val uId = firebaseAuthRepository.getUserId()
+        featRepository.getAllPlayersSuggestedForEvent(idEvent, uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -87,29 +90,31 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value = SuggestedPlayersState(
-                        players = result.data!!,
+                        players = result.data?.players!!
                     )
+                    person = result.data.person
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     fun filterPlayers(){
-        var distance: String? = null
+        var distance: String? = person?.willingDistance.toString()
         if(state.value.distance != ""){
             distance = state.value.distance
         }
-        var minAge: String? = null
+        var minAge: String? = person?.minAge.toString()
         if(state.value.minAge != ""){
             minAge = state.value.minAge
         }
-        var maxAge: String? = null
+        var maxAge: String? = person?.maxAge.toString()
         if(state.value.maxAge != ""){
             maxAge = state.value.maxAge
         }
 
+
         val requestFilterPlayers = RequestFilterPlayers(
-            eventId= state.value.idEvent,
+            eventId= eventId,
             distance = distance?.toInt(),
             max_age = maxAge?.toInt(),
             min_age = minAge?.toInt()

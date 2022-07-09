@@ -53,7 +53,7 @@ interface FeatRepository {
     fun getPlayer(id: Int): Flow<Result<Player>> // @GET("/players/{id}")
     fun getPlayersByUser(userUid: String): Flow<Result<List<Player>>> // @GET("/players/getAllByUser/{userUid}")
     fun getAllByPerson(personId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllByPerson/{personId}")
-    fun getAllPlayersSuggestedForEvent(eventId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllPlayersSuggestedForEvent/{eventId}")
+    fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> // @GET("/players/getAllPlayersSuggestedForEvent/{eventId}")
     fun getAllPlayersConfirmedByEvent(eventId: Int): Flow<Result<List<Player>>> // @GET("/players/getAllConfirmedByEvent/{eventId}")
     fun getAllPlayersAppliedByEvent(eventId: Int): Flow<Result<List<PlayerApplyDetail>>> // @GET("/players/getAllAppliedByEvent/{eventId}")
     fun createPlayer(req: RequestPlayer): Flow<Result<String>> // @POST("/players/create")

@@ -502,12 +502,16 @@ constructor(
         }
     }
 
-    override fun getAllPlayersSuggestedForEvent(eventId: Int): Flow<Result<List<Player>>> = flow {
+    override fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> = flow {
         try {
             emit(Result.Loading())
-            val response = featProvider.getAllPlayersSuggestedForEvent(eventId)
+            val response = featProvider.getAllPlayersSuggestedForEvent(eventId);
+            val person = featProvider.getPerson(uId).body()
             if (response.code() in 200..299) {
-                emit(Result.Success(data = response.body()))
+                emit(Result.Success(data = ResponseDataSuggestedPlayers(
+                    players = response.body(),
+                    person = person
+                )))
             } else {
                 logging(request = eventId, response = response)
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
