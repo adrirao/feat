@@ -1196,13 +1196,15 @@ constructor(
             emit(Result.Loading())
             val responseGetSuggestedEvent = featProvider.getEventsSuggestedForUser(uId);
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
+            val responsePerson = featProvider.getPerson(uId)
 
             if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299){
                 emit(
                     Result.Success(
                         data = ResponseDataSearch(
                             events = responseGetSuggestedEvent.body()!!,
-                            players = responseGetPlayer.body()!!
+                            players = responseGetPlayer.body()!!,
+                            person = responsePerson.body()!!
                         )
                     )
                 )
@@ -1222,13 +1224,15 @@ constructor(
             emit(Result.Loading())
             val filterEvents = featProvider.getfilterEventForUser(req);
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
+            val responseGetPerson = featProvider.getPerson(uId)
 
             if(responseGetPlayer.code() in 200..299 && filterEvents.code() in 200..299){
                 emit(
                     Result.Success(
                         data = ResponseDataSearch(
                             events = filterEvents.body()!!,
-                            players = responseGetPlayer.body()!!
+                            players = responseGetPlayer.body()!!,
+                            person = responseGetPerson.body()!!
                         )
                     )
                 )
