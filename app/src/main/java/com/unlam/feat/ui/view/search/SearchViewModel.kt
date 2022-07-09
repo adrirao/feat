@@ -146,7 +146,7 @@ constructor(
         if(state.value.time_start !== null){
             startTime = state.value.time_start
         }
-        var endTime: LocalTime? = LocalTime.of(23,59,99);
+        var endTime: LocalTime? = LocalTime.of(23,59,59);
         if(state.value.time_end !== null){
             endTime = state.value.time_end
         }
