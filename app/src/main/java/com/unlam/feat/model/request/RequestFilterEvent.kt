@@ -5,7 +5,6 @@ import java.time.LocalTime
 data class RequestFilterEvent (
     val uid: String,
     val sportGenericId: Int?,
-    val sportId: Int?,
     val dayId: Int?,
     val startTime: LocalTime?,
     val endTime: LocalTime?,

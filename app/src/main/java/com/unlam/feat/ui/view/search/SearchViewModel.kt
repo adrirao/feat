@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.model.Person
 import com.unlam.feat.model.request.RequestEvent
 import com.unlam.feat.model.request.RequestFilterEvent
 import com.unlam.feat.repository.FeatRepositoryImp
@@ -33,6 +34,7 @@ constructor(
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    lateinit var person : Person;
 
     init {
         getDataSearch()
@@ -77,6 +79,7 @@ constructor(
                             time_end = event.valueLocalTimeOpt
                         )
                     }
+                    else -> {}
                 }
             }
             is SearchEvent.RefreshData ->{
@@ -118,7 +121,8 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value =
-                        result.data?.let { SearchState(sport = it.players, events = it.events) }!!
+                        result.data?.let { SearchState(sport = it.players, events = it.events)}!!
+                    person = result.data.person
                 }
             }
         }.launchIn(viewModelScope)
@@ -126,44 +130,40 @@ constructor(
 
     fun filterEvents(){
 
-        var distance: String? = null;
+        var distance: String? = person.willingDistance.toString();
         if(state.value.distance !== ""){
             distance = state.value.distance
         }
-        var sportGeneric: String? = null;
+        var sportGeneric: String? = "0";
         if(state.value.sportGeneric !== null){
             sportGeneric = state.value.sportGeneric
         }
-        var sportId: String? = null;
-        if(state.value.sportId !== null){
-            sportId = state.value.sportId
-        }
-        var dayId: String? = null;
+        var dayId: String? = "0";
         if(state.value.day !== null){
             dayId = state.value.day
         }
-        var startTime: LocalTime? = null;
+        var startTime: LocalTime? = LocalTime.of(1,0,0);
         if(state.value.time_start !== null){
             startTime = state.value.time_start
         }
-        var endTime: LocalTime? = null;
+        var endTime: LocalTime? = LocalTime.of(23,59,59);
         if(state.value.time_end !== null){
             endTime = state.value.time_end
         }
 
         val uId = firebaseAuthRepository.getUserId()
-        val request = RequestFilterEvent(
-            uid=uId,
-            sportGenericId = state.value.sportGeneric?.toInt(),
-            sportId = state.value.sportId?.toInt(),
-            dayId = state.value.day?.toInt(),
-            distance = distance?.toInt(),
-            startTime = state.value.time_start,
-            endTime = state.value.time_end
-        )
+
+            val request = RequestFilterEvent(
+                uid=uId,
+                sportGenericId = sportGeneric?.toInt(),
+                dayId = dayId?.toInt(),
+                distance = distance?.toInt(),
+                startTime = startTime,
+                endTime = endTime
+            )
 
 
-        if(request.sportGenericId == null && request.sportId == null && request.dayId == null && request.distance == null
+        if(request.sportGenericId == null && request.dayId == null && request.distance == null
             && request.startTime == null && request.endTime == null){
             getDataSearch()
         }else {
@@ -180,6 +180,7 @@ constructor(
                     is Result.Success -> {
                         _state.value =
                             SearchState(events = result.data?.events!!, sport = result.data.players)
+                        person = result.data.person
                     }
                 }
             }.launchIn(viewModelScope)
