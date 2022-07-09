@@ -124,16 +124,17 @@ fun ConfigProfileScreen(
     val pagerState = rememberPagerState()
 
 
-
-
-
-
-
     if (state.isSuccessSubmitData) {
         InfoDialog(
             title = "Creado con exito",
             desc = "Su perfil se configuro con exito",
-            onDismiss = { onClick(ConfigProfileEvents.onClick(TypeClick.GoToHome)) })
+            onDismiss = {
+                onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))
+                onEvent(ConfigProfileEvents.onClick(TypeClick.GoToTakePhoto))
+            },
+            textContentAccept = "Confirmar",
+            enabledCancelButton = false
+        )
     }
 
     if (state.isErrorSubmitData) {
@@ -143,8 +144,8 @@ fun ConfigProfileScreen(
             enabledCancelButton = false,
             onDismiss = {
                 onEvent(ConfigProfileEvents.SingOutUser)
-                onClick(ConfigProfileEvents.onClick(TypeClick.GoToLogin))
                 onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))
+                onClick(ConfigProfileEvents.onClick(TypeClick.GoToLogin))
             }
         )
     }
@@ -366,6 +367,7 @@ fun ConfigProfileScreen(
                         textContent = "Guardar",
                         onClick = {
                             onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
+                            onClick(ConfigProfileEvents.onClick(TypeClick.GoToHome))
                         },
                         modifier = Modifier
                             .padding(16.dp)

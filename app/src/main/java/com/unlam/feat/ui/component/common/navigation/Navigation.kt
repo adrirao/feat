@@ -12,6 +12,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.firebase.auth.FirebaseAuth
 import com.unlam.feat.R
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
@@ -328,9 +329,8 @@ private fun NavGraphBuilder.addRouteConfigProfile(navController: NavHostControll
             onClick = { event ->
                 when (event) {
                     ConfigProfileEvents.onClick(TypeClick.GoToLogin) -> {
-//                        FirebaseAuth.getInstance().signOut()
-//                        navController.popBackStack()
-//                        navController.navigate(Screen.Login.route)
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
                     }
                     ConfigProfileEvents.onClick(TypeClick.GoToHome) -> {
                         navController.popBackStack()
