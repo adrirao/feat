@@ -18,6 +18,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
+import com.unlam.feat.ui.component.common.event.NotFoundPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerDetail
 import com.unlam.feat.ui.theme.*
@@ -195,7 +196,7 @@ fun PageTwo(
                     }
                 )
             } else {
-                NotFoundEvent()
+                NotFoundPlayer()
             }
 
         }

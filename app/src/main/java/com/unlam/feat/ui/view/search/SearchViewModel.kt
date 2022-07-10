@@ -47,41 +47,52 @@ constructor(
                     error = ""
                 )
             }
-            is SearchEvent.ChangeDialog -> {
-                _state.value = _state.value.copy(
-                    showDialog = !_state.value.showDialog
-                )
-            }
             is SearchEvent.onValueChange -> {
                 when (event.typeValueChange) {
                     TypeValueChange.OnValueChangeSportGeneric -> {
                         _state.value = _state.value.copy(
-                            sportGeneric = event.value
+                            sportGeneric = if(event.value == "") null else event.value
                         )
+
                     }
                     TypeValueChange.OnValueChangeDay -> {
                         _state.value = _state.value.copy(
-                            day = event.value
-                        )
-                    }
-                    TypeValueChange.OnValueChangeDistance -> {
-                        _state.value = _state.value.copy(
-                            distance = event.value
+                            day = if(event.value == "") null else event.value
                         )
                     }
                     TypeValueChange.OnValueChangeStartTime -> {
                         _state.value = _state.value.copy(
-                            time_start = event.valueLocalTimeOpt
+                            time_start = if(event.value == "") null else event.valueLocalTimeOpt
                         )
                     }
                     TypeValueChange.OnValueChangeEndTime -> {
                         _state.value = _state.value.copy(
-                            time_end = event.valueLocalTimeOpt
+                            time_end = if(event.value == "") null else event.valueLocalTimeOpt
                         )
                     }
-                    TypeValueChange.OnValueChangeSportGeneric -> {
+                    TypeValueChange.OnValueChangeDistance -> {
                         _state.value = _state.value.copy(
-                            sportIsChecked = event.valueBooleanOpt!!
+                            distance = if(event.value == "") null else event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeSportIsChecked -> {
+                        _state.value = _state.value.copy(
+                            sportIsChecked = event.valueBooleanOpt!!,
+                        )
+                    }
+                    TypeValueChange.OnValueChangeDayIsChecked -> {
+                        _state.value = _state.value.copy(
+                            dayIsChecked = event.valueBooleanOpt!!,
+                        )
+                    }
+                    TypeValueChange.OnValueChangeTimeIsChecked -> {
+                        _state.value = _state.value.copy(
+                            timeIsChecked = event.valueBooleanOpt!!,
+                        )
+                    }
+                    TypeValueChange.OnValueChangeDistanceIsChecked -> {
+                        _state.value = _state.value.copy(
+                            distanceIsChecked =  event.valueBooleanOpt!!,
                         )
                     }
                     else -> {}
@@ -97,24 +108,8 @@ constructor(
         }
     }
 
-    fun getEventsSuggestedForUser() {
-        val uId = firebaseAuthRepository.getUserId()
-        featRepository.getEventsSuggestedForUser(uId).onEach { result ->
-            when (result) {
-                is Result.Error -> {
-                    _state.value = SearchState(error = result.message ?: "Error Inesperado")
-                }
-                is Result.Loading -> {
-                    _state.value = SearchState(isLoading = true)
-                }
-                is Result.Success -> {
-                    _state.value = _state.value.copy(events = result.data ?: emptyList(), isLoading = false)
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
 
-    fun getDataSearch(){
+    private fun getDataSearch(){
         val uId = firebaseAuthRepository.getUserId()
         featRepository.getSearchEvent(uId).onEach { result ->
             when (result) {
@@ -125,15 +120,14 @@ constructor(
                     _state.value = SearchState(isLoading = true)
                 }
                 is Result.Success -> {
-                    _state.value =
-                        result.data?.let { SearchState(sport = it.players, events = it.events)}!!
-                    person = result.data.person
+                    _state.value = SearchState(sport = result.data?.players ?: listOf() , events = result.data?.events ?: listOf())
+                    person = result.data?.person!!
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun filterEvents(){
+    private fun filterEvents(){
 
         var distance: String? = person.willingDistance.toString();
         if(state.value.distance != ""){
@@ -163,8 +157,8 @@ constructor(
                 sportGenericId = sportGeneric?.toInt(),
                 dayId = dayId?.toInt(),
                 distance = distance?.toInt(),
-                startTime = startTime,
-                endTime = endTime
+                startTime = startTime.toString(),
+                endTime = endTime.toString()
             )
 
 

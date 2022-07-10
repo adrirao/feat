@@ -63,26 +63,26 @@ fun RowScope.BottomNavigationItem(
                                 .align(Alignment.Center),
                         )
                     }
-                    if (alertCount != null) {
-                        val alertText = if (alertCount > 99) {
-                            "99+"
-                        } else {
-                            alertCount.toString()
-                        }
-                        Text(
-                            text = alertText,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                            fontSize = 13.sp,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .offset(12.dp)
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(Color.Red)
-                        )
-                    }
+//                    if (alertCount != null) {
+//                        val alertText = if (alertCount > 99) {
+//                            "99+"
+//                        } else {
+//                            alertCount.toString()
+//                        }
+//                        Text(
+//                            text = alertText,
+//                            color = Color.White,
+//                            fontWeight = FontWeight.Bold,
+//                            textAlign = TextAlign.Center,
+//                            fontSize = 13.sp,
+//                            modifier = Modifier
+//                                .align(Alignment.TopCenter)
+//                                .offset(12.dp)
+//                                .size(20.dp)
+//                                .clip(CircleShape)
+//                                .background(Color.Red)
+//                        )
+//                    }
                 }
             }
         )

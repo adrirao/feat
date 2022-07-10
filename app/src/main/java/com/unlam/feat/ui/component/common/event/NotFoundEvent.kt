@@ -24,3 +24,18 @@ fun NotFoundEvent() {
         )
     }
 }
+
+@Composable
+fun NotFoundPlayer() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        FeatText(
+            text = "No se encontraron participantes.",
+            fontSize = MaterialTheme.typography.body1.fontSize,
+            color = PurpleMedium
+        )
+    }
+}

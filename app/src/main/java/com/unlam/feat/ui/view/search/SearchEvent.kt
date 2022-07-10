@@ -7,7 +7,6 @@ import java.time.LocalTime
 
 sealed class SearchEvent {
     object DismissDialog: SearchEvent()
-    object ChangeDialog: SearchEvent()
     object RefreshData: SearchEvent()
     data class onValueChange(
         val typeValueChange: TypeValueChange,

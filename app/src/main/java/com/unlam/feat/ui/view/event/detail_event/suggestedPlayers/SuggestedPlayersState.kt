@@ -9,8 +9,5 @@ data class SuggestedPlayersState (
     val showDialog: Boolean = false,
     var idEvent: Int = 0,
 
-    val minAge: String = "",
-    val maxAge: String = "",
-    val distance: String =""
 
 )

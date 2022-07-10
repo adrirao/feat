@@ -6,7 +6,7 @@ data class RequestFilterEvent (
     val uid: String,
     val sportGenericId: Int?,
     val dayId: Int?,
-    val startTime: LocalTime?,
-    val endTime: LocalTime?,
+    val startTime: String?,
+    val endTime: String?,
     val distance: Int?
     )

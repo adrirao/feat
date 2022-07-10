@@ -1279,7 +1279,7 @@ constructor(
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
             val responsePerson = featProvider.getPerson(uId)
 
-            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299){
+            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299 && responsePerson.code() in 200..299){
                 emit(
                     Result.Success(
                         data = ResponseDataSearch(

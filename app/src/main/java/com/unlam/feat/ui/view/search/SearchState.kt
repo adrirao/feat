@@ -17,7 +17,7 @@ data class SearchState(
     val sportGeneric: String? = null,
     val sportId: String? = null,
     val day: String? = null,
-    val distance: String = "",
+    val distance: String? = null,
 
     val sport: List<Player> = emptyList(),
     val sportList : List<Sport> = listOf(),
@@ -35,4 +35,7 @@ data class SearchState(
     val showDialog: Boolean = false,
 
     val sportIsChecked: Boolean = false,
+    val dayIsChecked: Boolean = false,
+    val timeIsChecked: Boolean = false,
+    val distanceIsChecked: Boolean = false,
 )

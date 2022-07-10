@@ -38,26 +38,6 @@ fun SuggestedPlayers(
                 separator = true,
                 verticalPadding = true
             )
-            Row(){
-                FeatOutlinedButton(
-                    textContent = "Filtros",
-                    contentColor = YellowColor,
-                    backgroundColor = YellowColor,
-                    textColor = PurpleDark,
-                    onClick = {
-                        onClick(SuggestedPlayersEvent.ChangeDialog)
-                    }
-                )
-                FeatOutlinedButton(
-                    textContent = "Reestablecer filtros",
-                    contentColor = YellowColor,
-                    backgroundColor = YellowColor,
-                    textColor = PurpleDark,
-                    onClick = {
-                        onClick(SuggestedPlayersEvent.RefreshData)
-                    }
-                )
-            }
 
             if (players.isNotEmpty()) {
                 LazyColumn(
@@ -70,6 +50,7 @@ fun SuggestedPlayers(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
+
 
                                 }
                             }
@@ -84,87 +65,4 @@ fun SuggestedPlayers(
         }
     }
 
-    val suggestedPlayers: SuggestedPlayersViewModel = hiltViewModel()
-    if(state.showDialog){
-        FilerPlayers(state= state,onClick = onClick, onValueChange = {event -> suggestedPlayers.onEvent(event)})
-    }
-}
-
-@Composable
-fun FilerPlayers(
-    state: SuggestedPlayersState,
-    onClick: (SuggestedPlayersEvent) -> Unit,
-    onValueChange: (SuggestedPlayersEvent.onValueChange) -> Unit,
-){
-
-    Dialog(
-        onDismissRequest = {
-            onClick(SuggestedPlayersEvent.ChangeDialog)
-        }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            FeatForm(
-                modifier = Modifier.padding(10.dp),
-                title = "Filtros:",
-                page = ""
-            ) {
-                Row(){
-                    FeatOutlinedTextField(
-                        modifier = Modifier.width(100.dp),
-                        text = state.minAge,
-                        textLabel = "Edad Mínima",
-                        keyboardType = KeyboardType.Number,
-                        onValueChange = {
-                            onValueChange(
-                                SuggestedPlayersEvent.onValueChange(
-                                    TypeValueChange.OnValueChangeMinAge, it
-                                )
-                            )
-                        }
-                    )
-                    FeatOutlinedTextField(
-                        modifier = Modifier.width(100.dp),
-                        text = state.maxAge,
-                        textLabel = "Edad Máxima",
-                        keyboardType = KeyboardType.Number,
-                        onValueChange = {
-                            onValueChange(
-                                SuggestedPlayersEvent.onValueChange(
-                                    TypeValueChange.OnValueChangeMaxAge, it
-                                )
-                            )
-                        }
-                    )
-                }
-
-                FeatOutlinedTextField(
-                    text = state.distance,
-                    textLabel = "Distancia",
-                    keyboardType = KeyboardType.Number,
-                    onValueChange = {
-                        onValueChange(
-                            SuggestedPlayersEvent.onValueChange(
-                                TypeValueChange.OnValueChangeDistance, it
-                            )
-                        )
-                    }
-                )
-                FeatOutlinedButton(
-                    modifier = Modifier.align(Alignment.End),
-                    textContent = "Filtrar",
-                    contentColor = YellowColor,
-                    backgroundColor = YellowColor,
-                    textColor = PurpleDark,
-                    onClick = {
-                        onClick(SuggestedPlayersEvent.OnClick(TypeClick.Submit))
-                        onClick(SuggestedPlayersEvent.ChangeDialog)
-                    }
-                )
-            }
-        }
-    }
 }

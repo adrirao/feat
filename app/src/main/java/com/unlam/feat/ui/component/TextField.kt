@@ -208,7 +208,8 @@ fun FeatOutlinedTimePicker(
     label: String = "",
     titlePicker: String = "Default",
     error: String = "",
-    isErrorVisible: Boolean = true
+    isErrorVisible: Boolean = true,
+    enabled: Boolean = true
 ) {
     val dialogState = rememberMaterialDialogState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -226,39 +227,44 @@ fun FeatOutlinedTimePicker(
                 interactionSource = interactionSource,
                 indication = null
             ) {
+                if(enabled){
                 dialogState.show()
+                }
             },
         enabled = false,
         textLabel = label,
         error = if (isErrorVisible) error else "",
         unFocusedColor = if (error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
     )
-    MaterialDialog(
-        dialogState = dialogState,
-        buttons = {
-            positiveButton(
-                text = "Aceptar",
-                textStyle = TextStyle(color = GreenColor)
-            )
-            negativeButton(
-                text = "Cancelar",
-                textStyle = TextStyle(color = GreenColor)
-            )
-        },
 
-        ) {
-        timepicker(
-            title = titlePicker,
-            is24HourClock = true,
-            colors = TimePickerDefaults.colors(
-                activeBackgroundColor = GreenColor,
-                borderColor = GreenColor,
-                selectorColor = GreenColor
-            )
-        ) { time ->
-            onValueChange(time)
+        MaterialDialog(
+            dialogState = dialogState,
+            buttons = {
+                positiveButton(
+                    text = "Aceptar",
+                    textStyle = TextStyle(color = GreenColor)
+                )
+                negativeButton(
+                    text = "Cancelar",
+                    textStyle = TextStyle(color = GreenColor)
+                )
+            },
+
+            ) {
+            timepicker(
+                title = titlePicker,
+                is24HourClock = true,
+                colors = TimePickerDefaults.colors(
+                    activeBackgroundColor = GreenColor,
+                    borderColor = GreenColor,
+                    selectorColor = GreenColor
+                )
+            ) { time ->
+                onValueChange(time)
+            }
         }
-    }
+
+
 }
 
 @Composable

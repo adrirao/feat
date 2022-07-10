@@ -65,14 +65,14 @@ fun ProfileScreen(
     val date = LocalDate.parse(person.birthDate.substring(0, 10)).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
     )
-    FeatContent {
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 50.dp),
+                    .padding(vertical = 0.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box {
@@ -104,7 +104,7 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50))
                                 .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                .size(200.dp),
+                                .size(150.dp),
                             bitmap = bitmap.value!!.asImageBitmap(),
                             contentDescription = "Gallery Image",
                             contentScale = ContentScale.Crop
@@ -123,7 +123,7 @@ fun ProfileScreen(
                                     .clip(RoundedCornerShape(50))
                                     .background(PurpleDark)
                                     .padding(10.dp)
-                                    .size(30.dp),
+                                    .size(15.dp),
                                 imageVector = Icons.Outlined.CameraAlt,
                                 tint = GreenColor,
                                 contentDescription = null
@@ -139,7 +139,7 @@ fun ProfileScreen(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(50))
                                     .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                    .size(200.dp),
+                                    .size(150.dp),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
                             )
@@ -149,7 +149,7 @@ fun ProfileScreen(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(50))
                                     .border(3.dp, PurpleLight, RoundedCornerShape(50))
-                                    .size(200.dp),
+                                    .size(150.dp),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
                             )
@@ -168,7 +168,7 @@ fun ProfileScreen(
                                     .clip(RoundedCornerShape(50))
                                     .background(PurpleDark)
                                     .padding(10.dp)
-                                    .size(30.dp),
+                                    .size(15.dp),
                                 imageVector = Icons.Outlined.CameraAlt,
                                 tint = GreenColor,
                                 contentDescription = null
@@ -355,5 +355,4 @@ fun ProfileScreen(
                 )
             }
         }
-    }
 }

@@ -80,6 +80,11 @@ sealed class TypeValueChange {
     object OnValueChangeDay: TypeValueChange()
     object OnValueChangeDistance: TypeValueChange()
 
+    object OnValueChangeSportIsChecked: TypeValueChange()
+    object OnValueChangeDayIsChecked: TypeValueChange()
+    object OnValueChangeTimeIsChecked: TypeValueChange()
+    object OnValueChangeDistanceIsChecked: TypeValueChange()
+
 
 
 }
