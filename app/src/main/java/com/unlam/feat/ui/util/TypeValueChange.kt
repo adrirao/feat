@@ -81,4 +81,5 @@ sealed class TypeValueChange {
     object OnValueChangeDistance: TypeValueChange()
 
 
+
 }

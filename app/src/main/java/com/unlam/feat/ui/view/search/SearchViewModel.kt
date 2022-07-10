@@ -79,6 +79,11 @@ constructor(
                             time_end = event.valueLocalTimeOpt
                         )
                     }
+                    TypeValueChange.OnValueChangeSportGeneric -> {
+                        _state.value = _state.value.copy(
+                            sportIsChecked = event.valueBooleanOpt!!
+                        )
+                    }
                     else -> {}
                 }
             }
@@ -131,19 +136,19 @@ constructor(
     fun filterEvents(){
 
         var distance: String? = person.willingDistance.toString();
-        if(state.value.distance !== ""){
+        if(state.value.distance != ""){
             distance = state.value.distance
         }
         var sportGeneric: String? = "0";
-        if(state.value.sportGeneric !== null){
+        if(state.value.sportGeneric != null){
             sportGeneric = state.value.sportGeneric
         }
         var dayId: String? = "0";
-        if(state.value.day !== null){
+        if(state.value.day != null){
             dayId = state.value.day
         }
         var startTime: LocalTime? = LocalTime.of(1,0,0);
-        if(state.value.time_start !== null){
+        if(state.value.time_start != null){
             startTime = state.value.time_start
         }
         var endTime: LocalTime? = LocalTime.of(23,59,59);

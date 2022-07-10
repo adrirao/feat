@@ -116,7 +116,7 @@ fun FeatOutlinedTextField(
             } else trailingIcon,
             isError = error != "",
             enabled = enabled,
-            maxLines = maxLines
+            maxLines = maxLines,
         )
         if (error.isNotEmpty()) {
             Text(
@@ -267,10 +267,15 @@ fun FeatOutlinedDropDown(
     options: List<String>,
     selectedText: (String) -> Unit,
     error: String = "",
-    initialValue: String = ""
+    initialValue: String = "",
+    enabled: Boolean = true
 ) {
-
     var expanded by remember { mutableStateOf(false) }
+
+    if(!enabled){
+        expanded = enabled
+    }
+
     var selectedText by remember { mutableStateOf(initialValue) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }

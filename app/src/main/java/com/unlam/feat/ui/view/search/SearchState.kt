@@ -33,4 +33,6 @@ data class SearchState(
 
     val sportGenericError : NewEventState.GenericError? = null,
     val showDialog: Boolean = false,
+
+    val sportIsChecked: Boolean = false,
 )

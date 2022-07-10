@@ -67,6 +67,7 @@ import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
+import com.unlam.feat.ui.view.search.SearchEvent
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
 import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
@@ -459,6 +460,9 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
             onClick = searchViewModel::onEvent,
             onClickCard = {
                 navController.navigate(Screen.SearchEventDetail.route + "/${it.id}")
+            },
+            onEvent = { event ->
+                searchViewModel.onEvent(event)
             }
         )
     }

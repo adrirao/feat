@@ -13,7 +13,8 @@ sealed class SearchEvent {
         val typeValueChange: TypeValueChange,
         val value: String,
         val valueOpt: String? = null,
-        val valueLocalTimeOpt: LocalTime? = null
+        val valueLocalTimeOpt: LocalTime? = null,
+        val valueBooleanOpt: Boolean? = null
     ): SearchEvent()
     data class OnClick (val typeClick: TypeClick) : SearchEvent()
 }
