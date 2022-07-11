@@ -52,7 +52,7 @@ fun DetailEventMyEventScreen(
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
-                count = 3,
+                count = if(state.event!!.state.description != StateEvent.CONFIRMED) 3 else 2,
                 state = pagerState
             ) { position ->
                 when (position) {
@@ -60,14 +60,27 @@ fun DetailEventMyEventScreen(
                         state = state,
                         onClick = onClick
                     )
-                    1 -> PageTwo(
-                        state,
-                        onClick = onClick
-                    )
-                    2 -> PageTree(
-                        state,
-                        onClick = onClick
-                    )
+                    1 -> {
+                        if(state.event.state.description != StateEvent.CONFIRMED){
+                            PageTwoNotConfirmed(
+                                state,
+                                onClick = onClick
+                            )
+                        }else{
+                            PageTwoConfirmed(
+                                state,
+                                onClick = onClick
+                            )
+                        }
+                    }
+                    2 -> {
+                        if(state.event!!.state.description != StateEvent.CONFIRMED) {
+                            PageTree(
+                                state,
+                                onClick = onClick
+                            )
+                        }
+                    }
                 }
             }
 
@@ -79,22 +92,24 @@ fun DetailEventMyEventScreen(
             )
 
             if (pagerState.currentPage != 0) {
-                FeatOutlinedButtonIcon(
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    icon = Icons.Outlined.PersonAdd,
-                    onClick = {
-                        navigateTo(
-                            DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(
-                                state.event?.id
+                if(state.event!!.state.description != StateEvent.CONFIRMED){
+                    FeatOutlinedButtonIcon(
+                        modifier = Modifier.align(Alignment.BottomEnd),
+                        icon = Icons.Outlined.PersonAdd,
+                        onClick = {
+                            navigateTo(
+                                DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(
+                                    state.event?.id
+                                )
                             )
-                        )
-                    },
-                    height = 70.dp,
-                    width = 70.dp,
-                    contentColor = GreenColor,
-                    backgroundColor = GreenColor90,
-                    textColor = PurpleDark,
-                )
+                        },
+                        height = 70.dp,
+                        width = 70.dp,
+                        contentColor = GreenColor,
+                        backgroundColor = GreenColor90,
+                        textColor = PurpleDark,
+                    )
+                }
             } else {
                 FeatOutlinedButtonIcon(
                     modifier = Modifier.align(Alignment.BottomEnd),
@@ -103,7 +118,8 @@ fun DetailEventMyEventScreen(
                     width = 50.dp,
                     onClick = { nextPage = true },
                     contentColor = PurpleMedium,
-                    backgroundColor = PurpleMedium20
+                    backgroundColor = PurpleMedium20,
+                    textColor = PurpleMedium
                 )
             }
 
@@ -143,7 +159,7 @@ fun PageOne(
 }
 
 @Composable
-fun PageTwo(
+fun PageTwoNotConfirmed(
     state: DetailEventState,
     onClick: (DetailEventEvent) -> Unit
 ) {
@@ -184,6 +200,42 @@ fun PageTwo(
                                 }
                             }
 
+                        }
+                    }
+                )
+            } else {
+                NotFoundPlayer()
+            }
+
+        }
+    }
+}
+
+@Composable
+fun PageTwoConfirmed(
+    state: DetailEventState,
+    onClick: (DetailEventEvent) -> Unit
+) {
+    val players = state.playersConfirmed!!
+    Box {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            FeatText(
+                text = "Participantes del evento:",
+                fontSize = MaterialTheme.typography.h6.fontSize,
+                separator = true,
+                verticalPadding = true
+            )
+
+            if (players.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(10.dp),
+                    content = {
+                        items(players) { player ->
+                            CardPlayer(player = player)
                         }
                     }
                 )

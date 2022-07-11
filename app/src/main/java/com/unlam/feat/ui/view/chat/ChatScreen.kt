@@ -90,27 +90,27 @@ fun ChatScreen(
                                         color = GreenColor,
                                     )
                                 }
-                                Box {
-                                    Row(
-                                        horizontalArrangement = Arrangement.End
-                                    ) {
-                                        Text(
-                                            modifier = Modifier
-                                                .weight(9f),
-                                            text = message.message,
-                                            textAlign = if (message.from == user) TextAlign.Start else TextAlign.Start,
-                                            fontSize = MaterialTheme.typography.body1.fontSize
-                                        )
-                                        Text(
-                                            modifier = Modifier.align(Alignment.Bottom).weight(1f),
-                                            text = SimpleDateFormat("hh:mm").format(message.dob),
-                                            textAlign = if (message.from == user) TextAlign.End else TextAlign.End,
-                                            fontSize = 12.sp,
-                                            color = PurpleLight
-                                        )
-                                    }
-
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text(
+                                        modifier = Modifier.align(Alignment.Start),
+//                                        modifier = Modifier
+//                                            .weight(9f),
+                                        text = message.message,
+                                        textAlign = if (message.from == user) TextAlign.Start else TextAlign.Start,
+                                        fontSize = MaterialTheme.typography.body1.fontSize
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .align(Alignment.End),
+                                        text = SimpleDateFormat("hh:mm").format(message.dob),
+                                        textAlign = if (message.from == user) TextAlign.End else TextAlign.End,
+                                        fontSize = 12.sp,
+                                        color = PurpleLight
+                                    )
                                 }
+
                             }
                         }
                     }
