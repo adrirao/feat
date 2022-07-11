@@ -83,8 +83,8 @@ fun SuccessDialog(
                                 FeatOutlinedButton(
                                     textContent = "Cancelar",
                                     contentColor = RedColor,
-                                    backgroundColor = RedColor20,
-                                    textColor = RedColor,
+                                    backgroundColor = RedColor,
+                                    textColor = PurpleDark,
                                     onClick = onDismiss,
                                     width = 100.dp,
                                     height = 40.dp
@@ -95,8 +95,8 @@ fun SuccessDialog(
                                 modifier = if (!enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
                                 textContent = textContentAccept,
                                 contentColor = GreenColor,
-                                backgroundColor = GreenColor20,
-                                textColor = GreenColor,
+                                backgroundColor = GreenColor,
+                                textColor = PurpleDark,
                                 onClick = onDismiss,
                                 width = if(enabledCancelButton) 100.dp else 250.dp,
                                 height = if(enabledCancelButton) 40.dp else 50.dp,
@@ -177,8 +177,8 @@ fun ErrorDialog(
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
                                 contentColor = RedColor,
-                                backgroundColor = RedColor20,
-                                textColor = RedColor,
+                                backgroundColor = RedColor,
+                                textColor = PurpleDark,
                                 onClick = onDismiss,
                                 width = 100.dp,
                                 height = 40.dp
@@ -270,8 +270,8 @@ fun InfoDialog(
                             FeatOutlinedButton(
                                 textContent = "Cancelar",
                                 contentColor = RedColor,
-                                backgroundColor = RedColor20,
-                                textColor = RedColor,
+                                backgroundColor = RedColor,
+                                textColor = PurpleDark,
                                 onClick = onDismiss,
                                 width = 100.dp,
                                 height = 40.dp
@@ -282,8 +282,8 @@ fun InfoDialog(
                                 modifier = if (!enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
                                 textContent = textContentAccept,
                                 contentColor = GreenColor,
-                                backgroundColor = GreenColor20,
-                                textColor = GreenColor,
+                                backgroundColor = GreenColor,
+                                textColor = PurpleDark,
                                 onClick = onDismiss,
                                 width = if(enabledCancelButton) 100.dp else 250.dp,
                                 height = if(enabledCancelButton) 40.dp else 50.dp,

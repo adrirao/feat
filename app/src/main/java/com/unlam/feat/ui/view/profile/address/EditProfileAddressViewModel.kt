@@ -127,7 +127,8 @@ constructor(
                 }
                 is Result.Error -> {
                     _state.value = _state.value.copy(
-                        error = result.message!!
+                        error = result.message!!,
+                        isErrorSubmitData = true
                     )
                 }
             }

@@ -212,7 +212,8 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             LoginState.LoginMessage.UserNotExist -> {
                 ErrorDialog(
                     title = stringResource(R.string.text_user_not_exist),
-                    desc = stringResource(R.string.desc_user_not_exist)
+                    desc = stringResource(R.string.desc_user_not_exist),
+                    enabledCancelButton = false
                 ) {
                     loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -220,7 +221,8 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             LoginState.LoginMessage.ApiConnectionError -> {
                 ErrorDialog(
                     title = stringResource(R.string.error_api_connection),
-                    desc = stringResource(R.string.error_description_api_connection)
+                    desc = stringResource(R.string.error_description_api_connection),
+                    enabledCancelButton = false
                 ) {
                     loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -228,7 +230,8 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             LoginState.LoginMessage.InvalidCredentials -> {
                 ErrorDialog(
                     title = stringResource(R.string.text_invalid_credential),
-                    desc = stringResource(R.string.desc_invalid_credential)
+                    desc = stringResource(R.string.desc_invalid_credential),
+                    enabledCancelButton = false
                 ) {
                     loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -236,7 +239,8 @@ private fun NavGraphBuilder.addRouteLogin(navController: NavHostController) {
             LoginState.LoginMessage.VerifyEmail -> {
                 InfoDialog(
                     title = stringResource(R.string.text_verify_email),
-                    desc = stringResource(R.string.desc_verify_email)
+                    desc = stringResource(R.string.desc_verify_email),
+                    enabledCancelButton = false
                 ) {
                     loginViewModel.onEvent(LoginEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -283,7 +287,8 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
             RegisterState.RegistrationMessage.UserAlreadyExist -> {
                 InfoDialog(
                     title = stringResource(R.string.text_user_already_exist),
-                    desc = stringResource(R.string.desc_user_already_exist)
+                    desc = stringResource(R.string.desc_user_already_exist),
+                    enabledCancelButton = false
                 ) {
                     registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -291,7 +296,8 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
             RegisterState.RegistrationMessage.RegistrationSuccess -> {
                 SuccessDialog(
                     title = stringResource(R.string.text_user_created),
-                    desc = stringResource(R.string.desc_user_created)
+                    desc = stringResource(R.string.desc_user_created),
+                    enabledCancelButton = false
                 ) {
                     registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                     navController.popBackStack()
@@ -301,7 +307,8 @@ private fun NavGraphBuilder.addRouteRegister(navController: NavHostController) {
             RegisterState.RegistrationMessage.RegistrationError -> {
                 ErrorDialog(
                     title = stringResource(R.string.text_error),
-                    desc = stringResource(R.string.desc_error)
+                    desc = stringResource(R.string.desc_error),
+                    enabledCancelButton = false
                 ) {
                     registerViewModel.onEvent(RegisterEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -416,7 +423,8 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
                 onDismiss = {
                     navController.popBackStack()
                     navController.navigate(Screen.Events.route)
-                }
+                },
+                enabledCancelButton = false
             )
         }
 
@@ -439,7 +447,8 @@ private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
             NewEventState.NewEventMessage.NewEventError -> {
                 ErrorDialog(
                     title = stringResource(R.string.text_error),
-                    desc = stringResource(R.string.desc_error)
+                    desc = stringResource(R.string.desc_error),
+                    enabledCancelButton = false
                 ) {
                     newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
                 }
@@ -447,7 +456,8 @@ private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
             NewEventState.NewEventMessage.NewEventSuccess -> {
                 SuccessDialog(
                     title = stringResource(R.string.text_event_created),
-                    desc = stringResource(R.string.desc_event_created)
+                    desc = stringResource(R.string.desc_event_created),
+                    enabledCancelButton = false
                 ) {
                     newEventViewModel.onEvent(NewEventEvents.onClick(TypeClick.DismissDialog))
                     navController.popBackStack()
@@ -616,7 +626,8 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
         if (state.successPlayer || state.successCancelEvent || state.successConfirmEvent) {
             SuccessDialog(
                 title = state.successTitle,
-                desc = state.successDescription
+                desc = state.successDescription,
+                enabledCancelButton = false
             ) {
                 detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
                 navController.popBackStack()
@@ -627,7 +638,8 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
         if (state.error.isNotEmpty()) {
             ErrorDialog(
                 title = stringResource(R.string.text_error),
-                desc = stringResource(R.string.desc_error)
+                desc = stringResource(R.string.desc_error),
+                enabledCancelButton = false
             ) {
                 detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
             }
@@ -673,7 +685,8 @@ private fun NavGraphBuilder.addRouteDetailSearchEvent(
                 desc = "No se pudo procesar la solicitud",
                 onDismiss = {
                     searchEventDetailViewModel.onEvent(SearchEventDetailEvent.DismissDialog)
-                }
+                },
+                enabledCancelButton = false
             )
         }
         if (state.success) {
@@ -683,7 +696,8 @@ private fun NavGraphBuilder.addRouteDetailSearchEvent(
                 onDismiss = {
                     navController.popBackStack()
                     navController.navigate(Screen.Search.route)
-                }
+                },
+                enabledCancelButton = false
             )
         }
 
@@ -849,7 +863,19 @@ private fun NavGraphBuilder.addRouteEditAddress(
                 onDismiss = {
                     navController.popBackStack()
                     navController.navigate(Screen.Profile.route)
-                }
+                },
+                enabledCancelButton = false
+            )
+        }
+        if (state.isErrorSubmitData) {
+            ErrorDialog(
+                title = "No se puedo agregar la dirección",
+                desc = "Hubo un problema al agregar la direccion, por favor, vuelve a intentarlo",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                },
+                enabledCancelButton = false
             )
         }
 
