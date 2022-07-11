@@ -194,8 +194,8 @@ fun PageTwoNotConfirmed(
                                             onClick(DetailEventEvent.KickPlayer(player.id))
                                         },
                                         contentColor = RedColor,
-                                        backgroundColor = RedColor20,
-                                        textColor = RedColor
+                                        backgroundColor = RedColor90,
+                                        textColor = PurpleDark
                                     )
                                 }
                             }

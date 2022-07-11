@@ -71,17 +71,7 @@ fun DetailInvitationScreen(
                 pagerState = pagerState
             )
 
-            if (pagerState.currentPage != 0) {
-                FeatOutlinedButtonIcon(
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    icon = Icons.Outlined.PersonAdd, onClick = { nextPage = true },
-                    height = 70.dp,
-                    width = 70.dp,
-                    contentColor = GreenColor,
-                    backgroundColor = GreenColor20,
-                    textColor = GreenColor,
-                )
-            } else {
+            if (pagerState.currentPage == 0) {
                 FeatOutlinedButtonIcon(
                     modifier = Modifier.align(Alignment.BottomEnd),
                     icon = Icons.Outlined.PlayArrow,
@@ -115,7 +105,7 @@ fun PageOne(
             event = event,
             stateEvent = StateEvent.INVITED,
             onClick = {
-                when(it){
+                when (it) {
                     TypeClick.Event.TypleClickEvent.Confirm -> {
                         onClick(DetailInvitationEvent.ConfirmInvitation)
                     }
