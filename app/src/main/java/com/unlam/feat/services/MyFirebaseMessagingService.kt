@@ -21,11 +21,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             NotificationManager.IMPORTANCE_HIGH
         )
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
-        val notification = Notification.Builder(this,Constants.CHANNEL_ID)
+        val notification = Notification.Builder(this, Constants.CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
-            .setSmallIcon(R.drawable.ic_add)
+            .setSmallIcon(R.drawable.ic_logo)
             .setAutoCancel(true)
-        NotificationManagerCompat.from(this).notify(1,notification.build())
+        NotificationManagerCompat.from(this).notify(1, notification.build())
     }
 }
