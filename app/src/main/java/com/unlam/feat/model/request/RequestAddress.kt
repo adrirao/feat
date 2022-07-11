@@ -11,5 +11,5 @@ data class RequestAddress(
     val zipCode: String,
     val latitude: String,
     val person: Int,
-    val logitude: String,
+    val longitude: String,
 )

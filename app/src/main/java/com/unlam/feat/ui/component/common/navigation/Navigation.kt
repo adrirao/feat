@@ -68,6 +68,7 @@ import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
+import com.unlam.feat.ui.view.profile.address.EditProfileAddressEvent
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressViewModel
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
@@ -534,8 +535,8 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.EditProfilePreferences.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
                         navController.navigate(Screen.Login.route)
-                    }else if(typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress){
-                        navController.navigate(Screen.EditProfileAddress.route)
+                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress) {
+                        navController.navigate(Screen.EditProfileAddress.route + "/${state.person!!.id}")
                     }
                 },
                 uploadImage = profileViewModel::onEvent,
@@ -820,26 +821,33 @@ private fun NavGraphBuilder.addRouteEditAddress(
     navController: NavHostController,
 ) {
     composable(
-        route = Screen.EditProfileAddress.route,
+        route = Screen.EditProfileAddress.route + "/{idPerson}",
+        arguments = Screen.EditProfileAddress.arguments ?: listOf()
     ) {
+        val idPerson = it.arguments?.getInt("idPerson") ?: 0
         val editProfileAddressViewModel: EditProfileAddressViewModel = hiltViewModel()
         val state by remember { editProfileAddressViewModel.state }
+        editProfileAddressViewModel.setIdPerson(idPerson)
 
         if (state.isLoading) {
             FeatCircularProgress()
         }
 
-//        if (state.person != null) {
-            EditProfileAddressScreen(
-                state = state,
-                onValueChange = {editProfileAddressViewModel::onEvent},
-                goToProfile = {
+        if (state.isSuccessSubmitData) {
+            SuccessDialog(
+                title = "Direccion agregada con exito",
+                desc = "Tu direccion fue agregada con exito!",
+                onDismiss = {
                     navController.popBackStack()
                     navController.navigate(Screen.Profile.route)
-                },
-                openMap = {},
-                onEvent = {}
+                }
             )
         }
-//    }
+
+        EditProfileAddressScreen(
+            state = state,
+            onEvent = editProfileAddressViewModel::onEvent,
+            onClick = { editProfileAddressViewModel.onEvent(EditProfileAddressEvent.SubmitData) }
+        )
+    }
 }

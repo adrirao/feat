@@ -284,7 +284,7 @@ fun ProfileScreen(
                     }
                     FeatOutlinedButtonIcon(
                         modifier = Modifier.align(Alignment.BottomEnd),
-                        icon = Icons.Outlined.EditNote,
+                        icon = Icons.Outlined.Add,
                         shape = RoundedCornerShape(50),
                         height = 50.dp,
                         width = 50.dp,

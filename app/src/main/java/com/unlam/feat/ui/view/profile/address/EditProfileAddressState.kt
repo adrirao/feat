@@ -2,9 +2,9 @@ package com.unlam.feat.ui.view.profile.address
 
 import com.unlam.feat.model.Person
 
-data class EditProfileAddressState (
+data class EditProfileAddressState(
     val addressAlias: String = "",
-    val addressStreet: String = "",
+    val address: String = "",
     val addressNumber: String = "",
     val addressTown: String = "",
     val addressZipCode: String = "",
@@ -12,6 +12,11 @@ data class EditProfileAddressState (
     val addressLongitude: String = "",
     val personId: Int? = null,
     val person: Person? = null,
+    val errorAlias: GenericError? = null,
+    val errorAddress: GenericError? = null,
+    val latitude: String = "",
+    val longitude: String = "",
+    val idPlayer: String = "",
 
     val personError: String? = "",
     val addressStreetError: AddressStreetError? = null,
@@ -20,7 +25,7 @@ data class EditProfileAddressState (
     val addressZipCodeError: AddressZipCodeError? = null,
     val fieldEmpty: String = "",
 
-    val isLoading:Boolean = false,
+    val isLoading: Boolean = false,
     val isSuccessSubmitData: Boolean = false,
     val error: String? = null,
 
@@ -29,6 +34,10 @@ data class EditProfileAddressState (
     val descriptionAlert: String = ""
 ) {
     //TODO refactorizar si solo se va a validar si el campo esta vacio o no.
+
+    sealed class GenericError {
+        object FieldEmpty : GenericError()
+    }
 
     sealed class AddressStreetError {
         object FieldEmpty : AddressStreetError()
