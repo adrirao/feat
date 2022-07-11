@@ -31,7 +31,7 @@ fun ChatScreen(
 ) {
     val messagesList = state.messages
     val event = state.event
-    val user = Firebase.auth.uid
+    val user = "${state.person!!.names} ${state.person.lastname}"
 
     FeatContent {
         FeatHeader(

@@ -125,7 +125,7 @@ fun FeatEventCardHome(
                                 if (infoState.isNotEmpty()) {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        horizontalArrangement = if(!showChat) Arrangement.Center else Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Card(

@@ -133,7 +133,7 @@ private fun NavGraphBuilder.addRouteChat(navController: NavHostController) {
             FeatCircularProgress()
         }
 
-        if (state.event != null) {
+        if (state.event != null && state.person != null) {
             ChatScreen(state = state,
                 onEvent = {
                     chatViewModel.onValueChange(it)
@@ -575,7 +575,7 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
             FeatCircularProgress()
         }
 
-        if (state.event != null && state.players != null && qualifications.isNotEmpty()) {
+        if (state.event != null && state.players != null) {
             DetailEventHomeScreen(
                 state,
                 qualifications,

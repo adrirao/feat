@@ -39,7 +39,7 @@ fun FeatOutlinedButton(
     textColor: Color = contentColor,
     textAlign: TextAlign = TextAlign.Center,
     textWeight: FontWeight = FontWeight.Bold,
-    fontSize: TextUnit? = null,
+    fontSize: TextUnit? = 10.sp,
     onClick: () -> Unit
 ) {
     OutlinedButton(

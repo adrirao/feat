@@ -21,6 +21,7 @@ import com.unlam.feat.ui.component.common.event.FeatEventCardHome
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.event.EventState
 import com.unlam.feat.util.StateEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -31,7 +32,7 @@ import kotlinx.coroutines.yield
 fun HomeScreen(
     state: HomeState,
     onClick: (HomeEvents) -> Unit,
-    goToChat : (Int) -> Unit = {}
+    goToChat: (Int) -> Unit = {}
 ) {
     val eventsConfirmed = state.eventsConfirmedForMy ?: listOf()
     val eventsSuggested = state.eventsSuggestedToday ?: listOf()
@@ -103,7 +104,7 @@ fun HomeScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 10.dp, vertical = 10.dp),
                             event = event,
-                            showChat= true,
+                            showChat = event.origen.uppercase() != StateEvent.PLAYER_PENDING_APPLY,
                             onClick = {
                                 onClick(
                                     HomeEvents.onClick(
