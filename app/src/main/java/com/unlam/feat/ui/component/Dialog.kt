@@ -29,6 +29,8 @@ import com.unlam.feat.ui.theme.*
 fun SuccessDialog(
     title: String,
     desc: String,
+    enabledCancelButton:Boolean = true,
+    textContentAccept: String = "Aceptar",
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -77,24 +79,27 @@ fun SuccessDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            FeatOutlinedButton(
-                                textContent = "Cancelar",
-                                contentColor = RedColor,
-                                backgroundColor = RedColor20,
-                                textColor = RedColor,
-                                onClick = onDismiss,
-                                width = 100.dp,
-                                height = 40.dp
-                            )
+                            if(enabledCancelButton) {
+                                FeatOutlinedButton(
+                                    textContent = "Cancelar",
+                                    contentColor = RedColor,
+                                    backgroundColor = RedColor20,
+                                    textColor = RedColor,
+                                    onClick = onDismiss,
+                                    width = 100.dp,
+                                    height = 40.dp
+                                )
+                            }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                textContent = "Aceptar",
+                                modifier = if (!enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                textContent = textContentAccept,
                                 contentColor = GreenColor,
                                 backgroundColor = GreenColor20,
                                 textColor = GreenColor,
                                 onClick = onDismiss,
-                                width = 100.dp,
-                                height = 40.dp
+                                width = if(enabledCancelButton) 100.dp else 250.dp,
+                                height = if(enabledCancelButton) 40.dp else 50.dp,
                             )
                         }
                     }
@@ -181,7 +186,7 @@ fun ErrorDialog(
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                modifier = if (!enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
                                 textContent = textContentAccept,
                                 contentColor = GreenColor,
                                 backgroundColor = GreenColor,
@@ -274,14 +279,14 @@ fun InfoDialog(
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             FeatOutlinedButton(
-                                modifier = if (enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
+                                modifier = if (!enabledCancelButton) Modifier.fillMaxWidth() else Modifier,
                                 textContent = textContentAccept,
                                 contentColor = GreenColor,
                                 backgroundColor = GreenColor20,
                                 textColor = GreenColor,
                                 onClick = onDismiss,
-                                width = 100.dp,
-                                height = 40.dp
+                                width = if(enabledCancelButton) 100.dp else 250.dp,
+                                height = if(enabledCancelButton) 40.dp else 50.dp,
                             )
                         }
                     }

@@ -880,6 +880,7 @@ constructor(
             _state.value = _state.value.copy(
                 dateOfBirthError = ConfigProfileState.DateError.IsNotOfLegalAge
             )
+            return
         }
         _state.value = _state.value.copy(dateOfBirthError = null)
     }

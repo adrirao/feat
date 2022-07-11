@@ -125,7 +125,7 @@ fun ConfigProfileScreen(
 
 
     if (state.isSuccessSubmitData) {
-        InfoDialog(
+        SuccessDialog(
             title = "Creado con exito",
             desc = "Su perfil se configuro con exito",
             onDismiss = {

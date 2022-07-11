@@ -712,7 +712,8 @@ private fun NavGraphBuilder.addRouteDetailInvitation(
                 desc = "No se pudo procesar la solicitud, por favor, vuelva a intentarlo",
                 onDismiss = {
                     detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
-                }
+                },
+                enabledCancelButton = false,
             )
         }
         if (state.success) {
@@ -723,7 +724,8 @@ private fun NavGraphBuilder.addRouteDetailInvitation(
                     detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
                     navController.popBackStack()
                     navController.navigate(Screen.Invitation.route)
-                }
+                },
+                enabledCancelButton = false,
             )
         }
 

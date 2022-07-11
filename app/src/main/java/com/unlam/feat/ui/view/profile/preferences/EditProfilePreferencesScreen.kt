@@ -25,7 +25,7 @@ fun EditProfilePreferencesScreen(
     goToProfile: () -> Unit
 ) {
     if(state.isSuccessSubmitData){
-        InfoDialog(
+        SuccessDialog(
             title = "Modificación Exitosa",
             desc = "Los datos se modificaron con exito",
             enabledCancelButton = false,
@@ -45,7 +45,6 @@ fun EditProfilePreferencesScreen(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        val person = state.person!!
         FeatForm(
             modifier = Modifier.padding(10.dp),
             title = "Preferencias:",
@@ -69,7 +68,7 @@ fun EditProfilePreferencesScreen(
             ) {
                 FeatOutlinedTextField(
                     modifier = Modifier.width(150.dp),
-                    text = person.minAge.toString(),
+                    text = state.minAge.toString(),
                     keyboardType = KeyboardType.Number,
                     textLabel = "Edad minima",
                     onValueChange = { age ->
@@ -84,7 +83,7 @@ fun EditProfilePreferencesScreen(
                 )
                 FeatOutlinedTextField(
                     modifier = Modifier.width(150.dp),
-                    text = person.maxAge.toString(),
+                    text = state.maxAge.toString(),
                     textLabel = "Edad maxima",
                     keyboardType = KeyboardType.Number,
                     onValueChange = { age ->
@@ -99,7 +98,7 @@ fun EditProfilePreferencesScreen(
                 )
             }
             FeatOutlinedTextField(
-                text = person.willingDistance.toString(),
+                text = state.willingDistance.toString(),
                 textLabel = "Distancia",
                 keyboardType = KeyboardType.Number,
                 onValueChange = { distance ->

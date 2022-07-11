@@ -99,9 +99,9 @@ class EditPersonalInformationViewModel @Inject constructor(
         featRepository.updatePersonPersonalInformation(request).onEach { result ->
             when (result) {
                 is Result.Error -> {
-                    _state.value = EditPersonalInformationState(error = result.message ?: "Error Inesperado")
                     _state.value = _state.value.copy(
-                        isErrorSubmitData = true
+                        isErrorSubmitData = true,
+                        error = result.message ?: "Error Inesperado"
                     )
                 }
                 is Result.Loading -> {
@@ -110,10 +110,10 @@ class EditPersonalInformationViewModel @Inject constructor(
                     )
                 }
                 is Result.Success -> {
-                    _state.value = EditPersonalInformationState(isUpdatedMessage = result.data)
                     _state.value = _state.value.copy(
                         isSuccessSubmitData = true,
-                        isLoading = false
+                        isLoading = false,
+                        isUpdatedMessage = result.data
                     )
                 }
             }
@@ -177,6 +177,7 @@ class EditPersonalInformationViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 birthDateError = EditPersonalInformationState.DateError.IsNotOfLegalAge
             )
+            return
         }
         _state.value = _state.value.copy(birthDateError = null)
     }

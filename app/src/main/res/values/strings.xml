@@ -39,7 +39,7 @@
     <string name="location">Ubicación</string>
     <string name="alias">Alias</string>
     <string name="invalid_date">Fecha invalida</string>
-    <string name="is_not_of_legal_age">Debe ser mayor de 16 años para utilizar la aplicación</string>
+    <string name="is_not_of_legal_age">Edad +16</string>
     <string name="start_time">Inicio</string>
     <string name="end_time">Fin</string>
     <string name="sunday">Domingo</string>

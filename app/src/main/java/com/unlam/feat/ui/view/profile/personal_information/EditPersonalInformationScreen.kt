@@ -29,7 +29,7 @@ fun EditPersonalInformationScreen(
 ) {
 
     if(state.isSuccessSubmitData){
-        InfoDialog(
+        SuccessDialog(
             title = "Modificación Exitosa",
             desc = "Los datos se modificaron con exito",
             enabledCancelButton = false,

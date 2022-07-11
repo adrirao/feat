@@ -12,6 +12,7 @@ import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.config_profile.ConfigProfileState
+import com.unlam.feat.ui.view.profile.personal_information.EditPersonalInformationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -125,15 +126,22 @@ constructor(
         featRepository.updatePerson(request).onEach { result ->
             when (result) {
                 is Result.Error -> {
-                    _state.value = EditProfilePreferencesState(error = result.message ?: "Error Inesperado")
+                    _state.value = _state.value.copy(
+                        isErrorSubmitData = true,
+                        error = result.message ?: "Error Inesperado"
+
+                    )
                 }
                 is Result.Loading -> {
-                    _state.value = EditProfilePreferencesState(isLoading = true)
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
                 }
                 is Result.Success -> {
-                    _state.value = EditProfilePreferencesState(isUpdatedMessage = result.data)
                     _state.value = _state.value.copy(
-                        isSuccessSubmitData = true
+                         isSuccessSubmitData = true,
+                        isLoading = false,
+                        isUpdatedMessage = result.data
                     )
                 }
             }
