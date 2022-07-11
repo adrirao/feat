@@ -16,10 +16,13 @@ import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
+import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.GreenColor90
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.YellowColor
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
 
 @Composable
 fun SuggestedPlayers(
@@ -50,8 +53,16 @@ fun SuggestedPlayers(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-
-
+                                    FeatOutlinedButton(
+                                        modifier = Modifier.weight(1f),
+                                        textContent = "Confirmar",
+                                        onClick = {
+                                            onClick(SuggestedPlayersEvent.OnClick.Invite(player.id))
+                                        },
+                                        contentColor = GreenColor,
+                                        backgroundColor = GreenColor90,
+                                        textColor = PurpleDark,
+                                    )
                                 }
                             }
 

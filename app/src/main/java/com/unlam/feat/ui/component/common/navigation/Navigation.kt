@@ -376,9 +376,12 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
         )
     }
 }
+
 private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostController) {
-    composable(route = Screen.SuggestedPlayers.route + "/{idEvent}",
-        arguments = Screen.SuggestedPlayers.arguments ?: listOf()){
+    composable(
+        route = Screen.SuggestedPlayers.route + "/{idEvent}",
+        arguments = Screen.SuggestedPlayers.arguments ?: listOf()
+    ) {
         val idEvent = it.arguments?.getString("idEvent") ?: ""
         val suggestedPlayerViewModel: SuggestedPlayersViewModel = hiltViewModel()
         val state by remember {
@@ -391,6 +394,17 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
 
         if (state.isLoading) {
             FeatCircularProgress()
+        }
+
+        if (state.successPlayer) {
+            SuccessDialog(
+                title = state.successTitle,
+                desc = state.successDescription,
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Events.route)
+                }
+            )
         }
 
         SuggestedPlayers(

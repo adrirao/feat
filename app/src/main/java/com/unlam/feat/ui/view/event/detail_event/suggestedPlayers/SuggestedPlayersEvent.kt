@@ -4,13 +4,16 @@ import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 
 sealed class SuggestedPlayersEvent {
-    object DismissDialog: SuggestedPlayersEvent()
-    object ChangeDialog: SuggestedPlayersEvent()
-    object RefreshData: SuggestedPlayersEvent()
+    object DismissDialog : SuggestedPlayersEvent()
+    object ChangeDialog : SuggestedPlayersEvent()
+    object RefreshData : SuggestedPlayersEvent()
     data class onValueChange(
         val typeValueChange: TypeValueChange,
         val value: String,
         val valueOpt: String? = null,
-    ): SuggestedPlayersEvent()
-    data class OnClick (val typeClick: TypeClick) : SuggestedPlayersEvent()
+    ) : SuggestedPlayersEvent()
+
+    object OnClick : SuggestedPlayersEvent() {
+        data class Invite(val idPlayer: Int) : SuggestedPlayersEvent()
+    }
 }
