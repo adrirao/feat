@@ -775,12 +775,7 @@ private fun NavGraphBuilder.addRouteDetailInvitation(
             DetailInvitationScreen(
                 state = state,
                 onClick = { event ->
-                    if (event == DetailInvitationEvent.CancelInvitation) {
-                        navController.popBackStack()
-                        navController.navigate(Screen.Invitation.route)
-                    } else {
-                        detailInvitation.onEvent(event)
-                    }
+                    detailInvitation.onEvent(event)
                 },
             )
         }
