@@ -23,7 +23,9 @@ fun CardPlayer(
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     FeatCard(
-        modifier = modifier.fillMaxWidth().padding(vertical = 10.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
     ) {
         Row {
             Icon(
@@ -42,7 +44,7 @@ fun CardPlayer(
                     fontSize = MaterialTheme.typography.body1.fontSize
                 )
                 FeatInfo(
-                    textInfo = "Apodo: ${player.person.nickname} ${player.person.lastname}",
+                    textInfo = "Apodo: ${player.person.nickname}",
                     fontSize = MaterialTheme.typography.body1.fontSize
                 )
                 FeatInfo(
@@ -71,7 +73,9 @@ fun CardPlayerCalification(
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     FeatCard(
-        modifier = modifier.fillMaxWidth().padding(vertical = 10.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
     ) {
         Row {
             Icon(

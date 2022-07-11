@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.Person
+import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestFilterEvent
 import com.unlam.feat.model.request.RequestFilterPlayers
 import com.unlam.feat.repository.FeatRepositoryImp
@@ -31,15 +32,18 @@ constructor(
     private val _state = mutableStateOf(SuggestedPlayersState())
     val state: State<SuggestedPlayersState> = _state
 
-
-
-
     fun onEvent(event: SuggestedPlayersEvent) {
         when (event) {
             is SuggestedPlayersEvent.DismissDialog -> {
                 _state.value = _state.value.copy(
                     error = ""
                 )
+            }
+            is SuggestedPlayersEvent.OnClick.Invite -> {
+                _state.value = _state.value.copy(
+                    idPlayer = event.idPlayer
+                )
+                invitePlayer()
             }
         }
     }
@@ -56,13 +60,45 @@ constructor(
                     _state.value = SuggestedPlayersState(isLoading = true)
                 }
                 is Result.Success -> {
-                    _state.value = SuggestedPlayersState(
-                        players = result.data?.players!!
+                    _state.value = _state.value.copy(
+                        idEvent = idEvent,
+                        players = result.data?.players!!,
+                        isLoading = false
                     )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
+    private fun invitePlayer() {
+
+        val requestCreateInvitation = RequestCreateInvitation(
+            playerId = state.value.idPlayer.toString(),
+            eventId = _state.value.idEvent,
+            origin = "O"
+        )
+
+        featRepository.createInvitation(requestCreateInvitation).onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _state.value = _state.value.copy(
+                        successPlayer = true,
+                        successTitle = "Invitacion enviada",
+                        successDescription = "La invitacion se ha enviado con exito",
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        error = result.message!!
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 
 }
