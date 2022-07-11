@@ -20,14 +20,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.model.LatLng
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
 import com.unlam.feat.model.HomeEvent
 import com.unlam.feat.ui.component.*
-import com.unlam.feat.ui.theme.GreenColor
-import com.unlam.feat.ui.theme.PurpleDark
-import com.unlam.feat.ui.theme.YellowColor
+import com.unlam.feat.ui.theme.*
 import com.unlam.feat.util.Constants
 import com.unlam.feat.util.StateEvent
 import com.unlam.feat.util.getAddress
@@ -39,6 +38,7 @@ fun FeatEventCardHome(
     modifier: Modifier = Modifier,
     event: HomeEvent,
     onClick: () -> Unit,
+    showChat: Boolean = false,
     goToChat: (Int) -> Unit = {}
 ) {
     val date = LocalDate.parse(event.date.substring(0, 10)).format(
@@ -123,22 +123,40 @@ fun FeatEventCardHome(
                                     color = GreenColor
                                 }
                                 if (infoState.isNotEmpty()) {
-                                    Card(
-                                        modifier = Modifier
-                                            .align(Alignment.End)
-                                            .clickable {
-                                                goToChat(event.id)
-                                            },
-                                        shape = RoundedCornerShape(30),
-                                        backgroundColor = color,
-                                        content = {
-                                            Text(
-                                                modifier = Modifier.padding(5.dp),
-                                                text = infoState,
-                                                color = PurpleDark
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Card(
+                                            modifier = Modifier
+                                                .clickable {
+                                                    goToChat(event.id)
+                                                },
+                                            shape = RoundedCornerShape(30),
+                                            backgroundColor = color,
+                                            content = {
+                                                Text(
+                                                    modifier = Modifier.padding(5.dp),
+                                                    text = infoState,
+                                                    color = PurpleDark
+                                                )
+                                            }
+                                        )
+                                        if (showChat) {
+                                            FeatOutlinedButton(
+                                                modifier = Modifier.height(50.dp),
+                                                textContent = "Chat",
+                                                fontSize = 12.sp,
+                                                textColor = PurpleDark,
+                                                contentColor = PurpleLight,
+                                                backgroundColor = PurpleLight,
+                                                onClick = {
+                                                    goToChat(event.id)
+                                                }
                                             )
                                         }
-                                    )
+                                    }
                                 }
                             }
                         }
@@ -155,6 +173,7 @@ fun FeatEventCard(
     colorCard: Color = PurpleDark,
     event: Event,
     new: Boolean = false,
+    showChat: Boolean = false,
     onClick: () -> Unit,
     goToChat: (Int) -> Unit = {}
 ) {
@@ -231,9 +250,16 @@ fun FeatEventCard(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            if (event.state.description == StateEvent.CONFIRMED) {
+                            if (showChat) {
                                 FeatOutlinedButton(
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .align(Alignment.End),
                                     textContent = "Chat",
+                                    fontSize = 12.sp,
+                                    textColor = PurpleDark,
+                                    contentColor = PurpleLight,
+                                    backgroundColor = PurpleLight,
                                     onClick = {
                                         goToChat(event.id)
                                     }

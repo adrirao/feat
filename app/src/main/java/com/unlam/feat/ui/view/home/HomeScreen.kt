@@ -103,6 +103,7 @@ fun HomeScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 10.dp, vertical = 10.dp),
                             event = event,
+                            showChat= true,
                             onClick = {
                                 onClick(
                                     HomeEvents.onClick(

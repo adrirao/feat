@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unlam.feat.ui.theme.LightTransparent
@@ -38,6 +39,7 @@ fun FeatOutlinedButton(
     textColor: Color = contentColor,
     textAlign: TextAlign = TextAlign.Center,
     textWeight: FontWeight = FontWeight.Bold,
+    fontSize: TextUnit? = null,
     onClick: () -> Unit
 ) {
     OutlinedButton(
@@ -67,11 +69,11 @@ fun FeatOutlinedButton(
             color = textColor,
             textAlign = textAlign,
             fontWeight = textWeight,
-            style = if (height >= 50.dp) {
+            style = if (height >= 50.dp || fontSize != null) {
                 MaterialTheme.typography.body1.copy(
                     color = textColor
                 )
-            } else TextStyle(fontSize = 10.sp)
+            } else TextStyle(fontSize = fontSize!!)
 
         )
     }

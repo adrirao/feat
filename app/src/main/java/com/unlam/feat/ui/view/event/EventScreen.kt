@@ -50,6 +50,7 @@ fun EventScreen(
                         modifier = Modifier
                             .padding(10.dp),
                         event = event,
+                        showChat = true,
                         onClick = {
                             onClick(EventEvents.onClick(TypeClick.GoToDetailEvent, event.id))
                         },
