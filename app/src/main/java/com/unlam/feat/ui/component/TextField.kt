@@ -156,7 +156,7 @@ fun FeatOutlinedDatePicker(
     FeatOutlinedTextField(
         text = date?.toString()?.format(
             DateTimeFormatter.ofPattern(
-                "dd LLLL yyyy"
+                "dd/MM/yyyy"
             )
         )
             ?: "",

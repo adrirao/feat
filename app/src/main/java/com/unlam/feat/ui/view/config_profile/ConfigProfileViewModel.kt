@@ -873,12 +873,12 @@ constructor(
     private fun validateDateOfBirth(date: LocalDate?) {
         if (date == null) {
             _state.value = _state.value.copy(
-                dateOfBirthError = ConfigProfileState.GenericError.FieldEmpty
+                dateOfBirthError = ConfigProfileState.DateError.FieldEmpty
             )
             return
         } else if (!date.isBefore(LocalDate.now().minusYears(16))) {
             _state.value = _state.value.copy(
-                dateOfBirthError = ConfigProfileState.DateError.DateInvalid
+                dateOfBirthError = ConfigProfileState.DateError.IsNotOfLegalAge
             )
         }
         _state.value = _state.value.copy(dateOfBirthError = null)

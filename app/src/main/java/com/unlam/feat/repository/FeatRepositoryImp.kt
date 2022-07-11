@@ -1303,7 +1303,7 @@ constructor(
     override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>> = flow{
         try {
             emit(Result.Loading())
-            val filterEvents = featProvider.getfilterEventForUser(req);
+            val filterEvents = featProvider.getfilterEventForUser(req)
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
             val responseGetPerson = featProvider.getPerson(uId)
 

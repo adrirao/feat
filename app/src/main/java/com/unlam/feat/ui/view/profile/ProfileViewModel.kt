@@ -37,9 +37,6 @@ constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
-    init {
-        getDetailProfile()
-    }
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
@@ -62,7 +59,7 @@ constructor(
     }
 
 
-    private fun getDetailProfile() {
+    fun getDetailProfile() {
         val uId = firebaseAuthRepository.getUserId()
         featRepository.getDetailProfile(uId).onEach { result ->
             when (result) {

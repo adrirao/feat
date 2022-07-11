@@ -519,8 +519,7 @@ private fun PageOne(
                 },
                 titlePicker = stringResource(R.string.select_date),
                 error = when (state.dateOfBirthError) {
-                    ConfigProfileState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
-                    ConfigProfileState.DateError.DateInvalid -> stringResource(id = R.string.invalid_date)
+                    ConfigProfileState.DateError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
                     ConfigProfileState.DateError.IsNotOfLegalAge -> stringResource(R.string.is_not_of_legal_age)
                     else -> ""
                 }

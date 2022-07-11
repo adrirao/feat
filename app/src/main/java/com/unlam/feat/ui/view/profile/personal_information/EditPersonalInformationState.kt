@@ -8,11 +8,28 @@ data class EditPersonalInformationState (
     val error: String = "",
     val isUpdatedMessage: String? = "",
     val isSuccessSubmitData: Boolean = false,
+    val isErrorSubmitData: Boolean = false,
+    val sexList: List<String> = listOf("Hombre", "Mujer", "Otro"),
 
-    val person: Person? = null,
+    val personId: String = "",
     val names: String = "",
     val lastname: String = "",
     val nickname: String = "",
-    val birth_date: LocalDate? = null,
+    val birthDate: String = "",
     val sex: String= "",
-)
+
+    val lastnameError: GenericError? = null,
+    val nameError: GenericError? = null,
+    val nicknameError: GenericError? = null,
+    val sexError: GenericError? = null,
+    val birthDateError: DateError? = null,
+){
+    sealed class GenericError {
+        object FieldEmpty : GenericError()
+    }
+    sealed class DateError{
+        object DateInvalid : DateError()
+        object IsNotOfLegalAge : DateError()
+    }
+
+}

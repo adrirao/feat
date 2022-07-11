@@ -95,7 +95,7 @@ data class ConfigProfileState(
     val error: String = "",
     val lastNameError: GenericError? = null,
     val nameError: GenericError? = null,
-    val dateOfBirthError: GenericError? = null,
+    val dateOfBirthError: DateError? = null,
     val nicknameError: GenericError? = null,
     val sexError: GenericError? = null,
     val latitudeError: GenericError? = null,
@@ -144,8 +144,8 @@ data class ConfigProfileState(
         object FieldEmpty : GenericError()
     }
     sealed class DateError{
-        object DateInvalid : GenericError()
-        object IsNotOfLegalAge : GenericError()
+        object FieldEmpty : DateError()
+        object IsNotOfLegalAge : DateError()
     }
 
     sealed class DayError {

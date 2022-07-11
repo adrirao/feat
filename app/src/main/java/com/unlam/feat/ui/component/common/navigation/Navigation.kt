@@ -67,7 +67,6 @@ import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
-import com.unlam.feat.ui.view.search.SearchEvent
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
 import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
@@ -501,6 +500,9 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
         val state by remember {
             profileViewModel.state
         }
+        LaunchedEffect(true) {
+            profileViewModel.getDetailProfile()
+        }
 
         if (state.isLoading) {
             FeatCircularProgress()
@@ -512,7 +514,7 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                 navigateTo = { typeNavigate ->
                     if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPersonalInfo) {
                         navController.navigate(Screen.EditProfilePersonalInformation.route)
-                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferencies) {
+                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToPreferences) {
                         navController.navigate(Screen.EditProfilePreferences.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
                         navController.navigate(Screen.Login.route)
@@ -754,11 +756,14 @@ private fun NavGraphBuilder.addRouteEditPersonalInformation(
             FeatCircularProgress()
         }
 
-        if (state.person != null) {
+        if (state.personId != "null") {
             EditPersonalInformationScreen(
                 state = state,
                 onValueChange = editPersonalInformationViewModel::onEvent,
-                updatePerson = {}
+                goToProfile = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                }
             )
         }
 
