@@ -12,6 +12,7 @@ sealed class ProfileEvent {
             data class NavigateToPlayerInformation(val playerJson : String) : TypeNavigate()
             object NavigateToPreferences : TypeNavigate()
             object NavigateToLogin: TypeNavigate()
+
         }
     }
     data class UploadImage(val image: Bitmap) : ProfileEvent()

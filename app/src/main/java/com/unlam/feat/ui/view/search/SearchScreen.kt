@@ -54,7 +54,17 @@ fun SearchScreen(
         sheetBackgroundColor = Color.Transparent,
         sheetPeekHeight = 0.dp,
         sheetContent = {
-            SheetContent(state, onEvent)
+            SheetContent(state, onEvent) {
+                if (it) {
+                    scope.launch {
+                        if (sheetState.isCollapsed) {
+                            sheetState.expand()
+                        } else {
+                            sheetState.collapse()
+                        }
+                    }
+                }
+            }
         },
 
         ) {
@@ -136,7 +146,8 @@ fun SearchScreen(
 @Composable
 private fun SheetContent(
     state: SearchState,
-    onEvent: (SearchEvent) -> Unit
+    onEvent: (SearchEvent) -> Unit,
+    onClickFilter: (Boolean) -> Unit
 ) {
     var sportList = mutableListOf<String>()
 
@@ -387,6 +398,7 @@ private fun SheetContent(
                     onEvent(
                         SearchEvent.OnClick(TypeClick.Submit)
                     )
+                    onClickFilter(true)
                 }
             )
         }

@@ -69,7 +69,6 @@ fun ConfigProfileScreen(
     onEvent: (ConfigProfileEvents) -> Unit,
     onClick: (ConfigProfileEvents) -> Unit,
 ) {
-
     val context = LocalContext.current
     val bottomSheetModalState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)

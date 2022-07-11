@@ -177,8 +177,9 @@ constructor(
                         )
                     }
                     is Result.Success -> {
-                        _state.value =
-                            SearchState(events = result.data?.events!!, sport = result.data.players)
+                        _state.value = _state.value.copy(
+                            events = result.data?.events!!, sport = result.data.players, isLoading = false
+                        )
                         person = result.data.person
                     }
                 }

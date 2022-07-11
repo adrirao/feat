@@ -1,5 +1,7 @@
 package com.unlam.feat.ui.view.profile.address
 
+import com.unlam.feat.model.Person
+
 data class EditProfileAddressState (
     val addressAlias: String = "",
     val addressStreet: String = "",
@@ -9,6 +11,7 @@ data class EditProfileAddressState (
     val addressLatitude: String = "",
     val addressLongitude: String = "",
     val personId: Int? = null,
+    val person: Person? = null,
 
     val personError: String? = "",
     val addressStreetError: AddressStreetError? = null,

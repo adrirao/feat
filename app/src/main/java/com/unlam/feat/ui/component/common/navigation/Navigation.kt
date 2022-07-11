@@ -2,6 +2,7 @@
 
 package com.unlam.feat.ui.component.common.navigation
 
+import EditProfileAddressScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -67,6 +68,7 @@ import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
+import com.unlam.feat.ui.view.profile.address.EditProfileAddressViewModel
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
 import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
@@ -100,6 +102,7 @@ fun Navigation(navController: NavHostController) {
         addRouteEditPersonalInformation(navController)
         addRouteEditPreferences(navController)
         addRouteDetailInvitation(navController)
+        addRouteEditAddress(navController)
         addRouteInfoPlayer(navController)
     }
 }
@@ -521,7 +524,6 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
         if (state.isLoading) {
             FeatCircularProgress()
         }
-
         if (state.person != null && state.availabilities != null) {
             ProfileScreen(
                 state = state,
@@ -532,6 +534,8 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.EditProfilePreferences.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToLogin) {
                         navController.navigate(Screen.Login.route)
+                    }else if(typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress){
+                        navController.navigate(Screen.EditProfileAddress.route)
                     }
                 },
                 uploadImage = profileViewModel::onEvent,
@@ -810,4 +814,32 @@ private fun NavGraphBuilder.addRouteEditPreferences(
             )
         }
     }
+}
+
+private fun NavGraphBuilder.addRouteEditAddress(
+    navController: NavHostController,
+) {
+    composable(
+        route = Screen.EditProfileAddress.route,
+    ) {
+        val editProfileAddressViewModel: EditProfileAddressViewModel = hiltViewModel()
+        val state by remember { editProfileAddressViewModel.state }
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+//        if (state.person != null) {
+            EditProfileAddressScreen(
+                state = state,
+                onValueChange = {editProfileAddressViewModel::onEvent},
+                goToProfile = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                },
+                openMap = {},
+                onEvent = {}
+            )
+        }
+//    }
 }
