@@ -35,9 +35,11 @@ fun ChatScreen(
 
     FeatContent {
         FeatHeader(
+            modifier = Modifier.fillMaxWidth(),
             text = event!!.name,
             fontSize = MaterialTheme.typography.h6.fontSize,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
 
         LazyColumn(
@@ -84,24 +86,30 @@ fun ChatScreen(
                                             .padding(bottom = 4.dp),
                                         text = "@${message.from}",
                                         fontSize = MaterialTheme.typography.body2.fontSize,
-                                        textAlign = TextAlign.End,
+                                        textAlign = TextAlign.Start,
                                         color = GreenColor,
                                     )
                                 }
                                 Box {
-                                    Text(
-                                        modifier = Modifier.align(if (message.from == user) Alignment.BottomStart else Alignment.BottomEnd),
-                                        text = SimpleDateFormat("hh:mm").format(message.dob),
-                                        textAlign = if (message.from == user) TextAlign.Start else TextAlign.End,
-                                        fontSize = 10.sp
-                                    )
-                                    Text(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        text = message.message,
-                                        textAlign = if (message.from == user) TextAlign.End else TextAlign.Start,
-                                        fontSize = MaterialTheme.typography.body1.fontSize
-                                    )
+                                    Row(
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            modifier = Modifier
+                                                .weight(9f),
+                                            text = message.message,
+                                            textAlign = if (message.from == user) TextAlign.Start else TextAlign.Start,
+                                            fontSize = MaterialTheme.typography.body1.fontSize
+                                        )
+                                        Text(
+                                            modifier = Modifier.align(Alignment.Bottom).weight(1f),
+                                            text = SimpleDateFormat("hh:mm").format(message.dob),
+                                            textAlign = if (message.from == user) TextAlign.End else TextAlign.End,
+                                            fontSize = 12.sp,
+                                            color = PurpleLight
+                                        )
+                                    }
+
                                 }
                             }
                         }
