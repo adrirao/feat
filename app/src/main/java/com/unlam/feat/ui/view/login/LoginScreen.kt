@@ -16,10 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
-import com.unlam.feat.ui.theme.GreenColor20
-import com.unlam.feat.ui.theme.GreenLight
-import com.unlam.feat.ui.theme.PurpleLight
-import com.unlam.feat.ui.theme.GreenColor
+import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.Screen
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
@@ -100,8 +97,9 @@ fun LoginScreen(
                     FeatOutlinedButton(
                         modifier = Modifier.align(Alignment.End),
                         width = 150.dp,
-                        backgroundColor = GreenColor20,
+                        backgroundColor = GreenColor90,
                         contentColor = GreenColor,
+                        textColor = PurpleDark,
                         textContent = "Ingresar",
                         onClick = {
                             onClick(LoginEvents.onClick(TypeClick.Login))

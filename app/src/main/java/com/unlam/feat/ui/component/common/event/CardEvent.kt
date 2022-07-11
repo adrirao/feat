@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,7 @@ fun FeatEventCardHome(
                 modifier = Modifier.clickable { onClick() }
             ) {
                 FeatText(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp),
                     text = event.name.uppercase(),
                     fontSize = MaterialTheme.typography.h5.fontSize,
                     color = GreenColor,
@@ -139,7 +140,8 @@ fun FeatEventCardHome(
                                                 Text(
                                                     modifier = Modifier.padding(5.dp),
                                                     text = infoState,
-                                                    color = PurpleDark
+                                                    color = PurpleDark,
+                                                    fontWeight = FontWeight.Bold
                                                 )
                                             }
                                         )
@@ -192,7 +194,7 @@ fun FeatEventCard(
                 modifier = Modifier.clickable { onClick() }
             ) {
                 FeatText(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp),
                     text = event.name.uppercase(),
                     fontSize = MaterialTheme.typography.h5.fontSize,
                     color = GreenColor,

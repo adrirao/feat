@@ -146,8 +146,9 @@ fun RegisterScreen(
                 FeatSpacerSmall()
                 FeatOutlinedButton(
                     modifier = Modifier.align(Alignment.End),
+                    backgroundColor = GreenColor90,
                     contentColor = GreenColor,
-                    backgroundColor = GreenColor20,
+                    textColor = PurpleDark,
                     textContent = stringResource(id = R.string.text_register),
                     onClick = {
                         onClick(RegisterEvents.onClick(TypeClick.Register))
