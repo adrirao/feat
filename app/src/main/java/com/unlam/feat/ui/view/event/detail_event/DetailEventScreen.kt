@@ -92,8 +92,8 @@ fun DetailEventMyEventScreen(
                     height = 70.dp,
                     width = 70.dp,
                     contentColor = GreenColor,
-                    backgroundColor = GreenColor20,
-                    textColor = GreenColor,
+                    backgroundColor = GreenColor90,
+                    textColor = PurpleDark,
                 )
             } else {
                 FeatOutlinedButtonIcon(
@@ -219,12 +219,14 @@ fun PageTree(
                         .padding(10.dp),
                     content = {
                         items(players) { player ->
-                            CardPlayerDetail(player = player) {
+                            CardPlayerDetail(
+                                player = player
+                            ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    if (player.origin == "Postulado") {
+                                    if (player.origin.uppercase() == StateEvent.PLAYER_POSTULATED) {
                                         FeatOutlinedButton(
                                             textContent = "Rechazar",
                                             height = 40.dp,
@@ -232,8 +234,8 @@ fun PageTree(
                                                 onClick(DetailEventEvent.RejectPlayer(player.id))
                                             },
                                             contentColor = RedColor,
-                                            backgroundColor = RedColor20,
-                                            textColor = RedColor
+                                            backgroundColor = RedColor90,
+                                            textColor = PurpleDark
                                         )
                                         FeatOutlinedButton(
                                             textContent = "Aceptar",
@@ -242,19 +244,19 @@ fun PageTree(
                                                 onClick(DetailEventEvent.AcceptPlayer(player.id))
                                             },
                                             contentColor = GreenColor,
-                                            backgroundColor = GreenColor20,
-                                            textColor = GreenColor
+                                            backgroundColor = GreenColor90,
+                                            textColor = PurpleDark
                                         )
-                                    } else if (player.origin == "Invitado") {
+                                    } else if (player.origin.uppercase() == StateEvent.INVITED) {
                                         FeatOutlinedButton(
-                                            textContent = "Cancelar invitación",
+                                            textContent = "Cancelar",
                                             height = 40.dp,
                                             onClick = {
                                                 onClick(DetailEventEvent.RejectPlayer(player.id))
                                             },
                                             contentColor = RedColor,
-                                            backgroundColor = RedColor20,
-                                            textColor = RedColor
+                                            backgroundColor = RedColor90,
+                                            textColor = PurpleDark
                                         )
                                     }
 

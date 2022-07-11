@@ -264,7 +264,7 @@ fun FeatEventDetail(
                                 StateEvent.SUGGESTED -> {
                                     ApplyButton(onClick = onClick)
                                 }
-                                StateEvent.PENDING_APPLY -> {
+                                StateEvent.PLAYER_PENDING_APPLY -> {
                                     CancelButton(
                                         textContent = "Cancelar invitacion",
                                         onClick = onClick
@@ -277,6 +277,12 @@ fun FeatEventDetail(
                                     )
                                     ConfirmButton(
                                         textContent = "Participar",
+                                        onClick = onClick
+                                    )
+                                }
+                                StateEvent.PLAYER_CONFIRMED -> {
+                                    CancelButton(
+                                        textContent = "Cancelar invitacion",
                                         onClick = onClick
                                     )
                                 }
@@ -301,8 +307,8 @@ fun RowScope.CancelButton(
             onClick(TypeClick.Event.TypleClickEvent.Cancel)
         },
         contentColor = RedColor,
-        backgroundColor = RedColor20,
-        textColor = RedColor,
+        backgroundColor = RedColor90,
+        textColor = PurpleDark,
     )
 }
 

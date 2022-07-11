@@ -48,7 +48,9 @@ fun SuggestedPlayers(
                         .padding(10.dp),
                     content = {
                         items(players) { player ->
-                            CardPlayer(player = player) {
+                            CardPlayer(
+                                player = player
+                            ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End

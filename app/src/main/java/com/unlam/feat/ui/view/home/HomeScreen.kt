@@ -21,6 +21,7 @@ import com.unlam.feat.ui.component.common.event.FeatEventCardHome
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.util.StateEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 
@@ -73,7 +74,7 @@ fun HomeScreen(
                                         HomeEvents.onClick(
                                             TypeClick.GoToDetailEvent,
                                             event.id,
-                                            "SUGERIDO"
+                                            descOrigen = StateEvent.SUGGESTED
                                         )
                                     )
                                 }

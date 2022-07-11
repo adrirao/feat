@@ -23,11 +23,13 @@ import com.unlam.feat.R
 import com.unlam.feat.model.Qualification
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
+import com.unlam.feat.ui.component.common.event.FeatEventDetail
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerCalification
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.util.Constants
+import com.unlam.feat.util.StateEvent
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -93,7 +95,7 @@ fun DetailEventHomeScreen(
                 contentColor = PurpleMedium,
                 backgroundColor = PurpleMedium20
             )
-        } else if (pagerState.currentPage == 1 && descOrigen == Constants.StateEvent.CONFIRMED) {
+        } else if (pagerState.currentPage == 1 && descOrigen == Constants.StateEvent.FINALIZED) {
             FeatOutlinedButtonIcon(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 icon = Icons.Outlined.Add,
@@ -103,7 +105,7 @@ fun DetailEventHomeScreen(
                     onClick(DetailEventHomeEvent.OnClick)
                 },
                 contentColor = YellowColor,
-                backgroundColor = YellowColor20
+                backgroundColor = YellowColor90
             )
         }
     }
@@ -117,28 +119,13 @@ fun PageOne(
     onClick: () -> Unit
 ) {
     val event = state.event!!
-    DetailEvent(
+    FeatEventDetail(
         event = event,
-        content = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                content = {
-                    if (descOrigen != Constants.StateEvent.FINALIZED || descOrigen != Constants.StateEvent.CONFIRMED) {
-                        FeatOutlinedButton(
-                            modifier = Modifier.weight(1f),
-                            contentColor = GreenColor,
-                            backgroundColor = GreenColor90,
-                            textColor = PurpleDark,
-                            textContent = "Participar",
-                            onClick = { onClick() }
-                        )
-                    }
-                }
-            )
+        stateEvent = descOrigen,
+        onClick = {
+            onClick()
         }
     )
-
 }
 
 @Composable
@@ -167,7 +154,7 @@ fun PageTwo(
                     modifier = Modifier
                         .padding(10.dp),
                     content = {
-                        if (descOrigen == Constants.StateEvent.FINALIZED) {
+                        if (descOrigen != Constants.StateEvent.FINALIZED) {
                             items(players) { player ->
                                 CardPlayer(
                                     player = player,

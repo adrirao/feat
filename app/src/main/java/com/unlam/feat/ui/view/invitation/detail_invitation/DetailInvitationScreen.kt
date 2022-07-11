@@ -125,36 +125,6 @@ fun PageOne(
                 }
             }
         )
-//        DetailEvent(
-//            event = event,
-//            content = {
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    FeatOutlinedButton(
-//                        textContent = "Cancelar",
-//                        onClick = {
-//                            onClick(DetailInvitationEvent.CancelInvitation)
-//                        },
-//                        contentColor = RedColor,
-//                        backgroundColor = RedColor20,
-//                        textColor = RedColor,
-//                        height = 46.dp
-//                    )
-//                    FeatOutlinedButton(
-//                        textContent = "Confirmar",
-//                        onClick = {
-//                            onClick(DetailInvitationEvent.ConfirmInvitation)
-//                        },
-//                        contentColor = GreenColor,
-//                        backgroundColor = GreenColor20,
-//                        textColor = GreenColor,
-//                        height = 46.dp
-//                    )
-//                }
-//            }
-//        )
     }
 }
 

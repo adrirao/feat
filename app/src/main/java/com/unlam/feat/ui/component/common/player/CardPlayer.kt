@@ -110,7 +110,7 @@ fun CardPlayerDetail(
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     FeatCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
     ) {
         Row {
             Icon(
