@@ -19,7 +19,8 @@ import com.unlam.feat.ui.util.TypeClick
 @Composable
 fun EventScreen(
     state: EventState,
-    onClick: (EventEvents.onClick) -> Unit
+    onClick: (EventEvents.onClick) -> Unit,
+    goToChat: (Int) -> Unit = {}
 ) {
     val events = state.events
 
@@ -51,6 +52,9 @@ fun EventScreen(
                         event = event,
                         onClick = {
                             onClick(EventEvents.onClick(TypeClick.GoToDetailEvent, event.id))
+                        },
+                        goToChat = {
+                            goToChat(it)
                         }
                     )
                 }

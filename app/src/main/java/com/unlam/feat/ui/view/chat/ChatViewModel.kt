@@ -71,7 +71,7 @@ constructor(
 
     fun getEvent(idEvent: Int) {
         val idEvents = "48"
-        featRepository.getEventById(idEvents.toInt()).onEach { result ->
+        featRepository.getEventById(idEvent).onEach { result ->
             when (result) {
                 is Result.Success -> {
                     _state.value = ChatState(event = result.data)

@@ -45,10 +45,16 @@ sealed class Screen(
         navArgument("idEvent") { type = NavType.StringType }
     ))
 
-    object Chat : Screen("chat_screen")
-    object EditProfileAddress : Screen("edit_profile_address_screen",
-        listOf(navArgument("idPerson") { type = NavType.IntType})
+    object Chat : Screen(
+        "chat_screen",
+        listOf(navArgument("idEvent") { type = NavType.IntType })
     )
+
+    object EditProfileAddress : Screen(
+        "edit_profile_address_screen",
+        listOf(navArgument("idPerson") { type = NavType.IntType })
+    )
+
     object EditProfilePersonalInformation : Screen("edit_personal_information_screen")
     object EditProfilePreferences : Screen("edit_profile_preferences_screen")
     object InfoPlayer : Screen(

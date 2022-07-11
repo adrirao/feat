@@ -115,15 +115,18 @@ private fun NavGraphBuilder.addRouteSplash(navController: NavHostController) {
 }
 
 private fun NavGraphBuilder.addRouteChat(navController: NavHostController) {
-    composable(Screen.Chat.route) {
+    composable(
+        route = Screen.Chat.route + "/{idEvent}",
+        arguments = Screen.Chat.arguments ?: listOf()
+    ) {
         val chatViewModel: ChatViewModel = hiltViewModel()
-
+        val idEvent = it.arguments?.getInt("idEvent") ?: 0
         val state by remember {
             chatViewModel.state
         }
 
         LaunchedEffect(true) {
-            chatViewModel.getEvent(1)
+            chatViewModel.getEvent(idEvent)
         }
 
         if (state.isLoading) {
@@ -189,6 +192,9 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
                             }
                         }
                     }
+                },
+                goToChat = {
+                    navController.navigate(Screen.Chat.route + "/${it}")
                 }
             )
         }
@@ -376,6 +382,9 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
                         }
                     }
                 }
+            },
+            goToChat = {
+                navController.navigate(Screen.Chat.route + "/${it}")
             }
         )
     }

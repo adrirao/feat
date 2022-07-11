@@ -24,14 +24,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
 import com.unlam.feat.model.HomeEvent
-import com.unlam.feat.ui.component.FeatCard
-import com.unlam.feat.ui.component.FeatInfo
-import com.unlam.feat.ui.component.FeatSpacerSmall
-import com.unlam.feat.ui.component.FeatText
+import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.YellowColor
 import com.unlam.feat.util.Constants
+import com.unlam.feat.util.StateEvent
 import com.unlam.feat.util.getAddress
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,7 +38,8 @@ import java.time.format.DateTimeFormatter
 fun FeatEventCardHome(
     modifier: Modifier = Modifier,
     event: HomeEvent,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    goToChat: (Int) -> Unit = {}
 ) {
     val date = LocalDate.parse(event.date.substring(0, 10)).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -125,7 +124,11 @@ fun FeatEventCardHome(
                                 }
                                 if (infoState.isNotEmpty()) {
                                     Card(
-                                        modifier = Modifier.align(Alignment.End),
+                                        modifier = Modifier
+                                            .align(Alignment.End)
+                                            .clickable {
+                                                goToChat(event.id)
+                                            },
                                         shape = RoundedCornerShape(30),
                                         backgroundColor = color,
                                         content = {
@@ -152,7 +155,8 @@ fun FeatEventCard(
     colorCard: Color = PurpleDark,
     event: Event,
     new: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    goToChat: (Int) -> Unit = {}
 ) {
     val date = LocalDate.parse(event.date.substring(0, 10)).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -227,6 +231,14 @@ fun FeatEventCard(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
+                            if (event.state.description == StateEvent.CONFIRMED) {
+                                FeatOutlinedButton(
+                                    textContent = "Chat",
+                                    onClick = {
+                                        goToChat(event.id)
+                                    }
+                                )
+                            }
 //                            var infoState = ""
 //                            var color: Color = Color.Transparent
 //                            if (stateEvent.isNotEmpty()) {

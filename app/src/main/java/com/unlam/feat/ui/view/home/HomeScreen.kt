@@ -30,7 +30,8 @@ import kotlinx.coroutines.yield
 @Composable
 fun HomeScreen(
     state: HomeState,
-    onClick: (HomeEvents) -> Unit
+    onClick: (HomeEvents) -> Unit,
+    goToChat : (Int) -> Unit = {}
 ) {
     val eventsConfirmed = state.eventsConfirmedForMy ?: listOf()
     val eventsSuggested = state.eventsSuggestedToday ?: listOf()
@@ -110,6 +111,9 @@ fun HomeScreen(
                                         event.origen.trim().uppercase()
                                     )
                                 )
+                            },
+                            goToChat = {
+                                goToChat(it)
                             }
                         )
                     }
