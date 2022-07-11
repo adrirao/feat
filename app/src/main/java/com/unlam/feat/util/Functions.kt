@@ -17,8 +17,8 @@ fun <T, Y> logging(request: T, response: Response<Y>) {
     val TAG = "FeatLog"
     val gson = Gson()
     Log.d(TAG, "::::::::::::::::::: INIT LOG :::::::::::::::::::")
-    Log.d(TAG, "Response => ${gson.toJson(response.raw())}")
-    Log.d(TAG, "Request => ${gson.toJson(request)}")
+    Log.d(TAG, "Response => ${response.raw().toString()}")
+    Log.d(TAG, "Request => ${request.toString()}")
     Log.d(TAG, "::::::::::::::::::: END LOG :::::::::::::::::::")
 }
 
