@@ -47,8 +47,7 @@ fun EventScreen(
                 items(events) { event ->
                     FeatEventCard(
                         modifier = Modifier
-                            .padding(10.dp)
-                            .height(220.dp),
+                            .padding(10.dp),
                         event = event,
                         onClick = {
                             onClick(EventEvents.onClick(TypeClick.GoToDetailEvent, event.id))
