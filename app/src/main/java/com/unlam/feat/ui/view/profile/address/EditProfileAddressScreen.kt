@@ -19,13 +19,10 @@ import com.unlam.feat.ui.component.common.PermissionFlow
 import com.unlam.feat.ui.theme.PurpleDark
 import com.unlam.feat.ui.theme.PurpleLight
 import com.unlam.feat.ui.theme.YellowColor
-import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
-import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressEvent
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressState
-import com.unlam.feat.ui.view.profile.personal_information.EditProfilePersonalInformationEvent
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

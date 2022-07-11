@@ -27,6 +27,7 @@ data class EditProfileAddressState(
 
     val isLoading: Boolean = false,
     val isSuccessSubmitData: Boolean = false,
+    val isErrorSubmitData: Boolean = false,
     val error: String? = null,
 
     val showAlertPermission: Boolean = false,
