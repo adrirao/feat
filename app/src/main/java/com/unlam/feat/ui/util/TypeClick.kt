@@ -25,4 +25,11 @@ sealed class TypeClick {
     object SaveTennisData : TypeClick()
     object SavePadelData : TypeClick()
     object SaveRecreationalActivityData : TypeClick()
+
+    object Event : TypeClick(){
+        sealed class TypleClickEvent{
+            object Confirm : TypleClickEvent()
+            object Cancel : TypleClickEvent()
+        }
+    }
 }

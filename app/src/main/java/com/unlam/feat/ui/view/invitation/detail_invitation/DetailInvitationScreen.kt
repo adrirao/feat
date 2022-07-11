@@ -19,9 +19,12 @@ import com.unlam.feat.ui.component.FeatOutlinedButton
 import com.unlam.feat.ui.component.FeatOutlinedButtonIcon
 import com.unlam.feat.ui.component.FeatText
 import com.unlam.feat.ui.component.common.event.DetailEvent
+import com.unlam.feat.ui.component.common.event.FeatEventDetail
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.util.StateEvent
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -108,36 +111,50 @@ fun PageOne(
             separator = true,
             verticalPadding = true
         )
-        DetailEvent(
+        FeatEventDetail(
             event = event,
-            content = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    FeatOutlinedButton(
-                        textContent = "Cancelar",
-                        onClick = {
-                            onClick(DetailInvitationEvent.CancelInvitation)
-                        },
-                        contentColor = RedColor,
-                        backgroundColor = RedColor20,
-                        textColor = RedColor,
-                        height = 46.dp
-                    )
-                    FeatOutlinedButton(
-                        textContent = "Confirmar",
-                        onClick = {
-                            onClick(DetailInvitationEvent.ConfirmInvitation)
-                        },
-                        contentColor = GreenColor,
-                        backgroundColor = GreenColor20,
-                        textColor = GreenColor,
-                        height = 46.dp
-                    )
+            stateEvent = StateEvent.INVITED,
+            onClick = {
+                when(it){
+                    TypeClick.Event.TypleClickEvent.Confirm -> {
+                        onClick(DetailInvitationEvent.ConfirmInvitation)
+                    }
+                    TypeClick.Event.TypleClickEvent.Cancel -> {
+                        onClick(DetailInvitationEvent.CancelInvitation)
+                    }
                 }
             }
         )
+//        DetailEvent(
+//            event = event,
+//            content = {
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    FeatOutlinedButton(
+//                        textContent = "Cancelar",
+//                        onClick = {
+//                            onClick(DetailInvitationEvent.CancelInvitation)
+//                        },
+//                        contentColor = RedColor,
+//                        backgroundColor = RedColor20,
+//                        textColor = RedColor,
+//                        height = 46.dp
+//                    )
+//                    FeatOutlinedButton(
+//                        textContent = "Confirmar",
+//                        onClick = {
+//                            onClick(DetailInvitationEvent.ConfirmInvitation)
+//                        },
+//                        contentColor = GreenColor,
+//                        backgroundColor = GreenColor20,
+//                        textColor = GreenColor,
+//                        height = 46.dp
+//                    )
+//                }
+//            }
+//        )
     }
 }
 

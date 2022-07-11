@@ -17,11 +17,14 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
+import com.unlam.feat.ui.component.common.event.FeatEventDetail
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.event.NotFoundPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerDetail
 import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.util.StateEvent
 
 
 @SuppressLint("UnrememberedMutableState")
@@ -78,8 +81,13 @@ fun DetailEventMyEventScreen(
             if (pagerState.currentPage != 0) {
                 FeatOutlinedButtonIcon(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    icon = Icons.Outlined.PersonAdd, onClick = {
-                        navigateTo(DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(state.event?.id))
+                    icon = Icons.Outlined.PersonAdd,
+                    onClick = {
+                        navigateTo(
+                            DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(
+                                state.event?.id
+                            )
+                        )
                     },
                     height = 70.dp,
                     width = 70.dp,
@@ -117,33 +125,17 @@ fun PageOne(
             separator = true,
             verticalPadding = true
         )
-        DetailEvent(
+        FeatEventDetail(
             event = event,
-            content = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    FeatOutlinedButton(
-                        modifier = Modifier.weight(1f),
-                        textContent = "Cancelar",
-                        onClick = {
-                            onClick(DetailEventEvent.CancelEvent)
-                        },
-                        contentColor = RedColor,
-                        backgroundColor = RedColor20,
-                        textColor = RedColor,
-                    )
-                    FeatOutlinedButton(
-                        modifier = Modifier.weight(1f),
-                        textContent = "Confirmar",
-                        onClick = {
-                            onClick(DetailEventEvent.ConfirmEvent)
-                        },
-                        contentColor = GreenColor,
-                        backgroundColor = GreenColor90,
-                        textColor = PurpleDark,
-                    )
+            stateEvent = if (event.state.description == StateEvent.CREATED) StateEvent.CREATED else StateEvent.CONFIRMED,
+            onClick = {
+                when (it) {
+                    TypeClick.Event.TypleClickEvent.Confirm -> {
+                        onClick(DetailEventEvent.ConfirmEvent)
+                    }
+                    TypeClick.Event.TypleClickEvent.Cancel -> {
+                        onClick(DetailEventEvent.CancelEvent)
+                    }
                 }
             }
         )
@@ -232,7 +224,7 @@ fun PageTree(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    if(player.origin == "Postulado"){
+                                    if (player.origin == "Postulado") {
                                         FeatOutlinedButton(
                                             textContent = "Rechazar",
                                             height = 40.dp,
@@ -253,7 +245,7 @@ fun PageTree(
                                             backgroundColor = GreenColor20,
                                             textColor = GreenColor
                                         )
-                                    }else if(player.origin == "Invitado"){
+                                    } else if (player.origin == "Invitado") {
                                         FeatOutlinedButton(
                                             textContent = "Cancelar invitación",
                                             height = 40.dp,

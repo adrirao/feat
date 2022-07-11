@@ -18,12 +18,15 @@ import com.unlam.feat.ui.component.FeatOutlinedButton
 import com.unlam.feat.ui.component.FeatOutlinedButtonIcon
 import com.unlam.feat.ui.component.FeatText
 import com.unlam.feat.ui.component.common.event.DetailEvent
+import com.unlam.feat.ui.component.common.event.FeatEventDetail
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.theme.GreenColor20
 import com.unlam.feat.ui.theme.PurpleMedium
 import com.unlam.feat.ui.theme.PurpleMedium20
+import com.unlam.feat.ui.view.event.EventState
+import com.unlam.feat.util.StateEvent
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -90,27 +93,11 @@ fun PageOne(
     onClick: () -> Unit
 ) {
     val event = state.event!!
-    DetailEvent(
+    FeatEventDetail(
         event = event,
-        content = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                content = {
-                    FeatOutlinedButton(
-                        modifier = Modifier,
-                        textColor = GreenColor,
-                        contentColor = GreenColor,
-                        backgroundColor = GreenColor20,
-                        textContent = "Participar",
-                        height = 45.dp,
-                        onClick = { onClick() }
-                    )
-                }
-            )
-        }
+        stateEvent = StateEvent.SUGGESTED,
+        onClick = { onClick() }
     )
-
 }
 
 @Composable

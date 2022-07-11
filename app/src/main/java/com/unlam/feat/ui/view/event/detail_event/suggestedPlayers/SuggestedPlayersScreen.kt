@@ -55,7 +55,7 @@ fun SuggestedPlayers(
                                 ) {
                                     FeatOutlinedButton(
                                         modifier = Modifier.weight(1f),
-                                        textContent = "Confirmar",
+                                        textContent = "Invitar",
                                         onClick = {
                                             onClick(SuggestedPlayersEvent.OnClick.Invite(player.id))
                                         },

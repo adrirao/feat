@@ -30,15 +30,27 @@ object Constants {
 
     }
 
-    object ImageSport{
-        const val FUTBOL = "https://img.freepik.com/vector-gratis/coleccion-futbolistas-planos_23-2149002218.jpg"
-        const val BASQUET = "https://img.freepik.com/vector-gratis/adolescentes-jugando-baloncesto-calle-bola-nino-amigo-ilustracion-vectorial-plana-juego-deportivo-concepto-actividad-verano_74855-10164.jpg"
-        const val TENIS = "https://png.pngtree.com/illustration/20190226/ourlarge/pngtree-national-fitness-playing-tennis-double-tennis-tennis-court-image_6423.jpg"
+    object ImageSport {
+        const val FUTBOL =
+            "https://img.freepik.com/vector-gratis/coleccion-futbolistas-planos_23-2149002218.jpg"
+        const val BASQUET =
+            "https://img.freepik.com/vector-gratis/adolescentes-jugando-baloncesto-calle-bola-nino-amigo-ilustracion-vectorial-plana-juego-deportivo-concepto-actividad-verano_74855-10164.jpg"
+        const val TENIS =
+            "https://png.pngtree.com/illustration/20190226/ourlarge/pngtree-national-fitness-playing-tennis-double-tennis-tennis-court-image_6423.jpg"
         const val PADEL = "https://www.empadelados.com/wp-content/uploads/tipos_jugadores_2.jpg"
     }
 }
 
-object Messages{
+object Messages {
     const val UNKNOW_ERROR = "Ocurrió un error, por favor contáctese con el administrador."
     const val SUCCESS_CREATED = "Creado con exito."
+}
+
+object StateEvent {
+    const val SUGGESTED = "SUGERIDO"
+    const val CREATED = "Evento Creado"
+    const val CONFIRMED = "Evento Confirmado"
+    const val FINALIZED = "Evento Finalizado"
+    const val PENDING_APPLY = "Pendiente Aplicacion"
+    const val INVITED = "Invitado"
 }
