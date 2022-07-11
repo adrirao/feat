@@ -786,7 +786,11 @@ private fun NavGraphBuilder.addRouteEditPreferences(
         if (state.person != null) {
             EditProfilePreferencesScreen(
                 state = state,
-                onValueChange = editProfilePreferencesViewModel::onEvent
+                onValueChange = editProfilePreferencesViewModel::onEvent,
+                goToProfile = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                }
             )
         }
     }
