@@ -64,7 +64,6 @@ fun HomeScreen(
                             FeatEventCard(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(220.dp)
                                     .padding(horizontal = 10.dp),
                                 new = true,
                                 colorCard = IndigoColor,
@@ -100,7 +99,6 @@ fun HomeScreen(
                         FeatEventCardHome(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(250.dp)
                                 .padding(horizontal = 10.dp, vertical = 10.dp),
                             event = event,
                             onClick = {

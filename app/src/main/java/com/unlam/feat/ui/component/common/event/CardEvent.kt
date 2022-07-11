@@ -62,12 +62,10 @@ fun FeatEventCardHome(
                     fontWeight = FontWeight.ExtraBold
                 )
                 Row(
-                    modifier = Modifier.fillMaxSize(),
                     content = {
                         Image(
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
+                                .weight(1f),
                             painter = painterResource(
                                 id = when (event.sportDesc) {
                                     Constants.Sports.SOCCER_5, Constants.Sports.SOCCER_6,
@@ -87,7 +85,7 @@ fun FeatEventCardHome(
                         Column(
                             modifier = Modifier
                                 .weight(3f)
-                                .fillMaxHeight()
+//                                .fillMaxHeight()
                                 .padding(start = 20.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.Start
@@ -178,12 +176,11 @@ fun FeatEventCard(
                     fontWeight = FontWeight.ExtraBold
                 )
                 Row(
-                    modifier = Modifier.fillMaxSize(),
+//                    modifier = Modifier.fillMaxSize(),
                     content = {
                         Image(
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
+                                .weight(1f),
                             painter = painterResource(
                                 id = when (event.sport.description) {
                                     Constants.Sports.SOCCER_5, Constants.Sports.SOCCER_6,
@@ -203,7 +200,7 @@ fun FeatEventCard(
                         Column(
                             modifier = Modifier
                                 .weight(3f)
-                                .fillMaxHeight()
+//                                .fillMaxHeight()
                                 .padding(start = 20.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.Start
@@ -230,32 +227,32 @@ fun FeatEventCard(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            FeatSpacerSmall()
-                            var infoState = ""
-                            var color: Color = Color.Transparent
-                            if (stateEvent.isNotEmpty()) {
-                                if (stateEvent == stringResource(R.string.value_aplicated)) {
-                                    infoState = "Pendiente aplicacion"
-                                    color = YellowColor
-                                } else if (stateEvent == "CONFIRMADO") {
-                                    infoState = "Confirmado"
-                                    color = GreenColor
-                                }
-                                if (infoState.isNotEmpty()) {
-                                    Card(
-                                        modifier = Modifier.align(Alignment.End),
-                                        shape = RoundedCornerShape(30),
-                                        backgroundColor = color,
-                                        content = {
-                                            Text(
-                                                modifier = Modifier.padding(5.dp),
-                                                text = infoState,
-                                                color = PurpleDark
-                                            )
-                                        }
-                                    )
-                                }
-                            }
+//                            var infoState = ""
+//                            var color: Color = Color.Transparent
+//                            if (stateEvent.isNotEmpty()) {
+//                                FeatSpacerSmall()
+//                                if (stateEvent == stringResource(R.string.value_aplicated)) {
+//                                    infoState = "Pendiente aplicacion"
+//                                    color = YellowColor
+//                                } else if (stateEvent == "CONFIRMADO") {
+//                                    infoState = "Confirmado"
+//                                    color = GreenColor
+//                                }
+//                                if (infoState.isNotEmpty()) {
+//                                    Card(
+//                                        modifier = Modifier.align(Alignment.End),
+//                                        shape = RoundedCornerShape(30),
+//                                        backgroundColor = color,
+//                                        content = {
+//                                            Text(
+//                                                modifier = Modifier.padding(5.dp),
+//                                                text = infoState,
+//                                                color = PurpleDark
+//                                            )
+//                                        }
+//                                    )
+//                                }
+//                            }
                         }
                     }
                 )
