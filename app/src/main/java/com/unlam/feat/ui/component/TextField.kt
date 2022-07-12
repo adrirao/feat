@@ -225,8 +225,8 @@ fun FeatOutlinedTimePicker(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                if(enabled){
-                dialogState.show()
+                if (enabled) {
+                    dialogState.show()
                 }
             },
         enabled = false,
@@ -235,32 +235,32 @@ fun FeatOutlinedTimePicker(
         unFocusedColor = if (error.isNotEmpty()) MaterialTheme.colors.error else PurpleLight
     )
 
-        MaterialDialog(
-            dialogState = dialogState,
-            buttons = {
-                positiveButton(
-                    text = "Aceptar",
-                    textStyle = TextStyle(color = GreenColor)
-                )
-                negativeButton(
-                    text = "Cancelar",
-                    textStyle = TextStyle(color = GreenColor)
-                )
-            },
+    MaterialDialog(
+        dialogState = dialogState,
+        buttons = {
+            positiveButton(
+                text = "Aceptar",
+                textStyle = TextStyle(color = GreenColor)
+            )
+            negativeButton(
+                text = "Cancelar",
+                textStyle = TextStyle(color = GreenColor)
+            )
+        },
 
-            ) {
-            timepicker(
-                title = titlePicker,
-                is24HourClock = true,
-                colors = TimePickerDefaults.colors(
-                    activeBackgroundColor = GreenColor,
-                    borderColor = GreenColor,
-                    selectorColor = GreenColor
-                )
-            ) { time ->
-                onValueChange(time)
-            }
+        ) {
+        timepicker(
+            title = titlePicker,
+            is24HourClock = true,
+            colors = TimePickerDefaults.colors(
+                activeBackgroundColor = GreenColor,
+                borderColor = GreenColor,
+                selectorColor = GreenColor
+            )
+        ) { time ->
+            onValueChange(time)
         }
+    }
 
 
 }
@@ -272,15 +272,17 @@ fun FeatOutlinedDropDown(
     selectedText: (String) -> Unit,
     error: String = "",
     initialValue: String = "",
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    resetDefault: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    if(!enabled){
+    if (!enabled) {
         expanded = enabled
     }
 
-    var selectedText by remember { mutableStateOf(initialValue) }
+//    var textSelected = mutableStateOf(initialValue)
+    var textSelected by remember { mutableStateOf(initialValue) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -292,10 +294,14 @@ fun FeatOutlinedDropDown(
 
     Column() {
         FeatOutlinedTextField(
-            text = selectedText,
+            text = if (resetDefault) "" else textSelected,
             enabled = false,
             onValueChange = {
-                selectedText = it
+                if (textSelected != "") {
+                    textSelected = it
+                } else {
+                    textSelected = ""
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -322,7 +328,7 @@ fun FeatOutlinedDropDown(
         ) {
             options.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selectedText = label
+                    textSelected = label
                     selectedText(label)
                     expanded = false
                 }) {

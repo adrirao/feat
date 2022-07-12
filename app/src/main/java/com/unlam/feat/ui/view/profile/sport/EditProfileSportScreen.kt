@@ -1,10 +1,15 @@
 package com.unlam.feat.ui.view.profile.sport
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,14 +28,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun EditProfileSportScreen(
     state: EditProfileSportState,
     onValueChange: (EditProfileSportEvent) -> Unit,
     goToProfile: () -> Unit
 ) {
-
-    if(state.isSuccessSubmitData){
+    var changeSport by remember { mutableStateOf(false) }
+    if (state.isSuccessSubmitData) {
         SuccessDialog(
             title = "Modificación Exitosa",
             desc = "Los datos se modificaron con exito",
@@ -38,7 +44,7 @@ fun EditProfileSportScreen(
             onDismiss = goToProfile
         )
     }
-    if(state.isErrorSubmitData){
+    if (state.isErrorSubmitData) {
         ErrorDialog(
             title = "Error en el servidor",
             desc = "No se puedo realizar la operacion, comuniquese con el administrador",
@@ -67,7 +73,7 @@ fun EditProfileSportScreen(
             }
             val listSports = mutableListOf<String>()
             sports.forEach { name ->
-                if(!players.contains(name)){
+                if (!players.contains(name)) {
                     listSports.add(name)
                 }
             }
@@ -78,25 +84,29 @@ fun EditProfileSportScreen(
                 options = listSports,
                 selectedText = { value ->
                     state.sportsList?.forEach {
-                        if (it.description == value) onValueChange(
-                            EditProfileSportEvent.onValueChange(
-                                TypeValueChange.OnValueChangeTypeSport,
-                                it.id.toString()
+                        if (it.description == value) {
+                            changeSport = true
+                            onValueChange(
+                                EditProfileSportEvent.onValueChange(
+                                    TypeValueChange.OnValueChangeTypeSport,
+                                    it.id.toString()
+                                )
                             )
-                        )
-                        onValueChange(
-                            EditProfileSportEvent.onValueChange(
-                                TypeValueChange.OnValueChangeSelectSport,
-                                it.id.toString()
+                            onValueChange(
+                                EditProfileSportEvent.onValueChange(
+                                    TypeValueChange.OnValueChangeSelectSport,
+                                    it.id.toString()
+                                )
                             )
-                        )
+                        }
                     }
                 },
             )
 
 
+            val optionsPosition =
+                mutableListOf<String>()
 
-            val optionsPosition: MutableList<String> = mutableListOf<String>()
             state.positionList.forEach { positionList ->
                 optionsPosition.add(positionList.description)
             }
@@ -105,11 +115,14 @@ fun EditProfileSportScreen(
                 options = optionsPosition,
                 selectedText = { positionText ->
                     state.positionList.forEach { position ->
-                        if (position.description == positionText) onValueChange(
-                            EditProfileSportEvent.onValueChange(
-                                TypeValueChange.OnValueChangePositionSport, position.id.toString()
+                        if (position.description == positionText) {
+                            onValueChange(
+                                EditProfileSportEvent.onValueChange(
+                                    TypeValueChange.OnValueChangePositionSport,
+                                    position.id.toString()
+                                )
                             )
-                        )
+                        }
                     }
                 },
                 error = when (state.positionIdSportError) {
@@ -117,8 +130,6 @@ fun EditProfileSportScreen(
                     else -> ""
                 },
             )
-
-
 
 
             val optionsLevel: MutableList<String> = mutableListOf<String>()
@@ -130,11 +141,13 @@ fun EditProfileSportScreen(
                 options = optionsLevel,
                 selectedText = { levelText ->
                     state.levelList.forEach { level ->
-                        if (level.description == levelText) onValueChange(
-                            EditProfileSportEvent.onValueChange(
-                                TypeValueChange.OnValueChangeLevelSport, level.id.toString()
+                        if (level.description == levelText) {
+                            onValueChange(
+                                EditProfileSportEvent.onValueChange(
+                                    TypeValueChange.OnValueChangeLevelSport, level.id.toString()
+                                )
                             )
-                        )
+                        }
                     }
                 },
 //                error = when (state.) {
@@ -142,7 +155,6 @@ fun EditProfileSportScreen(
 //                    else -> ""
 //                },
             )
-
 
 
             val optionsValuation: MutableList<String> = mutableListOf<String>()
@@ -154,11 +166,14 @@ fun EditProfileSportScreen(
                 options = optionsValuation,
                 selectedText = { valuationText ->
                     state.valuationList.forEach { valuation ->
-                        if (valuation.description == valuationText) onValueChange(
-                            EditProfileSportEvent.onValueChange(
-                                TypeValueChange.OnValueChangeValuationSport, valuation.id.toString()
+                        if (valuation.description == valuationText) {
+                            onValueChange(
+                                EditProfileSportEvent.onValueChange(
+                                    TypeValueChange.OnValueChangeValuationSport,
+                                    valuation.id.toString()
+                                )
                             )
-                        )
+                        }
                     }
                 },
 //                error = when (state.) {

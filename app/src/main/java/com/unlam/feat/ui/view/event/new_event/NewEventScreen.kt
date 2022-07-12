@@ -137,6 +137,8 @@ private fun PageOne(
                         if (it.description == value) {
                             if (it.description == "Actividad Recreativa") {
                                 showCapacity(true)
+                            }else{
+                                showCapacity(false)
                             }
                             onValueChange(
                                 NewEventEvents.onValueChange(
