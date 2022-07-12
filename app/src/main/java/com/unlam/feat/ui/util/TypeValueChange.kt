@@ -46,6 +46,9 @@ sealed class TypeValueChange {
     object OnValueChangeWillingDistance : TypeValueChange()
     object OnValueChangeNotifications : TypeValueChange()
     object OnValueChangeSelectSport : TypeValueChange()
+    object OnValueChangeCapacity : TypeValueChange()
+
+
 
     object OnValueChangeIdSoccer : TypeValueChange()
     object OnValueChangePositionSoccer : TypeValueChange()
