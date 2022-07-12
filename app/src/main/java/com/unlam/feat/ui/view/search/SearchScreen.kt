@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.unlam.feat.R
 import com.unlam.feat.model.Event
@@ -94,7 +95,7 @@ fun SearchScreen(
                             },
                         ) {
                             Icon(
-                                imageVector =  Icons.Outlined.FilterAlt,
+                                imageVector = Icons.Outlined.FilterAlt,
                                 contentDescription = null,
                                 tint = PurpleMedium,
                                 modifier = Modifier.size(30.dp)
@@ -103,42 +104,40 @@ fun SearchScreen(
                     }
                 )
 
-               }
-                if(events.isNotEmpty()){
-                    LazyColumn(
-                        content = {
-                            items(events) { event ->
-                                FeatEventCard(
-                                    modifier = Modifier
-                                        .padding(10.dp),
-                                    event = event,
-                                    onClick = {
-                                        onClickCard(event)
-                                    }
-                                )
-                            }
-                        }
-                    )
-                }else{
-                    NotFoundEvent()
-                }
-
             }
-        }
+            if (events.isNotEmpty()) {
+                LazyColumn(
+                    content = {
+                        items(events) { event ->
+                            FeatEventCard(
+                                modifier = Modifier
+                                    .padding(10.dp),
+                                event = event,
+                                onClick = {
+                                    onClickCard(event)
+                                }
+                            )
+                        }
+                    }
+                )
+            } else {
+                NotFoundEvent()
+            }
 
-        if (state.error.isNotEmpty()) {
-            ErrorDialog(
-                title = "Error mis eventos",
-                desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
-                onDismiss = {
-                    onClick(SearchEvent.DismissDialog)
-                }
-            )
         }
-
     }
 
+    if (state.error.isNotEmpty()) {
+        ErrorDialog(
+            title = "Error mis eventos",
+            desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
+            onDismiss = {
+                onClick(SearchEvent.DismissDialog)
+            }
+        )
+    }
 
+}
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -193,7 +192,8 @@ private fun SheetContent(
                     .background(GreenColor)
             )
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
                 FeatCheckbox(
                     checked = state.sportIsChecked,
@@ -235,7 +235,8 @@ private fun SheetContent(
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
                 FeatCheckbox(
                     checked = state.dayIsChecked,
@@ -279,7 +280,6 @@ private fun SheetContent(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 FeatCheckbox(
                     checked = state.timeIsChecked,
@@ -306,9 +306,14 @@ private fun SheetContent(
 
                     }
                 )
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     FeatOutlinedTimePicker(
-                        modifier = Modifier.width(120.dp),
+                        modifier = Modifier.weight(2f),
                         time = state.time_start,
                         onValueChange = {
                             onEvent(
@@ -326,7 +331,7 @@ private fun SheetContent(
                         enabled = state.timeIsChecked
                     )
                     FeatOutlinedTimePicker(
-                        modifier = Modifier.width(150.dp),
+                        modifier = Modifier.weight(2f),
                         time = state.time_end,
                         onValueChange = {
                             onEvent(
@@ -407,4 +412,58 @@ private fun SheetContent(
 }
 
 
+@Preview
+@Composable
+fun prev (){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        FeatCheckbox(
+            modifier = Modifier.weight(1f),
+            checked = false,
+            onCheckedChange = {
+            }
+        )
+        Row(
+            modifier = Modifier.weight(4f),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            FeatOutlinedTextField(
+                modifier = Modifier.weight(1f),
+                text = "",
+                textLabel = "name",
+                onValueChange = {}
+            )
+            FeatOutlinedTextField(
+                modifier = Modifier.weight(1f),
+                text = "",
+                textLabel = "name",
+                onValueChange = {}
+            )
+//            FeatOutlinedTimePicker(
+//                modifier = Modifier.weight(2f),
+//                time = null,
+//                onValueChange = {
+//                },
+//                label = stringResource(R.string.start_time),
+//                titlePicker = stringResource(R.string.select_start_time),
+//                error = "",
+//                isErrorVisible = false,
+//                enabled = true
+//            )
+//            FeatOutlinedTimePicker(
+//                modifier = Modifier.weight(2f),
+//                time = null,
+//                onValueChange = {
+//                },
+//                label = stringResource(R.string.end_time),
+//                titlePicker = stringResource(R.string.select_end_time),
+//                error = "",
+//                isErrorVisible = false,
+//                enabled = true
+//            )
+        }
 
+    }
+}

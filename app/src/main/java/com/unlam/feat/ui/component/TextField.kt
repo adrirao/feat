@@ -63,11 +63,11 @@ fun FeatOutlinedTextField(
     onValueChange: (String) -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(paddingValues),
     ) {
         OutlinedTextField(
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = { onValueChange(it) },
             shape = shape,
@@ -126,14 +126,12 @@ fun FeatOutlinedTextField(
                 textAlign = TextAlign.End,
                 modifier = if (trailingIcon == null) {
                     Modifier
-                        .fillMaxWidth()
                         .padding(vertical = 5.dp)
                         .align(Alignment.CenterEnd)
                         .padding(end = 15.dp)
                 } else {
                     Modifier
                         .padding(vertical = 5.dp)
-                        .fillMaxWidth()
                         .align(Alignment.CenterEnd)
                         .padding(end = 40.dp)
                 }
