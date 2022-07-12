@@ -50,6 +50,7 @@ fun LoginScreen(
                     FeatOutlinedTextField(
                         text = state.textEmail,
                         textLabel = "Email",
+                        maxLines = 1,
                         unFocusedColor = PurpleLight,
                         onValueChange = {
                             onValueChange(
@@ -74,6 +75,7 @@ fun LoginScreen(
                         unFocusedColor = PurpleLight,
                         keyboardType = KeyboardType.Password,
                         textLabel = "Password",
+                        maxLines = 1,
                         onValueChange = {
                             onValueChange(
                                 LoginEvents.onValueChange(

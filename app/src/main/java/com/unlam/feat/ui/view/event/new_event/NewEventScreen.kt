@@ -168,6 +168,7 @@ private fun PageOne(
             FeatOutlinedTextField(
                 text = state.name,
                 textLabel = "Nombre del evento",
+                maxLines = 1,
                 onValueChange = {
                     onValueChange(
                         NewEventEvents.onValueChange(
