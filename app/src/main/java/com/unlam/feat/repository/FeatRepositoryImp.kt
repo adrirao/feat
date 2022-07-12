@@ -1328,6 +1328,33 @@ constructor(
         }
     }
 
+    override fun getPlayersUserAndSportList(uId: String): Flow<Result<ResponsePlayersUserSportList>> = flow{
+        try {
+            emit(Result.Loading())
+            val responseGetPlayer = featProvider.getPlayersByUser(uId)
+            val responseGetSportList = featProvider.getGenericsSports()
+
+            if(responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299){
+                emit(
+                    Result.Success(
+                        data = ResponsePlayersUserSportList(
+                            players = responseGetPlayer.body()!!,
+                            sportGenericList = responseGetSportList.body()!!
+                        )
+                    )
+                )
+            }else{
+                emit(Result.Error(message = "Unknown Error"))
+            }
+
+
+        }catch (e: Exception) {
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
+
 
 //</editor-fold desc="Multiple EndPoints">
 }

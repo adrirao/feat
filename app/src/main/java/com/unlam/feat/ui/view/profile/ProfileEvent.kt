@@ -9,7 +9,7 @@ sealed class ProfileEvent {
         sealed class TypeNavigate{
             object NavigateToAddress : TypeNavigate()
             object NavigateToPersonalInfo : TypeNavigate()
-            data class NavigateToPlayerInformation(val playerJson : String) : TypeNavigate()
+            object NavigateToSports : TypeNavigate()
             object NavigateToPreferences : TypeNavigate()
             object NavigateToLogin: TypeNavigate()
 

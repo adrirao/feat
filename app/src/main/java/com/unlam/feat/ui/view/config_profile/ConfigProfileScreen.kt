@@ -473,7 +473,7 @@ private fun PageOne(
 
             FeatOutlinedTextField(
                 text = state.lastName,
-                textLabel = stringResource(R.string.name),
+                textLabel = stringResource(R.string.last_name),
                 onValueChange = {
                     onValueChange(
                         ConfigProfileEvents.onValueChange(
@@ -490,7 +490,7 @@ private fun PageOne(
 
             FeatOutlinedTextField(
                 text = state.name,
-                textLabel = stringResource(R.string.last_name),
+                textLabel = stringResource(R.string.name),
                 onValueChange = {
                     onValueChange(
                         ConfigProfileEvents.onValueChange(

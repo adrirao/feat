@@ -59,6 +59,7 @@ fun ProfileScreen(
 
     val person = state.person!!
     val addresses = state.addresses!!
+    val players = state.players!!
     val date = LocalDate.parse(person.birthDate.substring(0, 10)).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
     )
@@ -278,7 +279,7 @@ fun ProfileScreen(
                         addresses.forEach { address ->
                             FeatInfo(
                                 modifier = Modifier.padding(end = 50.dp),
-                                textInfo = "- ${address.alias} ${address.street} ${address.number} ${address.town} ${address.street} "
+                                textInfo = "- ${address.alias}\n${address.street}"
                             )
                         }
                     }
@@ -306,33 +307,36 @@ fun ProfileScreen(
                             fontWeight = FontWeight.Bold,
                             separator = true
                         )
-                        FeatInfo(
-                            modifier = Modifier.padding(end = 50.dp),
-                            textInfo = "Futbol"
-                        )
-                        FeatInfo(textInfo = "Tenis")
-                    }
-                    FeatOutlinedButtonIcon(
-                        modifier = Modifier.align(Alignment.BottomEnd),
-                        icon = Icons.Outlined.EditNote,
-                        shape = RoundedCornerShape(50),
-                        height = 50.dp,
-                        width = 50.dp,
-                        backgroundColor = GreenColor90,
-                        contentColor = GreenColor,
-                        textColor = PurpleDark,
-                        onClick = {
-//                            val moshi =
-//                                Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-//                            val jsonAdapter = moshi.adapter(Player::class.java).lenient()
-//                            val playerJson = jsonAdapter.toJson(player)
-                            navigateTo(
-                                ProfileEvent.NavigateTo.TypeNavigate.NavigateToPlayerInformation(
-                                    ""
-                                )
+                        players.forEach { player ->
+                            FeatSportCard(
+                                enable = false,
+                                onClickCard = {},
+                                sport = player.sport.description,
+                                idSport=player.sport.id ,
+                                modifier = Modifier
+                                    .height(100.dp)
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                elevation = 0.dp
                             )
                         }
-                    )
+                        FeatOutlinedButtonIcon(
+                            modifier = Modifier.align(Alignment.End),
+                            icon = Icons.Outlined.Add,
+                            shape = RoundedCornerShape(50),
+                            height = 50.dp,
+                            width = 50.dp,
+                            backgroundColor = GreenColor90,
+                            contentColor = GreenColor,
+                            textColor = PurpleDark,
+                            onClick = {
+                                navigateTo(
+                                    ProfileEvent.NavigateTo.TypeNavigate.NavigateToSports
+                                )
+                            }
+                        )
+                    }
+
                 }
                 FeatSpacerMedium()
                 FeatOutlinedButton(

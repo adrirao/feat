@@ -117,6 +117,7 @@ interface FeatRepository {
     fun getDataSearchEvent(idEvent: Int, uId: String): Flow<Result<ResponseDataSearchEvent>>
     fun getSearchEvent(uId: String): Flow<Result<ResponseDataSearch>>
     fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>>
+    fun getPlayersUserAndSportList(uId: String): Flow<Result<ResponsePlayersUserSportList>>
     //</editor-fold desc="Multiple EndPoints">
 
 

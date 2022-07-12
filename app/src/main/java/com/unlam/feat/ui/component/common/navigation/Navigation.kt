@@ -70,6 +70,9 @@ import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressEvent
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressViewModel
+import com.unlam.feat.ui.view.profile.sport.EditProfileSportEvent
+import com.unlam.feat.ui.view.profile.sport.EditProfileSportScreen
+import com.unlam.feat.ui.view.profile.sport.EditProfileSportViewModel
 import com.unlam.feat.ui.view.search.SearchScreen
 import com.unlam.feat.ui.view.search.SearchViewModel
 import com.unlam.feat.ui.view.search.event_detail.DetailSearchEventScreen
@@ -104,7 +107,9 @@ fun Navigation(navController: NavHostController) {
         addRouteEditPreferences(navController)
         addRouteDetailInvitation(navController)
         addRouteEditAddress(navController)
+        addRouteEditSport(navController)
         addRouteInfoPlayer(navController)
+
     }
 }
 
@@ -556,6 +561,8 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.Login.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress) {
                         navController.navigate(Screen.EditProfileAddress.route + "/${state.person!!.id}")
+                    }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToSports) {
+                        navController.navigate(Screen.EditProfileSports.route + "/${state.person!!.id}")
                     }
                 },
                 uploadImage = profileViewModel::onEvent,
@@ -878,6 +885,50 @@ private fun NavGraphBuilder.addRouteEditAddress(
             state = state,
             onEvent = editProfileAddressViewModel::onEvent,
             onClick = { editProfileAddressViewModel.onEvent(EditProfileAddressEvent.SubmitData) }
+        )
+    }
+}
+
+private fun NavGraphBuilder.addRouteEditSport(
+    navController: NavHostController,
+) {
+    composable(route = Screen.EditProfileSports.route) {
+
+        val editProfileSportViewModel: EditProfileSportViewModel = hiltViewModel()
+        val state by remember { editProfileSportViewModel.state }
+
+
+        if (state.isLoading) {
+            FeatCircularProgress()
+        }
+
+        if (state.isSuccessSubmitData) {
+            SuccessDialog(
+                title = "Direccion agregada con exito",
+                desc = "Tu direccion fue agregada con exito!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                },
+                enabledCancelButton = false
+            )
+        }
+        if (state.isErrorSubmitData) {
+            ErrorDialog(
+                title = "No se puedo agregar la dirección",
+                desc = "Hubo un problema al agregar la direccion, por favor, vuelve a intentarlo",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Profile.route)
+                },
+                enabledCancelButton = false
+            )
+        }
+
+        EditProfileSportScreen(
+            state = state,
+            onEvent = editProfileSportViewModel::onEvent,
+            onClick = { editProfileSportViewModel.onEvent(EditProfileSportEvent.SubmitData) }
         )
     }
 }

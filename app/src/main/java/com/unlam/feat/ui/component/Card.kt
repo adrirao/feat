@@ -219,7 +219,7 @@ fun FeatSportCard(
     corner: CornerSize = CornerSize(16.dp),
     shape: RoundedCornerShape = RoundedCornerShape(corner),
     onClickCard: () -> Unit,
-
+    enable: Boolean = true,
     //ICON SPORT
     sport: String = "",
     sportDescription: String = "",
@@ -232,7 +232,8 @@ fun FeatSportCard(
         onClick = onClickCard,
         elevation = elevation,
         backgroundColor = backgroundColor,
-        shape = shape
+        shape = shape,
+        enabled = enable
     ) {
         when (idSport) {
             1 -> contentCard(

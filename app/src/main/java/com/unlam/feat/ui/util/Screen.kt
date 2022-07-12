@@ -54,6 +54,7 @@ sealed class Screen(
         "edit_profile_address_screen",
         listOf(navArgument("idPerson") { type = NavType.IntType })
     )
+    object EditProfileSports : Screen("edit_profile_sport_screen")
 
     object EditProfilePersonalInformation : Screen("edit_personal_information_screen")
     object EditProfilePreferences : Screen("edit_profile_preferences_screen")
@@ -61,4 +62,5 @@ sealed class Screen(
         "info_player_screen",
         listOf(navArgument("idPlayer") { type = NavType.StringType })
     )
+
 }
