@@ -8,6 +8,7 @@ import com.unlam.feat.R
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.search.SearchEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -28,6 +29,19 @@ constructor(
     init {
         getEvents()
     }
+
+    fun onEvent(event: EventEvents) {
+        when (event) {
+            is EventEvents.DismissDialog -> {
+                _state.value = _state.value.copy(
+                    eventsError = null
+                )
+            }
+        }
+    }
+
+
+
 
     private fun getEvents() {
         val uId = firebaseAuthRepository.getUserId()

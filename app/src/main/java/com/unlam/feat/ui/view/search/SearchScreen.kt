@@ -26,6 +26,7 @@ import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.config_profile.ConfigProfileState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -133,7 +134,8 @@ fun SearchScreen(
             desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
             onDismiss = {
                 onClick(SearchEvent.DismissDialog)
-            }
+            },
+            enabledCancelButton = false
         )
     }
 
@@ -208,7 +210,7 @@ private fun SheetContent(
                         if (!it) {
                             onEvent(
                                 SearchEvent.onValueChange(
-                                    TypeValueChange.OnValueChangeSportGeneric, ""
+                                    TypeValueChange.OnValueChangeSportId, ""
                                 )
                             )
                         }
@@ -222,14 +224,17 @@ private fun SheetContent(
                             if (it.sport.description == value) {
                                 onEvent(
                                     SearchEvent.onValueChange(
-                                        TypeValueChange.OnValueChangeSportGeneric, it.id.toString()
+                                        TypeValueChange.OnValueChangeSportId, it.id.toString()
                                     )
                                 )
                             }
                         }
                     },
                     options = sportList,
-                    error = "",
+                    error = when (state.sportIdError) {
+                        SearchState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                        else -> ""
+                    },
                     enabled = state.sportIsChecked,
                 )
             }
@@ -272,7 +277,10 @@ private fun SheetContent(
                         }
                     },
                     options = days,
-                    error = "",
+                    error = when (state.dayIdError) {
+                        SearchState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                        else -> ""
+                    },
                     enabled = state.dayIsChecked,
                 )
             }
@@ -314,7 +322,7 @@ private fun SheetContent(
                 ) {
                     FeatOutlinedTimePicker(
                         modifier = Modifier.weight(2f),
-                        time = state.time_start,
+                        time = state.timeStart,
                         onValueChange = {
                             onEvent(
                                 SearchEvent.onValueChange(
@@ -326,13 +334,16 @@ private fun SheetContent(
                         },
                         label = stringResource(R.string.start_time),
                         titlePicker = stringResource(R.string.select_start_time),
-                        error = "",
+                        error = when (state.timeError) {
+                            SearchState.TimeError.TimeEmpty -> stringResource(R.string.text_field_empty)
+                            else -> ""
+                        },
                         isErrorVisible = false,
                         enabled = state.timeIsChecked
                     )
                     FeatOutlinedTimePicker(
                         modifier = Modifier.weight(2f),
-                        time = state.time_end,
+                        time = state.timeEnd,
                         onValueChange = {
                             onEvent(
                                 SearchEvent.onValueChange(
@@ -344,7 +355,10 @@ private fun SheetContent(
                         },
                         label = stringResource(R.string.end_time),
                         titlePicker = stringResource(R.string.select_end_time),
-                        error = "",
+                        error = when (state.timeError) {
+                            SearchState.TimeError.TimeEmpty -> stringResource(R.string.text_field_empty)
+                            else -> ""
+                        },
                         isErrorVisible = false,
                         enabled = state.timeIsChecked
                     )
@@ -389,7 +403,11 @@ private fun SheetContent(
                             )
                         )
                     },
-                    enabled = state.distanceIsChecked
+                    enabled = state.distanceIsChecked,
+                    error = when (state.distanceError) {
+                        SearchState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                        else -> ""
+                    },
                 )
             }
             FeatOutlinedButton(
@@ -402,7 +420,11 @@ private fun SheetContent(
                     onEvent(
                         SearchEvent.OnClick(TypeClick.Submit)
                     )
-                    onClickFilter(true)
+                    if(state.dayIdError == null && state.distanceError == null &&
+                        state.sportIdError == null && state.timeError == null){
+
+                        onClickFilter(true)
+                    }
                 }
             )
         }

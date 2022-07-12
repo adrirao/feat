@@ -1300,20 +1300,16 @@ constructor(
         }
     }
 
-    override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataSearch>> = flow{
+    override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataFilterSearch>> = flow{
         try {
             emit(Result.Loading())
             val filterEvents = featProvider.getfilterEventForUser(req)
-            val responseGetPlayer = featProvider.getPlayersByUser(uId)
-            val responseGetPerson = featProvider.getPerson(uId)
 
-            if(responseGetPlayer.code() in 200..299 && filterEvents.code() in 200..299){
+            if(filterEvents.code() in 200..299){
                 emit(
                     Result.Success(
-                        data = ResponseDataSearch(
+                        data = ResponseDataFilterSearch(
                             events = filterEvents.body()!!,
-                            players = responseGetPlayer.body()!!,
-                            person = responseGetPerson.body()!!
                         )
                     )
                 )

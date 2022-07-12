@@ -4,6 +4,7 @@ import com.unlam.feat.model.Day
 import com.unlam.feat.model.Event
 import com.unlam.feat.model.Player
 import com.unlam.feat.model.Sport
+import com.unlam.feat.ui.view.event.EventState
 import com.unlam.feat.ui.view.event.new_event.NewEventState
 import java.time.LocalTime
 
@@ -11,13 +12,13 @@ data class SearchState(
     val isLoading: Boolean = false,
     val events: List<Event> = emptyList(),
     val error: String = "",
-    val time_start: LocalTime? = null,
-    val time_end: LocalTime? = null,
 
-    val sportGeneric: String? = null,
-    val sportId: String? = null,
-    val day: String? = null,
+    val dayId: String? = null,
+    val timeStart: LocalTime? = null,
+    val timeEnd: LocalTime? = null,
     val distance: String? = null,
+    val sportId: String? = null,
+
 
     val sport: List<Player> = emptyList(),
     val sportList : List<Sport> = listOf(),
@@ -31,11 +32,27 @@ data class SearchState(
         Day(id = 7, description="Sabado")
     ),
 
-    val sportGenericError : NewEventState.GenericError? = null,
+    val sportIdError : GenericError? = null,
+    val distanceError : GenericError? = null,
+    val dayIdError : GenericError? = null,
+    val timeError : TimeError? = null,
+
     val showDialog: Boolean = false,
 
     val sportIsChecked: Boolean = false,
     val dayIsChecked: Boolean = false,
     val timeIsChecked: Boolean = false,
     val distanceIsChecked: Boolean = false,
-)
+
+
+){
+    sealed class TimeError {
+        object WrongTimeRange : TimeError()
+        object StarTimeEmpty : TimeError()
+        object EndTimeEmpty : TimeError()
+        object TimeEmpty : TimeError()
+    }
+    sealed class GenericError {
+        object FieldEmpty : GenericError()
+    }
+}

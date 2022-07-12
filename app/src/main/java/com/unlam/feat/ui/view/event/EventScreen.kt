@@ -20,7 +20,8 @@ import com.unlam.feat.ui.util.TypeClick
 fun EventScreen(
     state: EventState,
     onClick: (EventEvents.onClick) -> Unit,
-    goToChat: (Int) -> Unit = {}
+    goToChat: (Int) -> Unit = {},
+    onEvent:(EventEvents) -> Unit,
 ) {
     val events = state.events
 
@@ -67,8 +68,9 @@ fun EventScreen(
             title = "Error mis eventos",
             desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
             onDismiss = {
-                onClick(EventEvents.onClick(TypeClick.DismissDialog))
-            }
+                onEvent(EventEvents.onClick(TypeClick.DismissDialog))
+            },
+            enabledCancelButton = false
         )
     }
     if (state.isLoading) {

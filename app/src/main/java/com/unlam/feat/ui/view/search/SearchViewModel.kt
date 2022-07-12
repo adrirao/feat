@@ -3,8 +3,10 @@ package com.unlam.feat.ui.view.search
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.R
 import com.unlam.feat.model.Person
 import com.unlam.feat.model.request.RequestEvent
 import com.unlam.feat.model.request.RequestFilterEvent
@@ -12,6 +14,7 @@ import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.config_profile.ConfigProfileState
 import com.unlam.feat.ui.view.event.new_event.NewEventState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +37,7 @@ constructor(
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-    lateinit var person : Person;
+    lateinit var person: Person;
 
     init {
         getDataSearch()
@@ -49,30 +52,30 @@ constructor(
             }
             is SearchEvent.onValueChange -> {
                 when (event.typeValueChange) {
-                    TypeValueChange.OnValueChangeSportGeneric -> {
+                    TypeValueChange.OnValueChangeSportId -> {
                         _state.value = _state.value.copy(
-                            sportGeneric = if(event.value == "") null else event.value
+                            sportId = event.value
                         )
 
                     }
                     TypeValueChange.OnValueChangeDay -> {
                         _state.value = _state.value.copy(
-                            day = if(event.value == "") null else event.value
+                            dayId = event.value
                         )
                     }
                     TypeValueChange.OnValueChangeStartTime -> {
                         _state.value = _state.value.copy(
-                            time_start = if(event.value == "") null else event.valueLocalTimeOpt
+                            timeStart = event.valueLocalTimeOpt
                         )
                     }
                     TypeValueChange.OnValueChangeEndTime -> {
                         _state.value = _state.value.copy(
-                            time_end = if(event.value == "") null else event.valueLocalTimeOpt
+                            timeEnd = event.valueLocalTimeOpt
                         )
                     }
                     TypeValueChange.OnValueChangeDistance -> {
                         _state.value = _state.value.copy(
-                            distance = if(event.value == "") null else event.value
+                            distance = if (event.value == "") null else event.value
                         )
                     }
                     TypeValueChange.OnValueChangeSportIsChecked -> {
@@ -92,24 +95,42 @@ constructor(
                     }
                     TypeValueChange.OnValueChangeDistanceIsChecked -> {
                         _state.value = _state.value.copy(
-                            distanceIsChecked =  event.valueBooleanOpt!!,
+                            distanceIsChecked = event.valueBooleanOpt!!,
                         )
                     }
                     else -> {}
                 }
             }
-            is SearchEvent.RefreshData ->{
+            is SearchEvent.RefreshData -> {
                 getDataSearch()
             }
-            SearchEvent.OnClick(TypeClick.Submit) ->{
+            SearchEvent.OnClick(TypeClick.Submit) -> {
+                _state.value = _state.value.copy(
+                    sportIdError = validateNoEmptyFieldIsChecked(
+                        _state.value.sportId,
+                        _state.value.sportIsChecked
+                    ),
+                    distanceError = validateNoEmptyFieldIsChecked(
+                        _state.value.distance,
+                        _state.value.distanceIsChecked
+                    ),
+                    dayIdError = validateNoEmptyFieldIsChecked(
+                        _state.value.dayId,
+                        _state.value.dayIsChecked
+                    ),
+                    timeError = validateDayIsValidRange(
+                        _state.value.timeStart,
+                        _state.value.timeEnd,
+                        _state.value.timeIsChecked
+                    ),
+                )
                 filterEvents()
-
             }
         }
     }
 
 
-    private fun getDataSearch(){
+    private fun getDataSearch() {
         val uId = firebaseAuthRepository.getUserId()
         featRepository.getSearchEvent(uId).onEach { result ->
             when (result) {
@@ -120,71 +141,92 @@ constructor(
                     _state.value = SearchState(isLoading = true)
                 }
                 is Result.Success -> {
-                    _state.value = SearchState(sport = result.data?.players ?: listOf() , events = result.data?.events ?: listOf())
+                    _state.value = SearchState(
+                        sport = result.data?.players ?: listOf(),
+                        events = result.data?.events ?: listOf()
+                    )
                     person = result.data?.person!!
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun filterEvents(){
+    private fun filterEvents() {
 
-        var distance: String? = person.willingDistance.toString();
-        if(state.value.distance != ""){
-            distance = state.value.distance
-        }
-        var sportGeneric: String? = "0";
-        if(state.value.sportGeneric != null){
-            sportGeneric = state.value.sportGeneric
-        }
-        var dayId: String? = "0";
-        if(state.value.day != null){
-            dayId = state.value.day
-        }
-        var startTime: LocalTime? = LocalTime.of(1,0,0);
-        if(state.value.time_start != null){
-            startTime = state.value.time_start
-        }
-        var endTime: LocalTime? = LocalTime.of(23,59,59);
-        if(state.value.time_end !== null){
-            endTime = state.value.time_end
-        }
+        val sportId = if (_state.value.sportIdError == null) _state.value.sportId else return
+        val distance = if (_state.value.distanceError == null) _state.value.distance else return
+        val dayId = if (_state.value.dayIdError == null) _state.value.dayId else return
+        val startTime = if (_state.value.timeError == null) _state.value.timeStart else return
+        val endTime = if (_state.value.timeError == null) _state.value.timeEnd else return
 
         val uId = firebaseAuthRepository.getUserId()
 
-            val request = RequestFilterEvent(
-                uid=uId,
-                sportGenericId = sportGeneric?.toInt(),
-                dayId = dayId?.toInt(),
-                distance = distance?.toInt(),
-                startTime = startTime.toString(),
-                endTime = endTime.toString()
-            )
+        val request = RequestFilterEvent(
+            uid = uId,
+            sportGenericId = sportId,
+            dayId = dayId,
+            distance = distance,
+            startTime = if(startTime == null) null else startTime.toString(),
+            endTime = if(endTime == null) null else endTime.toString(),
+        )
 
 
-        if(request.sportGenericId == null && request.dayId == null && request.distance == null
-            && request.startTime == null && request.endTime == null){
-            getDataSearch()
-        }else {
-            featRepository.getFilterSearchEvent(uId, request).onEach { result ->
-                when (result) {
-                    is Result.Error -> {
-                        _state.value = SearchState(error = result.message ?: "Error Inesperado")
-                    }
-                    is Result.Loading -> {
-                        _state.value = _state.value.copy(
-                            isLoading = true
-                        )
-                    }
-                    is Result.Success -> {
-                        _state.value = _state.value.copy(
-                            events = result.data?.events!!, sport = result.data.players, isLoading = false
-                        )
-                        person = result.data.person
-                    }
+
+        featRepository.getFilterSearchEvent(uId, request).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value = SearchState(error = result.message ?: "Error Inesperado")
                 }
-            }.launchIn(viewModelScope)
-        }
-
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = _state.value.copy(
+                        events = result.data?.events!!,
+                        isLoading = false
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
+
+
+    private fun validateDayIsValidRange(
+        dayStar: LocalTime?,
+        dayEnd: LocalTime?,
+        dayIsChecked: Boolean
+    ): SearchState.TimeError? {
+        if (dayIsChecked) {
+            if (dayEnd == null && dayStar == null) {
+                return SearchState.TimeError.TimeEmpty
+            }
+            if (dayStar == null) {
+                return SearchState.TimeError.StarTimeEmpty
+            }
+            if (dayEnd == null) {
+                return SearchState.TimeError.EndTimeEmpty
+            }
+            if (dayStar.isAfter(dayEnd)) {
+                return SearchState.TimeError.WrongTimeRange
+            }
+        }
+        return null
+    }
+
+    private fun validateNoEmptyFieldIsChecked(
+        field: String?,
+        isChecked: Boolean
+    ): SearchState.GenericError? {
+        if (isChecked) {
+            val trimmedField = field?.trim() ?: ""
+            if (trimmedField.isBlank()) {
+                return SearchState.GenericError.FieldEmpty
+            }
+        }
+        return null
+    }
+
+
 }

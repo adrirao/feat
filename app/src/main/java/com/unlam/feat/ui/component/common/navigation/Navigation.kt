@@ -383,6 +383,7 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
 
         EventScreen(
             state = state,
+            onEvent = eventViewModel::onEvent,
             onClick = { event ->
                 when (event) {
                     EventEvents.onClick(TypeClick.GoToNewEvent) -> {
