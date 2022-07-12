@@ -8,10 +8,27 @@ data class EditProfileSportState (
     val isSuccessSubmitData: Boolean = false,
     val isErrorSubmitData: Boolean = false,
     val error: String? = null,
-    val playersUser: List<Player>? = emptyList(),
-    val sportsList: List<SportGeneric>? = emptyList(),
     val levelList: List<Level> = emptyList(),
     val valuationList: List<Valuation> = emptyList(),
     val positionList: List<Position> = emptyList(),
 
-    )
+
+    val playersUser: List<Player>? = emptyList(),
+    val sportsList: List<SportGeneric>? = emptyList(),
+
+    val sportId: String = "",
+    val abilitiesSport:String = "",
+    val positionIdSport:Int? = null,
+    val levelIdSport:Int? = null,
+    val valuationIdSport:Int? = null,
+
+    val abilitiesSportError:GenericError? = null,
+    val positionIdSportError:GenericError? = null,
+    val levelIdSportError:GenericError? = null,
+    val valuationIdSportError:GenericError? = null,
+
+    ){
+    sealed class GenericError {
+        object FieldEmpty : GenericError()
+    }
+}

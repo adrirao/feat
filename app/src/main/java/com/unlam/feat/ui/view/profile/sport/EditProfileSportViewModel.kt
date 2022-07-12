@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressState
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,10 +29,16 @@ constructor(
     }
 
     fun onEvent(event: EditProfileSportEvent) {
-
+        when (event) {
+            is EditProfileSportEvent.onValueChange -> {
+                when (event.typeValueChange) {
+                    TypeValueChange.OnValueChangeSelectSport -> {
+                        getDataSportScreen(event.value.toInt())
+                    }
+                }
+            }
+        }
     }
-
-
 
 
     private fun getPlayersByUserSportList() {
@@ -41,7 +49,8 @@ constructor(
                 is Result.Success -> {
                     _state.value = EditProfileSportState(
                         playersUser = result.data?.players,
-                        sportsList = result.data?.sportGenericList)
+                        sportsList = result.data?.sportGenericList
+                    )
 
                 }
                 is Result.Loading -> {

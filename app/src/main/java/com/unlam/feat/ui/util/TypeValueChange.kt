@@ -85,6 +85,12 @@ sealed class TypeValueChange {
     object OnValueChangeTimeIsChecked: TypeValueChange()
     object OnValueChangeDistanceIsChecked: TypeValueChange()
 
+    object OnValueChangeIdSport : TypeValueChange()
+    object OnValueChangePositionSport : TypeValueChange()
+    object OnValueChangeLevelSport : TypeValueChange()
+    object OnValueChangeValuationSport : TypeValueChange()
+    object OnValueChangeAbilitiesSport : TypeValueChange()
+
 
 
 }

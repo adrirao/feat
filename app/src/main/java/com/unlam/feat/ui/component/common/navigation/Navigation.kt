@@ -562,7 +562,7 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress) {
                         navController.navigate(Screen.EditProfileAddress.route + "/${state.person!!.id}")
                     }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToSports) {
-                        navController.navigate(Screen.EditProfileSports.route + "/${state.person!!.id}")
+                        navController.navigate(Screen.EditProfileSports.route)
                     }
                 },
                 uploadImage = profileViewModel::onEvent,
@@ -927,8 +927,11 @@ private fun NavGraphBuilder.addRouteEditSport(
 
         EditProfileSportScreen(
             state = state,
-            onEvent = editProfileSportViewModel::onEvent,
-            onClick = { editProfileSportViewModel.onEvent(EditProfileSportEvent.SubmitData) }
+            onValueChange = editProfileSportViewModel::onEvent,
+            goToProfile = {
+                navController.popBackStack()
+                navController.navigate(Screen.Profile.route)
+            }
         )
     }
 }

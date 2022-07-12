@@ -117,7 +117,7 @@ fun EditProfileAddressScreen(
                     FeatSpacerSmall()
                     FeatOutlinedButton(
                         modifier = Modifier.align(Alignment.End),
-                        textContent = "Modificar",
+                        textContent = "AGREGAR",
                         contentColor = YellowColor,
                         backgroundColor = YellowColor,
                         textColor = PurpleDark,
