@@ -94,6 +94,11 @@ constructor(
                             sport = event.value
                         )
                     }
+                    TypeValueChange.OnValueChangeCapacity -> {
+                        _state.value = _state.value.copy(
+                            capacity = event.value
+                        )
+                    }
                 }
             }
             NewEventEvents.onClick(TypeClick.DismissDialog) -> {
@@ -113,6 +118,7 @@ constructor(
                 validateDescription(_state.value.description)
                 validateOrganizer(_state.value.organizer)
                 validateAddress(_state.value.address)
+//                validateCapacity(_state.value.capacity)
                 createEvent()
             }
         }
@@ -138,6 +144,18 @@ constructor(
             return
         }
         _state.value = _state.value.copy(sportError = null)
+    }
+
+
+    private fun validateCapacity(capacity: String) {
+        val trimmedCapacity = capacity.trim()
+        if (trimmedCapacity.isBlank()) {
+            _state.value = _state.value.copy(
+                capacityError = NewEventState.GenericError.FieldEmpty
+            )
+            return
+        }
+        _state.value = _state.value.copy(capacityError = null)
     }
 
     private fun validateName(name: String) {
@@ -256,6 +274,7 @@ constructor(
 
     private fun createEvent() {
         val name = if (_state.value.nameError == null) _state.value.name else return
+//        val capacity = if (_state.value.capacityError == null) _state.value.capacity else return
         val date = if (_state.value.dateError == null) _state.value.date else return
         val startTime = if (_state.value.startTimeError == null) _state.value.startTime else return
         val endTime = if (_state.value.endTimeError == null) _state.value.endTime else return
@@ -282,6 +301,7 @@ constructor(
             state = state,
             sport = sport,
             organizer = organizer,
+            capacity = if(_state.value.capacity.isEmpty()) null else _state.value.capacity
         )
 
         featRepository.postEvent(request).onEach { result ->
@@ -297,7 +317,6 @@ constructor(
                     )
                 }
                 is Result.Success -> {
-                    firebaseMessagingRepository.subscribeToTopic(request.name)
                     _state.value = NewEventState(
                         newEventMessage = NewEventState.NewEventMessage.NewEventSuccess
                     )

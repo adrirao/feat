@@ -298,7 +298,8 @@ fun ProfileScreen(
                     )
                 }
                 FeatCard(
-                    modifier = Modifier.padding(vertical = 10.dp)
+                    modifier = Modifier.padding(vertical = 10.dp),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
                     Column {
                         FeatText(

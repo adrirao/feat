@@ -12,9 +12,9 @@ data class NewEventState(
     val error: String = "",
     val isLoading: Boolean = false,
     val periodicityList: List<Periodicity> = listOf(),
-    val person : Person? = null,
+    val person: Person? = null,
     val sportGenericList: List<SportGeneric> = listOf(),
-    val sportList : List<Sport> = listOf(),
+    val sportList: List<Sport> = listOf(),
     val address: String = "",
 
     val name: String = "",
@@ -29,6 +29,7 @@ data class NewEventState(
     val sport: String = "",
     val organizer: String = "",
     val sportGeneric: String = "",
+    val capacity: String = "",
 
     val nameError: GenericError? = null,
     val dateError: GenericError? = null,
@@ -42,16 +43,17 @@ data class NewEventState(
     val sportError: GenericError? = null,
     val organizerError: GenericError? = null,
     val addressError: GenericError? = null,
-    val sportGenericError : GenericError? = null,
+    val sportGenericError: GenericError? = null,
+    val capacityError : GenericError? = null,
 
     val newEventMessage: NewEventMessage? = null,
-    val periodicityMessage : PeriodicitiesMessage? = null
+    val periodicityMessage: PeriodicitiesMessage? = null
 ) {
     sealed class GenericError {
         object FieldEmpty : GenericError()
     }
 
-    sealed class DateError{
+    sealed class DateError {
         object DateInvalid : GenericError()
     }
 

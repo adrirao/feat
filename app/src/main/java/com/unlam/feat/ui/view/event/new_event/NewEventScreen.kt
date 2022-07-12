@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -40,6 +41,10 @@ fun NewEventScreen(
         mutableStateOf(false)
     }
 
+    var showCapacity by remember {
+        mutableStateOf(false)
+    }
+
     val pagerState = rememberPagerState()
 
     Column {
@@ -53,10 +58,12 @@ fun NewEventScreen(
                 state = pagerState
             ) { position ->
                 when (position) {
-                    0 -> PageOne(state, onValueChange)
+                    0 -> PageOne(state, onValueChange, showCapacity = {
+                        showCapacity = it
+                    })
                     1 -> PageTwo(state, onValueChange, onClick, openMap = {
                         openMap = true
-                    })
+                    }, showCapacity = showCapacity)
                 }
             }
             HorizontalPagerIndicator(
@@ -101,6 +108,7 @@ fun NewEventScreen(
 private fun PageOne(
     state: NewEventState = NewEventState(),
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
+    showCapacity: (Boolean) -> Unit
 ) {
 
     val sports = mutableListOf<String>()
@@ -127,6 +135,9 @@ private fun PageOne(
                 selectedText = { value ->
                     state.sportGenericList.forEach {
                         if (it.description == value) {
+                            if (it.description == "Actividad Recreativa") {
+                                showCapacity(true)
+                            }
                             onValueChange(
                                 NewEventEvents.onValueChange(
                                     TypeValueChange.OnValueChangeSportGeneric, it.id.toString()
@@ -209,7 +220,8 @@ private fun PageTwo(
     state: NewEventState,
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
     onClick: (NewEventEvents.onClick) -> Unit,
-    openMap: () -> Unit
+    openMap: () -> Unit,
+    showCapacity: Boolean
 ) {
     val periodicityList = mutableListOf<String>()
     state.periodicityList.map {
@@ -230,10 +242,12 @@ private fun PageTwo(
     val locationPermissionDenied = remember {
         mutableStateOf(false)
     }
-    PermissionFlow(permissionState,
+    PermissionFlow(
+        permissionState,
         shouldShowRationale,
         exactLocationPermission,
-        locationPermissionDenied)
+        locationPermissionDenied
+    )
 
     FeatForm(
         modifier = Modifier.padding(10.dp),
@@ -329,9 +343,9 @@ private fun PageTwo(
                                 permissionState.permissions.size == permissionState.revokedPermissions.size
                             if (permissionState.allPermissionsGranted) {
                                 openMap()
-                            }else if (!permissionState.permissionRequested) {
+                            } else if (!permissionState.permissionRequested) {
                                 permissionState.launchMultiplePermissionRequest()
-                            }else if (!allPermissionsRevoked) {
+                            } else if (!allPermissionsRevoked) {
                                 exactLocationPermission.value = true
                             } else if (permissionState.shouldShowRationale) {
                                 shouldShowRationale.value = true
@@ -348,6 +362,25 @@ private fun PageTwo(
                     else -> ""
                 }
             )
+            if (showCapacity) {
+                FeatOutlinedTextField(
+                    text = state.capacity,
+                    textLabel = "Capacidad",
+                    onValueChange = {
+                        onValueChange(
+                            NewEventEvents.onValueChange(
+                                TypeValueChange.OnValueChangeCapacity,
+                                it
+                            )
+                        )
+                    },
+                    error = when (state.capacityError) {
+                        NewEventState.GenericError.FieldEmpty -> stringResource(id = R.string.text_field_empty)
+                        else -> ""
+                    },
+                    keyboardType = KeyboardType.Number
+                )
+            }
             FeatSpacerSmall()
             FeatOutlinedButton(
                 modifier = Modifier.align(Alignment.End),

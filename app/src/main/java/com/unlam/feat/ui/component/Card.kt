@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +42,7 @@ fun FeatCard(
     new: Boolean = false,
     @DrawableRes painter: Int? = null,
     padding: Dp = 15.dp,
+    shape: Shape = RoundedCornerShape(10),
     content: @Composable (BoxScope.() -> Unit)
 ) {
     Box {
@@ -52,7 +54,7 @@ fun FeatCard(
             },
             backgroundColor = colorCard,
             elevation = 3.dp,
-            shape = RoundedCornerShape(10)
+            shape = shape
         ) {
             if (urlImage.isBlank() && painter != null) {
                 Image(
