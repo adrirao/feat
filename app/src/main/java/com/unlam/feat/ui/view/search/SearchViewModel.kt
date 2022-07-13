@@ -37,7 +37,7 @@ constructor(
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-    lateinit var person: Person;
+
 
     init {
         getDataSearch()
@@ -54,13 +54,12 @@ constructor(
                 when (event.typeValueChange) {
                     TypeValueChange.OnValueChangeSportId -> {
                         _state.value = _state.value.copy(
-                            sportId = event.value
+                            sportId = if (event.value == "") null else event.value
                         )
-
                     }
                     TypeValueChange.OnValueChangeDay -> {
                         _state.value = _state.value.copy(
-                            dayId = event.value
+                            dayId = if (event.value == "") null else event.value
                         )
                     }
                     TypeValueChange.OnValueChangeStartTime -> {
@@ -143,9 +142,9 @@ constructor(
                 is Result.Success -> {
                     _state.value = SearchState(
                         sport = result.data?.players ?: listOf(),
-                        events = result.data?.events ?: listOf()
+                        events = result.data?.events ?: listOf(),
+                        sportList = result.data?.sportList ?: listOf()
                     )
-                    person = result.data?.person!!
                 }
             }
         }.launchIn(viewModelScope)

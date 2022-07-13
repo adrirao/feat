@@ -1,9 +1,6 @@
 package com.unlam.feat.ui.view.search
 
-import com.unlam.feat.model.Day
-import com.unlam.feat.model.Event
-import com.unlam.feat.model.Player
-import com.unlam.feat.model.Sport
+import com.unlam.feat.model.*
 import com.unlam.feat.ui.view.event.EventState
 import com.unlam.feat.ui.view.event.new_event.NewEventState
 import java.time.LocalTime
@@ -21,7 +18,7 @@ data class SearchState(
 
 
     val sport: List<Player> = emptyList(),
-    val sportList : List<Sport> = listOf(),
+    val sportList : List<SportGeneric> = listOf(),
     val daysList : List<Day> = listOf(
         Day(id = 1, description="Domingo"),
         Day(id = 2, description="Lunes"),

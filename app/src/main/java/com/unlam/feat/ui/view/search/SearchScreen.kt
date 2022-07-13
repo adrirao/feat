@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +49,20 @@ fun SearchScreen(
     )
     val scope = rememberCoroutineScope()
 
+
+    if (state.dayIdError != null || state.distanceError != null ||
+        state.sportIdError != null || state.timeError != null
+    ) {
+            LaunchedEffect(sheetState){
+                sheetState.expand()
+            }
+
+    }else{
+        LaunchedEffect(sheetState){
+            sheetState.collapse()
+        }
+    }
+
     BottomSheetScaffold(
         backgroundColor = Color.Transparent,
         scaffoldState = scaffoldState,
@@ -57,16 +72,8 @@ fun SearchScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             SheetContent(state, onEvent) {
-                if (it) {
-                    scope.launch {
-                        if (sheetState.isCollapsed) {
-                            sheetState.expand()
-                        } else {
-                            sheetState.collapse()
-                        }
-                    }
+
                 }
-            }
         },
 
         ) {
@@ -149,11 +156,22 @@ private fun SheetContent(
     onEvent: (SearchEvent) -> Unit,
     onClickFilter: (Boolean) -> Unit
 ) {
-    var sportList = mutableListOf<String>()
 
-    state.sport.map {
-        sportList.add(it.sport.description)
+    val sports = mutableListOf<String>()
+    state.sportList?.map {
+        sports.add(it.description)
     }
+    val players = mutableListOf<String>()
+    state.sport?.map {
+        players.add(it.sport.description)
+    }
+    val listSports = mutableListOf<String>()
+    sports.forEach { name ->
+        if (players.contains(name)) {
+            listSports.add(name)
+        }
+    }
+
 
     val days = mutableListOf<String>()
     days.add("Domingo");
@@ -220,8 +238,8 @@ private fun SheetContent(
                 FeatOutlinedDropDown(
                     label = "Deporte",
                     selectedText = { value ->
-                        state.sport.forEach {
-                            if (it.sport.description == value) {
+                        state.sportList.forEach {
+                            if (it.description == value) {
                                 onEvent(
                                     SearchEvent.onValueChange(
                                         TypeValueChange.OnValueChangeSportId, it.id.toString()
@@ -230,7 +248,7 @@ private fun SheetContent(
                             }
                         }
                     },
-                    options = sportList,
+                    options = listSports,
                     error = when (state.sportIdError) {
                         SearchState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
                         else -> ""
@@ -420,11 +438,7 @@ private fun SheetContent(
                     onEvent(
                         SearchEvent.OnClick(TypeClick.Submit)
                     )
-                    if(state.dayIdError == null && state.distanceError == null &&
-                        state.sportIdError == null && state.timeError == null){
-
-                        onClickFilter(true)
-                    }
+                    onClickFilter(true)
                 }
             )
         }
@@ -436,7 +450,7 @@ private fun SheetContent(
 
 @Preview
 @Composable
-fun prev (){
+fun prev() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End

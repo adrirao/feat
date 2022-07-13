@@ -1277,15 +1277,15 @@ constructor(
             emit(Result.Loading())
             val responseGetSuggestedEvent = featProvider.getEventsSuggestedForUser(uId);
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
-            val responsePerson = featProvider.getPerson(uId)
+            val responseListSport = featProvider.getGenericsSports()
 
-            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299 && responsePerson.code() in 200..299){
+            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299 && responseListSport.code() in 200..299){
                 emit(
                     Result.Success(
                         data = ResponseDataSearch(
                             events = responseGetSuggestedEvent.body()!!,
                             players = responseGetPlayer.body()!!,
-                            person = responsePerson.body()!!
+                            sportList = responseListSport.body()!!
                         )
                     )
                 )
