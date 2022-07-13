@@ -138,7 +138,7 @@ fun ConfigProfileScreen(
 
     if (state.isErrorSubmitData) {
         ErrorDialog(
-            title = "Error",
+            title = stringResource(R.string.text_error),
             desc = state.error,
             enabledCancelButton = false,
             onDismiss = {
@@ -174,7 +174,7 @@ fun ConfigProfileScreen(
                         ) {
 
                             FeatText(
-                                text = "Subir desde...",
+                                text = stringResource(R.string.upload_from),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(15.dp),
@@ -188,7 +188,7 @@ fun ConfigProfileScreen(
                                     .background(GreenColor)
                             )
                             FeatText(
-                                text = "Camara",
+                                text = stringResource(R.string.camera),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
@@ -218,7 +218,7 @@ fun ConfigProfileScreen(
                                     .background(PurpleMedium)
                             )
                             FeatText(
-                                text = "Galeria",
+                                text = stringResource(R.string.gallery),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
@@ -257,7 +257,7 @@ fun ConfigProfileScreen(
                             end = 10.dp,
                             bottom = 5.dp
                         ),
-                        text = "Por favor, elegi una foto para tu perfil",
+                        text = stringResource(R.string.choose_photo_for_profile),
                         fontSize = MaterialTheme.typography.h6.fontSize,
                         color = PurpleLight,
                         maxLines = 1
@@ -363,7 +363,7 @@ fun ConfigProfileScreen(
                 ) {
 
                     FeatOutlinedButton(
-                        textContent = "Guardar",
+                        textContent = stringResource(R.string.save),
                         onClick = {
                             onEvent(ConfigProfileEvents.UploadImage(bitmap.value!!))
                             onClick(ConfigProfileEvents.onClick(TypeClick.GoToHome))
@@ -465,7 +465,7 @@ private fun PageOne(
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp),
-        title = "Datos personales:",
+        title = stringResource(R.string.personal_information),
         page = "1/5"
     ) {
 
@@ -600,7 +600,7 @@ private fun PageTwo(
 
     FeatForm(
         modifier = Modifier.padding(10.dp),
-        title = "Direcciónes:",
+        title = stringResource(R.string.addresses),
         page = "2/5"
     ) {
         Column {
@@ -664,7 +664,7 @@ private fun PageThree(
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp),
-        title = "Disponibilidad:",
+        title = stringResource(R.string.availability),
         page = "3/5"
     ) {
         Column {
@@ -950,7 +950,7 @@ private fun PageFour(
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp),
-        title = "Preferencias:",
+        title = stringResource(R.string.preferences),
         page = "4/5"
     ) {
         FeatText(
@@ -974,7 +974,7 @@ private fun PageFour(
                 modifier = Modifier.width(150.dp),
                 text = state.minAge,
                 keyboardType = KeyboardType.Number,
-                textLabel = "Edad minima",
+                textLabel = stringResource(R.string.min_age),
                 onValueChange = { age ->
                     if (age.length <= 3 && ((age.toIntOrNull()) ?: 0) <= 150) {
                         onEvent(
@@ -988,7 +988,7 @@ private fun PageFour(
             FeatOutlinedTextField(
                 modifier = Modifier.width(150.dp),
                 text = state.maxAge,
-                textLabel = "Edad maxima",
+                textLabel = stringResource(R.string.max_age),
                 keyboardType = KeyboardType.Number,
                 onValueChange = { age ->
                     if (age.length <= 3 && ((age.toIntOrNull()) ?: 0) <= 150) {
@@ -1003,7 +1003,7 @@ private fun PageFour(
         }
         FeatOutlinedTextField(
             text = state.willingDistance,
-            textLabel = "Distancia busqueda",
+            textLabel = stringResource(R.string.search_distance),
             keyboardType = KeyboardType.Number,
             onValueChange = { distance ->
                 if (distance.length <= 2 && ((distance.toIntOrNull()) ?: 0) <= 30) {
@@ -1022,7 +1022,7 @@ private fun PageFour(
         )
         FeatCheckbox(
             checked = state.notifications,
-            label = "Notificaciones",
+            label = stringResource(R.string.notifications),
             onCheckedChange = {
                 onEvent(
                     ConfigProfileEvents.onValueChange(
@@ -1043,7 +1043,7 @@ private fun PageFive(
 ) {
     FeatForm(
         modifier = Modifier.padding(10.dp),
-        title = "Deportes:",
+        title = stringResource(R.string.sport),
         page = "5/5"
     ) {
         Column {
@@ -1101,7 +1101,7 @@ private fun PageFive(
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(top = 10.dp),
-                    textContent = "Guardar",
+                    textContent = stringResource(R.string.save),
                     onClick = { onEvent(ConfigProfileEvents.onClick(TypeClick.Submit)) }
                 )
             }
@@ -1126,7 +1126,7 @@ private fun SportDataSoccer(
     FeatForm(
         modifier = Modifier
             .padding(10.dp, 30.dp),
-        title = "Preferencias del deporte",
+        title = stringResource(R.string.sport_preferences),
         page = ""
     ) {
 
@@ -1141,7 +1141,7 @@ private fun SportDataSoccer(
                 }
             }
             FeatOutlinedDropDown(
-                label = "Posición",
+                label = stringResource(R.string.position),
                 options = optionsPosition,
                 selectedText = { positionText ->
                     state.positionList.forEach { position ->
@@ -1169,7 +1169,7 @@ private fun SportDataSoccer(
                 }
             }
             FeatOutlinedDropDown(
-                label = "Nivel",
+                label = stringResource(R.string.level),
                 options = optionsLevel,
                 selectedText = { levelText ->
                     state.levelList.forEach { level ->
@@ -1197,7 +1197,7 @@ private fun SportDataSoccer(
                 }
             }
             FeatOutlinedDropDown(
-                label = "Grado de interés",
+                label = stringResource(R.string.degree_of_interest),
                 options = optionsValuation,
                 selectedText = { valuationText ->
                     state.valuationList.forEach { valuation ->

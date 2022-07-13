@@ -17,6 +17,7 @@ data class ConfigProfileState(
     val levelList: List<Level> = emptyList(),
     val valuationList: List<Valuation> = emptyList(),
     val positionList: List<Position> = emptyList(),
+    //TODO Pasar a string
     val sexList: List<String> = listOf("Hombre", "Mujer", "Otro"),
     val sundayIsChecked: Boolean = false,
     val mondayIsChecked: Boolean = false,

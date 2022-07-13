@@ -60,5 +60,24 @@
     <string name="max_age_empty">Edad maxima vacia</string>
     <string name="error_description_api_connection">Se produjo un error al querer conectar con el servidor.</string>
     <string name="error_api_connection">Error de conexión con el servidor.</string>
+    <string name="message_word">Mensaje...</string>
+    <string name="degree_of_interest">Grado de interés</string>
+    <string name="level">Nivel</string>
+    <string name="position">Posición</string>
+    <string name="sport_preferences">Preferencias del deporte</string>
+    <string name="save">Guardar</string>
+    <string name="sport">Deportes:</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="search_distance">Distancia busqueda</string>
+    <string name="max_age">Edad maxima</string>
+    <string name="min_age">Edad minima</string>
+    <string name="preferences">Preferencias:</string>
+    <string name="availability">Disponibilidad:</string>
+    <string name="addresses">Direcciónes:</string>
+    <string name="personal_information">Datos personales:</string>
+    <string name="choose_photo_for_profile">Por favor, elegi una foto para tu perfil</string>
+    <string name="gallery">Galeria</string>
+    <string name="camera">Camara</string>
+    <string name="upload_from">Subir desde...</string>
 
 </resources>

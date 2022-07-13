@@ -72,7 +72,6 @@ fun SearchScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             SheetContent(state, onEvent) {
-
                 }
         },
 

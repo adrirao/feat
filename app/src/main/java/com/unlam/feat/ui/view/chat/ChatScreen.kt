@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.theme.*
 import java.text.SimpleDateFormat
@@ -131,7 +133,7 @@ fun ChatScreen(
                     paddingValues = PaddingValues(0.dp),
                     text = state.textMessage,
                     onValueChange = { onEvent(ChatEvents.OnChangeValue(it)) },
-                    textLabel = "Mensaje...",
+                    textLabel = stringResource(R.string.message_word),
                     trailingIcon = {
                         Icon(
                             modifier = Modifier.clickable {
