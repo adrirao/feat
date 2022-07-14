@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.R
 import com.unlam.feat.model.request.RequestPersonTransaction
+import com.unlam.feat.model.request.RequestUriImage
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.repository.FirebaseStorageRepositoryImp
@@ -998,6 +999,11 @@ constructor(
         viewModelScope.launch {
             val uId = firebaseAuthRepository.getUserId()
             firebaseStorageRepository.putFile(image, uId)
+            firebaseStorageRepository.getFile(uId, isSuccess = {
+                featRepository.updateUriImage(RequestUriImage(uId, it.toString()))
+                    .onEach { result ->
+                    }.launchIn(viewModelScope)
+            })
         }
     }
 }

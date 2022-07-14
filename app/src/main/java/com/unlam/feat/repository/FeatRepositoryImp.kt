@@ -863,6 +863,24 @@ constructor(
             }
         }
 
+    override fun updateUriImage(req: RequestUriImage): Flow<Result<String>> = flow {
+        try{
+            emit(Result.Loading())
+            val response = featProvider.updateUriImage(req)
+            if(response.code() in 200..299){
+                logging(request = req,response = response)
+
+                emit(Result.Success(data = response.body()))
+            }else{
+                logging(request = req,response = response)
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
+        } catch (e: Exception){
+            logging(e.localizedMessage!!.toString())
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
 
     //</editor-fold desc="Persons">
     //<editor-fold desc="Valuations">

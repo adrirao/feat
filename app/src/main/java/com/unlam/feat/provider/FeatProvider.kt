@@ -3,6 +3,8 @@ package com.unlam.feat.provider
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
 import com.unlam.feat.model.response.ResponseUids
+import com.unlam.feat.util.Result
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -198,6 +200,10 @@ interface FeatProvider {
     @Headers("Content-type: application/json")
     @POST("/persons/createPersonTransaction")
     suspend fun createPersonTransaction(@Body requestPerson: RequestPersonTransaction): Response<String>
+
+    @Headers("Content-type: application/json")
+    @PUT("/persons/setProfileImageUrl")
+    suspend fun updateUriImage(@Body req: RequestUriImage): Response<String>
     //</editor-fold>
 
     //<editor-fold desc="Valuations">
