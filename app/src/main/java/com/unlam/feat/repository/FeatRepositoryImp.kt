@@ -506,13 +506,27 @@ constructor(
     override fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> = flow {
         try {
             emit(Result.Loading())
+            val listPlayersId: MutableList<Int> = mutableListOf()
             val response = featProvider.getAllPlayersSuggestedForEvent(eventId);
             val person = featProvider.getPerson(uId).body()
+
             if (response.code() in 200..299) {
-                emit(Result.Success(data = ResponseDataSuggestedPlayers(
-                    players = response.body(),
-                    person = person
-                )))
+                response.body()?.forEach { player ->
+                    listPlayersId.add(player.id)
+                }
+                val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
+                val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
+
+                if(responseUid.code() in 200..299){
+                    emit(
+                        Result.Success(
+                            data = ResponseDataSuggestedPlayers(
+                            players = response.body() ?:  listOf(),
+                            person = person,
+                            playersUids = responseUid.body() ?:  listOf(),
+                        ))
+                    )
+                }
             } else {
                 logging(request = eventId, response = response)
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))

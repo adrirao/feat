@@ -10,6 +10,8 @@ import com.unlam.feat.model.request.RequestEventState
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.repository.FirebaseFirestoreRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -23,7 +25,8 @@ class DetailEventViewModel
 constructor(
     private val featRepository: FeatRepositoryImp,
     private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
-    private val firebaseFirestoreRepository: FirebaseFirestoreRepositoryImp
+    private val firebaseFirestoreRepository: FirebaseFirestoreRepositoryImp,
+    private val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(DetailEventState())
     val state: State<DetailEventState> = _state
@@ -290,12 +293,42 @@ constructor(
                     _state.value = DetailEventState(loading = true)
                 }
                 is Result.Success -> {
-                    _state.value = DetailEventState(
-                        event = result.data!!.event,
-                        playersApplied = result.data.playersApplied,
-                        playersConfirmed = result.data.playersConfirmed,
-                        playersSuggested = result.data.playersSuggested
-                    )
+
+                    var playersConfirmed = result.data!!.playersConfirmed
+                    var playersApplied = result.data!!.playersApplied
+                    val playersUid = result.data!!.playersUids
+
+                    firebaseStorageRepository.getUris(playersUid) { listUris ->
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if(uri.contains(player.uId)){
+                                    playersConfirmed.forEach { playerConfirmed ->
+                                        if(player.playerId == playerConfirmed.id){
+                                            playerConfirmed.uri = uri
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if(uri.contains(player.uId)){
+                                    playersApplied.forEach { playersApplied ->
+                                        if(player.playerId == playersApplied.id){
+                                            playersApplied.uri = uri
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _state.value = DetailEventState(
+                            event = result.data!!.event,
+                            playersApplied = result.data.playersApplied,
+                            playersConfirmed = result.data.playersConfirmed,
+                            playersSuggested = result.data.playersSuggested
+                        )
+                    }
+
                 }
             }
         }.launchIn(viewModelScope)
