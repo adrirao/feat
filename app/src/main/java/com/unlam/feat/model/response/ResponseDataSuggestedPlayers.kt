@@ -5,5 +5,6 @@ import com.unlam.feat.model.Player
 
 data class ResponseDataSuggestedPlayers (
     val players: List<Player>?,
-    val person: Person?
+    val person: Person?,
+    val playersUids : List<ResponseUids>
         )

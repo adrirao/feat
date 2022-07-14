@@ -124,16 +124,18 @@ fun CardPlayerDetail(
     ) {
         Column {
             Row {
-                Icon(
+                SubcomposeAsyncImage(
                     modifier = Modifier
                         .weight(1f)
-                        .align(Alignment.CenterVertically),
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = PurpleLight
-                )
+                        .align(Alignment.CenterVertically)
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(20)),
+                    contentScale= ContentScale.Crop,
+                    model = player.uri,
+                    contentDescription = "",
+                    loading = { FeatCircularProgress() })
                 Column(
-                    modifier = Modifier.weight(3f)
+                    modifier = Modifier.weight(2f)
                 ) {
                     FeatInfo(
                         textInfo = "Nombre: ${player.names} ${player.lastname ?: ""}",

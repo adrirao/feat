@@ -11,6 +11,7 @@ import com.unlam.feat.model.request.RequestFilterEvent
 import com.unlam.feat.model.request.RequestFilterPlayers
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.event.detail_event.DetailEventState
@@ -25,8 +26,9 @@ import javax.inject.Inject
 class SuggestedPlayersViewModel
 @Inject
 constructor(
-    val featRepository: FeatRepositoryImp,
-    val firebaseAuthRepository: FirebaseAuthRepositoryImp
+    private val featRepository: FeatRepositoryImp,
+    private val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    private val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
 
     private val _state = mutableStateOf(SuggestedPlayersState())
@@ -60,11 +62,28 @@ constructor(
                     _state.value = SuggestedPlayersState(isLoading = true)
                 }
                 is Result.Success -> {
-                    _state.value = _state.value.copy(
-                        idEvent = idEvent,
-                        players = result.data?.players!!,
-                        isLoading = false
-                    )
+
+                    var playersApplied = result.data!!.players
+                    val playersUid = result.data!!.playersUids
+
+                    firebaseStorageRepository.getUris(playersUid) { listUris ->
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if (uri.contains(player.uId)) {
+                                    playersApplied?.forEach { playersApplied ->
+                                        if (player.playerId == playersApplied.id) {
+                                            playersApplied.uri = uri
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _state.value = _state.value.copy(
+                            idEvent = idEvent,
+                            players = result.data?.players!!,
+                            isLoading = false
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)

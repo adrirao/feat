@@ -420,6 +420,11 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
 
         if (state.isLoading) {
             FeatCircularProgress()
+        }else {
+            SuggestedPlayers(
+                state,
+                onClick = suggestedPlayerViewModel::onEvent
+            )
         }
 
         if (state.successPlayer) {
@@ -434,10 +439,8 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
             )
         }
 
-        SuggestedPlayers(
-            state,
-            onClick = suggestedPlayerViewModel::onEvent
-        )
+
+
     }
 
 }
@@ -485,6 +488,9 @@ private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
                         navController.navigate(Screen.Events.route)
                     }
                     NewEventEvents.onClick(TypeClick.Submit) -> {
+                        newEventViewModel.onEvent(event)
+                    }
+                    NewEventEvents.onClick(TypeClick.DismissDialog) -> {
                         newEventViewModel.onEvent(event)
                     }
                 }

@@ -32,6 +32,7 @@ data class ConfigProfileState(
     val isErrorSubmitData: Boolean = false,
     val takePhoto:Boolean = false,
     val image: String? = "",
+    val formError: Boolean = false,
 
     val lastName: String = "",
     val name: String = "",

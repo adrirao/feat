@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.unlam.feat.R
 import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
+import com.unlam.feat.ui.component.common.event.NotFoundPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.theme.GreenColor
 import com.unlam.feat.ui.theme.GreenColor90
@@ -72,7 +73,7 @@ fun SuggestedPlayers(
                     }
                 )
             } else {
-                NotFoundEvent()
+                NotFoundPlayer()
             }
 
         }

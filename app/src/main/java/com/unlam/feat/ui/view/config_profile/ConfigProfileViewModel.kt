@@ -435,7 +435,8 @@ constructor(
             ConfigProfileEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
                     isErrorSubmitData = false,
-                    isSuccessSubmitData = false
+                    isSuccessSubmitData = false,
+                    formError = false
                 )
             }
             ConfigProfileEvents.onClick(TypeClick.SaveSoccerData) -> {
@@ -576,7 +577,9 @@ constructor(
                     )
                 }
 
-                createPerson()
+                _state.value = _state.value.copy(
+                    formError = createPerson()
+                )
 
 
             }
@@ -585,137 +588,141 @@ constructor(
     }
 
 
-    private fun createPerson() {
-        val name = if (_state.value.nameError == null) _state.value.name else return
-        val lastName = if (_state.value.lastNameError == null) _state.value.lastName else return
+    private fun createPerson(): Boolean {
+        val name = if (_state.value.nameError == null) _state.value.name else return true
+        val lastName =
+            if (_state.value.lastNameError == null) _state.value.lastName else return true
         val dateOfBirth =
-            if (_state.value.dateOfBirthError == null) _state.value.dateOfBirth else return
-        val nickname = if (_state.value.nicknameError == null) _state.value.nickname else return
-        val sex = if (_state.value.sexError == null) _state.value.sex else return
-        val latitude = if (_state.value.latitudeError == null) _state.value.latitude else return
-        val longitude = if (_state.value.longitudeError == null) _state.value.longitude else return
-        val address = if (_state.value.addressError == null) _state.value.address else return
+            if (_state.value.dateOfBirthError == null) _state.value.dateOfBirth else return true
+        val nickname =
+            if (_state.value.nicknameError == null) _state.value.nickname else return true
+        val sex = if (_state.value.sexError == null) _state.value.sex else return true
+        val latitude =
+            if (_state.value.latitudeError == null) _state.value.latitude else return true
+        val longitude =
+            if (_state.value.longitudeError == null) _state.value.longitude else return true
+        val address = if (_state.value.addressError == null) _state.value.address else return true
         val addressAlias =
-            if (_state.value.addressAliasError == null) _state.value.addressAlias else return
+            if (_state.value.addressAliasError == null) _state.value.addressAlias else return true
 
         val startTimeSunday = if (state.value.sundayError == null) {
             if (state.value.startTimeSunday != null) _state.value.startTimeSunday.toString() else null
-        } else return
+        } else return true
         val endTimeSunday = if (state.value.sundayError == null) {
             if (state.value.endTimeSunday != null) _state.value.endTimeSunday.toString() else null
-        } else return
+        } else return true
         val startTimeMonday = if (state.value.mondayError == null) {
             if (state.value.startTimeMonday != null) _state.value.startTimeMonday.toString() else null
-        } else return
+        } else return true
         val endTimeMonday = if (state.value.mondayError == null) {
             if (state.value.endTimeMonday != null) _state.value.endTimeMonday.toString() else null
-        } else return
+        } else return true
         val startTimeTuesday = if (state.value.tuesdayError == null) {
             if (state.value.startTimeTuesday != null) _state.value.startTimeTuesday.toString() else null
-        } else return
+        } else return true
         val endTimeTuesday = if (state.value.tuesdayError == null) {
             if (state.value.endTimeTuesday != null) _state.value.endTimeTuesday.toString() else null
-        } else return
+        } else return true
         val startTimeWednesday = if (state.value.wednesdayError == null) {
             if (state.value.startTimeWednesday != null) _state.value.startTimeWednesday.toString() else null
-        } else return
+        } else return true
         val endTimeWednesday = if (state.value.wednesdayError == null) {
             if (state.value.endTimeWednesday != null) _state.value.endTimeWednesday.toString() else null
-        } else return
+        } else return true
         val startTimeThursday = if (state.value.thursdayError == null) {
             if (state.value.startTimeThursday != null) _state.value.startTimeThursday.toString() else null
-        } else return
+        } else return true
         val endTimeThursday = if (state.value.thursdayError == null) {
             if (state.value.endTimeThursday != null) _state.value.endTimeThursday.toString() else null
-        } else return
+        } else return true
         val startTimeFriday = if (state.value.fridayError == null) {
             if (state.value.startTimeFriday != null) _state.value.startTimeFriday.toString() else null
-        } else return
+        } else return true
         val endTimeFriday = if (state.value.fridayError == null) {
             if (state.value.endTimeFriday != null) _state.value.endTimeFriday.toString() else null
-        } else return
+        } else return true
         val startTimeSaturday = if (state.value.saturdayError == null) {
             if (state.value.startTimeSaturday != null) _state.value.startTimeSaturday.toString() else null
-        } else return
+        } else return true
         val endTimeSaturday = if (state.value.saturdayError == null) {
             if (state.value.endTimeSaturday != null) _state.value.endTimeSaturday.toString() else null
-        } else return
-        val minAge = if (_state.value.ageError == null) _state.value.minAge else return
-        val maxAge = if (_state.value.ageError == null) _state.value.maxAge else return
+        } else return true
+        val minAge = if (_state.value.ageError == null) _state.value.minAge else return true
+        val maxAge = if (_state.value.ageError == null) _state.value.maxAge else return true
         val notifications =
-            if (_state.value.notifications != null) _state.value.notifications else return
+            if (_state.value.notifications != null) _state.value.notifications else return true
         val willingDistance =
-            if (_state.value.willingDistanceError == null) _state.value.willingDistance else return
+            if (_state.value.willingDistanceError == null) _state.value.willingDistance else return true
 
 
         val abilitiesSoccer = if (state.value.abilitiesSoccerError == null) {
             if (state.value.idSoccer != null) _state.value.abilitiesSoccer else null
-        } else return
+        } else return true
         val positionIdSoccer = if (state.value.positionIdSoccerError == null) {
             if (state.value.idSoccer != null) _state.value.positionIdSoccer else null
-        } else return
+        } else return true
         val levelIdSoccer = if (state.value.levelIdSoccerError == null) {
             if (state.value.idSoccer != null) _state.value.levelIdSoccer else null
-        } else return
+        } else return true
         val valuationIdSoccer = if (state.value.valuationIdSoccerError == null) {
             if (state.value.idSoccer != null) _state.value.valuationIdSoccer else null
-        } else return
+        } else return true
 
         val abilitiesBasketball = if (state.value.abilitiesBasketballError == null) {
             if (state.value.idBasketball != null) _state.value.abilitiesBasketball else null
-        } else return
+        } else return true
         val positionIdBasketball = if (state.value.positionIdBasketballError == null) {
             if (state.value.idBasketball != null) _state.value.positionIdBasketball else null
-        } else return
+        } else return true
         val levelIdBasketball = if (state.value.levelIdBasketballError == null) {
             if (state.value.idBasketball != null) _state.value.levelIdBasketball else null
-        } else return
+        } else return true
         val valuationIdBasketball = if (state.value.valuationIdBasketballError == null) {
             if (state.value.idBasketball != null) _state.value.valuationIdBasketball else null
-        } else return
+        } else return true
 
         val abilitiesPadel = if (state.value.abilitiesPadelError == null) {
             if (state.value.idPadel != null) _state.value.abilitiesPadel else null
-        } else return
+        } else return true
         val positionIdPadel = if (state.value.positionIdPadelError == null) {
             if (state.value.idPadel != null) _state.value.positionIdPadel else null
-        } else return
+        } else return true
         val levelIdPadel = if (state.value.levelIdPadelError == null) {
             if (state.value.idPadel != null) _state.value.levelIdPadel else null
-        } else return
+        } else return true
         val valuationIdPadel = if (state.value.valuationIdPadelError == null) {
             if (state.value.idPadel != null) _state.value.valuationIdPadel else null
-        } else return
+        } else return true
 
         val abilitiesTennis = if (state.value.abilitiesTennisError == null) {
             if (state.value.idTennis != null) _state.value.abilitiesTennis else null
-        } else return
+        } else return true
         val positionIdTennis = if (state.value.positionIdTennisError == null) {
             if (state.value.idTennis != null) _state.value.positionIdTennis else null
-        } else return
+        } else return true
         val levelIdTennis = if (state.value.levelIdTennisError == null) {
             if (state.value.idTennis != null) _state.value.levelIdTennis else null
-        } else return
+        } else return true
         val valuationIdTennis = if (state.value.valuationIdTennisError == null) {
             if (state.value.idTennis != null) _state.value.valuationIdTennis else null
-        } else return
+        } else return true
 
         val abilitiesRecreationalActivity =
             if (state.value.abilitiesRecreationalActivityError == null) {
                 if (state.value.idRecreationalActivity != null) _state.value.abilitiesRecreationalActivity else null
-            } else return
+            } else return true
         val positionIdRecreationalActivity =
             if (state.value.positionIdRecreationalActivityError == null) {
                 if (state.value.idRecreationalActivity != null) _state.value.positionIdRecreationalActivity else null
-            } else return
+            } else return true
         val levelIdRecreationalActivity =
             if (state.value.levelIdRecreationalActivityError == null) {
                 if (state.value.idRecreationalActivity != null) _state.value.levelIdRecreationalActivity else null
-            } else return
+            } else return true
         val valuationIdRecreationalActivity =
             if (state.value.valuationIdRecreationalActivityError == null) {
                 if (state.value.idRecreationalActivity != null) _state.value.valuationIdRecreationalActivity else null
-            } else return
+            } else return true
 
         val userUid = firebaseAuthRepository.getUserId()
         val request = RequestPersonTransaction(
@@ -801,7 +808,7 @@ constructor(
             }
         }.launchIn(viewModelScope)
 
-
+        return false
     }
 
 
