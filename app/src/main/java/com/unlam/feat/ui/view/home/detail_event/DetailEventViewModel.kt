@@ -74,16 +74,13 @@ constructor(
                     var playersConfirmed = result.data.playersConfirmed
                     val playersUid = result.data.playersUids
 
-
-
                     firebaseStorageRepository.getUris(playersUid) { listUris ->
                         playersUid.forEach { player ->
-                            listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
-                                    playersConfirmed.forEach { playerConfirmed ->
-                                       if(player.playerId == playerConfirmed.id){
-                                           playerConfirmed.uri = uri
-                                       }
+                            val uri = listUris.find { uriFilter -> uriFilter.contains(player.uId) }
+                            if(uri != null){
+                                playersConfirmed.forEach { playerConfirmed ->
+                                    if(player.playerId == playerConfirmed.id){
+                                        playerConfirmed.uri = uri
                                     }
                                 }
                             }

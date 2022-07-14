@@ -22,23 +22,17 @@ constructor(
 ) : FirebaseStorageRepository {
     override fun putFile(image: Bitmap, uId: String) {
         val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 60, baos)
+        image.compress(Bitmap.CompressFormat.JPEG, 5, baos)
         val data = baos.toByteArray()
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.putBytes(data)
     }
 
      override suspend fun getUris(uIds:List<ResponseUids>,isSuccess: (List<String>) -> Unit){
-        var uris:MutableList<String> = mutableListOf()
+        val uris:MutableList<String> = mutableListOf()
         firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
             uIds.forEach { uId ->
-                listUriResult.items.forEach { reference ->
-                    if(reference.name.contains(uId.uId)){
-                        reference.downloadUrl.await().also {
-                            uris.add(it.toString())
-                        }
-                    }
-                }
+                listUriResult.items.map { ref -> if(ref.name.contains(uId.uId)) ref.downloadUrl.await().also { uri -> uris.add(uri.toString()) }}
             }
             isSuccess(uris.toList())
         }
