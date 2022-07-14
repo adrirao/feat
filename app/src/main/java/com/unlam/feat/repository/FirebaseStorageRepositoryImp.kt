@@ -28,6 +28,22 @@ constructor(
 
     }
 
+     suspend fun getUris(uIds:List<String>):List<String>{
+        var uris:MutableList<String> = mutableListOf()
+        val listUri = firebaseStorage.getReference("images/").listAll()
+        listUri.result.items.forEach {reference ->
+            uIds.forEach { uId ->
+                if(reference.name.contains(uId)){
+                    reference.downloadUrl.await().also {
+                        uris.add(it.toString())
+                    }
+                }
+            }
+
+        }
+        return uris.toList()
+    }
+
     override fun getFile(uId: String, isSuccess: (Uri) -> Unit) {
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.downloadUrl.addOnSuccessListener {

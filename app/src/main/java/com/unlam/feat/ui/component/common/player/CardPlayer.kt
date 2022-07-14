@@ -8,10 +8,14 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.unlam.feat.model.Player
 import com.unlam.feat.model.PlayerApplyDetail
 import com.unlam.feat.ui.component.FeatCard
+import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.FeatInfo
 import com.unlam.feat.ui.component.FeatSpacerSmall
 import com.unlam.feat.ui.theme.PurpleLight
@@ -28,14 +32,22 @@ fun CardPlayer(
             .padding(vertical = 10.dp),
     ) {
         Row {
-            Icon(
+            SubcomposeAsyncImage(
                 modifier = Modifier
                     .weight(1f)
                     .align(Alignment.CenterVertically),
-                imageVector = Icons.Outlined.Person,
-                contentDescription = null,
-                tint = PurpleLight
-            )
+                contentScale= ContentScale.Crop,
+                model = "https://firebasestorage.googleapis.com/v0/b/feat-6ca32.appspot.com/o/images%2F7Pjlj6cEIjcdsZgIrT0UkP2JXVm1.jpeg?alt=media&token=38e80a71-0b08-41e1-a025-a8c24affa5f6",
+                contentDescription = "",
+                loading = { FeatCircularProgress() })
+//            Icon(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .align(Alignment.CenterVertically),
+//                imageVector = Icons.Outlined.Person,
+//                contentDescription = null,
+//                tint = PurpleLight
+//            )
             Column(
                 modifier = Modifier.weight(3f)
             ) {
@@ -110,7 +122,9 @@ fun CardPlayerDetail(
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     FeatCard(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
     ) {
         Row {
             Icon(

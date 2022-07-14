@@ -65,7 +65,7 @@ fun DetailEventHomeScreen(
                     state = state,
                     descOrigen = descOrigen,
                     onClick = {
-                        onClick(DetailEventHomeEvent.OnClick)
+                        onClick(DetailEventHomeEvent.ApplyEvent)
                     }
                 )
                 1 -> PageTwo(
@@ -122,9 +122,7 @@ fun PageOne(
     FeatEventDetail(
         event = event,
         stateEvent = descOrigen,
-        onClick = {
-            onClick()
-        }
+        onClick = { onClick() }
     )
 }
 

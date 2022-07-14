@@ -9,8 +9,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.Player
 import com.unlam.feat.model.Qualification
+import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestQualifyPlayers
 import com.unlam.feat.repository.FeatRepositoryImp
+import com.unlam.feat.repository.FirebaseAuthRepository
+import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,7 +26,8 @@ import kotlinx.coroutines.launch
 class DetailEventHomeViewModel
 @Inject
 constructor(
-    val featRepository: FeatRepositoryImp
+    val featRepository: FeatRepositoryImp,
+    val firebaseAuthRepository: FirebaseAuthRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(DetailEventHomeState())
     val state: State<DetailEventHomeState> = _state
@@ -34,15 +39,21 @@ constructor(
         when (event) {
             is DetailEventHomeEvent.DismissDialog -> {
                 _state.value = _state.value.copy(
-                    loading = false
+                    loading = false,
+                    error = "",
+                    success = false
                 )
+            }
+            is DetailEventHomeEvent.ApplyEvent ->{
+                applyEvent()
             }
         }
     }
 
     fun getDataDetailEvent(idEvent: Int) {
 
-        featRepository.getDataDetailEvent(idEvent, "").onEach { result ->
+        val uId = firebaseAuthRepository.getUserId()
+        featRepository.getDataDetailEvent(idEvent, uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -53,9 +64,18 @@ constructor(
                 }
                 is Result.Success -> {
                     loadQualificationsDefault(result.data!!.playersConfirmed)
+                    val players = result.data!!.players
+                    var playerId : String = ""
+
+                    players.forEach { player ->
+                        if(player.sport.id == result.data.event.sport.sportGeneric.id){
+                            playerId = player.id.toString()
+                        }
+                    }
                     _state.value = DetailEventHomeState(
                         event = result.data!!.event,
                         players = result.data.playersConfirmed,
+                        idPlayer = playerId
                     )
                 }
             }
@@ -122,5 +142,34 @@ constructor(
                 players = _state.value.players,
             )
         }
+    }
+
+    private fun applyEvent() {
+
+        val request = RequestCreateInvitation(
+            playerId = _state.value.idPlayer!!,
+            eventId = _state.value.event!!.id,
+            origin = "P"
+        )
+
+        featRepository.createInvitation(request).onEach { result ->
+            when (result) {
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        error=result.message!!
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        loading = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = _state.value.copy(
+                        success = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }

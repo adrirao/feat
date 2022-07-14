@@ -593,6 +593,28 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
             FeatCircularProgress()
         }
 
+        if (state.error.isNotBlank()) {
+            ErrorDialog(
+                title = "Ocurrio un error",
+                desc = "No se pudo procesar la solicitud",
+                onDismiss = {
+                    detailEventHomeViewModel.onEvent(DetailEventHomeEvent.DismissDialog)
+                },
+                enabledCancelButton = false
+            )
+        }
+        if (state.success) {
+            SuccessDialog(
+                title = "Enhorabuena",
+                desc = "Solicitud Enviada Correctamente!!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Home.route)
+                },
+                enabledCancelButton = false
+            )
+        }
+
         if (state.event != null && state.players != null) {
             DetailEventHomeScreen(
                 state,
@@ -603,6 +625,7 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                         is DetailEventHomeEvent.OnClickCardPlayer -> {
                             navController.navigate(Screen.InfoPlayer.route + "/${event.idPlayer}")
                         }
+                        DetailEventHomeEvent.ApplyEvent -> detailEventHomeViewModel.onEvent(event)
                         else -> detailEventHomeViewModel.qualifyPlayers()
                     }
                 },
