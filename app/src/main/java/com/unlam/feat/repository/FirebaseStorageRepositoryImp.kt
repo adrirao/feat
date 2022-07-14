@@ -29,16 +29,10 @@ constructor(
     }
 
      override suspend fun getUris(uIds:List<ResponseUids>,isSuccess: (List<String>) -> Unit){
-        var uris:MutableList<String> = mutableListOf()
+        val uris:MutableList<String> = mutableListOf()
         firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
             uIds.forEach { uId ->
-                listUriResult.items.forEach { reference ->
-                    if(reference.name.contains(uId.uId)){
-                        reference.downloadUrl.await().also {
-                            uris.add(it.toString())
-                        }
-                    }
-                }
+                listUriResult.items.map { ref -> if(ref.name.contains(uId.uId)) ref.downloadUrl.await().also { uri -> uris.add(uri.toString()) }}
             }
             isSuccess(uris.toList())
         }

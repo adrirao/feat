@@ -116,48 +116,50 @@ fun CardPlayerCalification(
 @Composable
 fun CardPlayerDetail(
     player: PlayerApplyDetail,
-    content: @Composable ColumnScope.() -> Unit = {}
+    content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
     FeatCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp),
     ) {
-        Row {
-            Icon(
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-                imageVector = Icons.Outlined.Person,
-                contentDescription = null,
-                tint = PurpleLight
-            )
-            Column(
-                modifier = Modifier.weight(3f)
-            ) {
-                FeatInfo(
-                    textInfo = "Nombre: ${player.names} ${player.lastname ?: ""}",
-                    fontSize = MaterialTheme.typography.body1.fontSize
+        Column {
+            Row {
+                Icon(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically),
+                    imageVector = Icons.Outlined.Person,
+                    contentDescription = null,
+                    tint = PurpleLight
                 )
-                FeatInfo(
-                    textInfo = "Apodo: ${player.nickname} ${player.lastname}",
-                    fontSize = MaterialTheme.typography.body1.fontSize
-                )
-                FeatInfo(
-                    textInfo = "Habilidad: ${player.abilities}",
-                    fontSize = MaterialTheme.typography.body1.fontSize
-                )
-                FeatInfo(
-                    textInfo = "Posicion: ${player.position}",
-                    fontSize = MaterialTheme.typography.body1.fontSize
-                )
-                FeatInfo(
-                    textInfo = "Nivel: ${player.level}",
-                    fontSize = MaterialTheme.typography.body1.fontSize
-                )
-                FeatSpacerSmall()
-                content()
+                Column(
+                    modifier = Modifier.weight(3f)
+                ) {
+                    FeatInfo(
+                        textInfo = "Nombre: ${player.names} ${player.lastname ?: ""}",
+                        fontSize = MaterialTheme.typography.body1.fontSize
+                    )
+                    FeatInfo(
+                        textInfo = "Apodo: ${player.nickname} ${player.lastname}",
+                        fontSize = MaterialTheme.typography.body1.fontSize
+                    )
+                    FeatInfo(
+                        textInfo = "Habilidad: ${player.abilities}",
+                        fontSize = MaterialTheme.typography.body1.fontSize
+                    )
+                    FeatInfo(
+                        textInfo = "Posicion: ${player.position}",
+                        fontSize = MaterialTheme.typography.body1.fontSize
+                    )
+                    FeatInfo(
+                        textInfo = "Nivel: ${player.level}",
+                        fontSize = MaterialTheme.typography.body1.fontSize
+                    )
+                    FeatSpacerSmall()
+                }
             }
+            content()
         }
     }
 }

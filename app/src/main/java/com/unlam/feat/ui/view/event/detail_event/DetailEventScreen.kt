@@ -276,7 +276,7 @@ fun PageTree(
                             ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     if (player.origin.uppercase() == StateEvent.PLAYER_POSTULATED) {
                                         FeatOutlinedButton(
