@@ -26,7 +26,6 @@ import com.unlam.feat.ui.theme.PurpleLight
 fun CardPlayer(
     modifier: Modifier = Modifier,
     player: Player,
-//    uri : String = "",
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     FeatCard(

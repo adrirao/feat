@@ -8,6 +8,8 @@ import com.unlam.feat.di.ResourcesProvider
 import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
+import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +22,8 @@ class SearchEventDetailViewModel
 constructor(
     private val resourcesProvider: ResourcesProvider,
     private val featRepository: FeatRepositoryImp,
-    private val firebaseRepository: FirebaseAuthRepositoryImp
+    private val firebaseRepository: FirebaseAuthRepositoryImp,
+    val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ):ViewModel(){
 
     private val _state = mutableStateOf(SearchEventDetailState())
@@ -41,7 +44,7 @@ constructor(
 
     fun getDataDetailEvent(idEvent: Int) {
         val uId =firebaseRepository.getUserId()
-        featRepository.getDataSearchEvent(idEvent,uId).onEach { result ->
+        featRepository.getDataDetailEvent(idEvent,uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -52,7 +55,7 @@ constructor(
                 }
                 is Result.Success -> {
 
-                    val players = result.data!!.playersUser
+                    val players = result.data!!.players
                     var playerId : String = ""
 
                     players.forEach { player ->
@@ -61,12 +64,31 @@ constructor(
                         }
                     }
 
-                    _state.value = SearchEventDetailState(
-                        event = result.data!!.event,
-                        playersConfirmed = result.data.playersConfirmed,
-                        idPlayer = playerId
+                    var playersConfirmed = result.data.playersConfirmed
+                    val playersUid = result.data.playersUids
 
-                    )
+                    firebaseStorageRepository.getUris(playersUid) { listUris ->
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if(uri.contains(player.uId)){
+                                    playersConfirmed.forEach { playerConfirmed ->
+                                        if(player.playerId == playerConfirmed.id){
+                                            playerConfirmed.uri = uri
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                        _state.value = SearchEventDetailState(
+                            event = result.data!!.event,
+                            playersConfirmed = result.data.playersConfirmed,
+                            idPlayer = playerId
+
+                        )
+                    }
+
+
                 }
             }
         }.launchIn(viewModelScope)
