@@ -45,6 +45,7 @@ data class NewEventState(
     val addressError: GenericError? = null,
     val sportGenericError: GenericError? = null,
     val capacityError : GenericError? = null,
+    val formError: Boolean = false,
 
     val newEventMessage: NewEventMessage? = null,
     val periodicityMessage: PeriodicitiesMessage? = null

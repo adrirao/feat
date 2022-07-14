@@ -104,7 +104,8 @@ constructor(
             NewEventEvents.onClick(TypeClick.DismissDialog) -> {
                 _state.value = _state.value.copy(
                     newEventMessage = null,
-                    periodicityMessage = null
+                    periodicityMessage = null,
+                    formError = false
                 )
             }
             NewEventEvents.onClick(TypeClick.Submit) -> {
@@ -119,7 +120,10 @@ constructor(
                 validateOrganizer(_state.value.organizer)
                 validateAddress(_state.value.address)
 //                validateCapacity(_state.value.capacity)
-                createEvent()
+                _state.value = _state.value.copy(
+                    formError = createEvent()
+                )
+
             }
         }
     }
@@ -272,21 +276,21 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun createEvent() {
-        val name = if (_state.value.nameError == null) _state.value.name else return
+    private fun createEvent():Boolean {
+        val name = if (_state.value.nameError == null) _state.value.name else return true
 //        val capacity = if (_state.value.capacityError == null) _state.value.capacity else return
-        val date = if (_state.value.dateError == null) _state.value.date else return
-        val startTime = if (_state.value.startTimeError == null) _state.value.startTime else return
-        val endTime = if (_state.value.endTimeError == null) _state.value.endTime else return
+        val date = if (_state.value.dateError == null) _state.value.date else return true
+        val startTime = if (_state.value.startTimeError == null) _state.value.startTime else return true
+        val endTime = if (_state.value.endTimeError == null) _state.value.endTime else return true
         val description =
-            if (_state.value.descriptionError == null) _state.value.description else return
+            if (_state.value.descriptionError == null) _state.value.description else return true
         val periodicity =
-            if (_state.value.periodicityError == null) _state.value.periodicity else return
-        val latitude = if (_state.value.latitudeError == null) _state.value.latitude else return
-        val longitude = if (_state.value.longitudeError == null) _state.value.longitude else return
-        val state = if (_state.value.stateError == null) _state.value.state else return
-        val sport = if (_state.value.sportError == null) _state.value.sport else return
-        if (_state.value.sportGenericError == null) _state.value.sportGeneric else return
+            if (_state.value.periodicityError == null) _state.value.periodicity else return true
+        val latitude = if (_state.value.latitudeError == null) _state.value.latitude else return true
+        val longitude = if (_state.value.longitudeError == null) _state.value.longitude else return true
+        val state = if (_state.value.stateError == null) _state.value.state else return true
+        val sport = if (_state.value.sportError == null) _state.value.sport else return true
+        if (_state.value.sportGenericError == null) _state.value.sportGeneric else return true
         val organizer = _state.value.person!!.id
 
         val request = RequestEvent(
@@ -324,6 +328,7 @@ constructor(
             }
         }.launchIn(viewModelScope)
 
+        return false
     }
 
     fun getPeriodicities() {

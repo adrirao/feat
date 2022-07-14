@@ -29,6 +29,7 @@ import com.unlam.feat.ui.component.common.PermissionFlow
 import com.unlam.feat.ui.theme.*
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
+import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -37,6 +38,18 @@ fun NewEventScreen(
     onValueChange: (NewEventEvents.onValueChange) -> Unit,
     onClick: (NewEventEvents.onClick) -> Unit
 ) {
+    if (state.formError) {
+        ErrorDialog(
+            title =  "Error en el formulario",
+            desc = "Por favor, revisar la información ingresada",
+            onDismiss = {
+                onClick(NewEventEvents.onClick(TypeClick.DismissDialog))
+            },
+            textContentAccept = "Confirmar",
+            enabledCancelButton = false
+        )
+    }
+
     var openMap by remember {
         mutableStateOf(false)
     }
@@ -388,7 +401,7 @@ private fun PageTwo(
                 modifier = Modifier.align(Alignment.End),
                 textContent = "Aceptar",
                 contentColor = GreenColor,
-                backgroundColor = GreenColor90,
+                backgroundColor = GreenColor,
                 textColor = PurpleDark
             ) {
                 onClick(NewEventEvents.onClick(TypeClick.Submit))

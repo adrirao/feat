@@ -490,6 +490,9 @@ private fun NavGraphBuilder.addRouteNewEvent(navController: NavHostController) {
                     NewEventEvents.onClick(TypeClick.Submit) -> {
                         newEventViewModel.onEvent(event)
                     }
+                    NewEventEvents.onClick(TypeClick.DismissDialog) -> {
+                        newEventViewModel.onEvent(event)
+                    }
                 }
             }
         )
