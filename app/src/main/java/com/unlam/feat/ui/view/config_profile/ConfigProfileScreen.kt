@@ -136,6 +136,18 @@ fun ConfigProfileScreen(
         )
     }
 
+    if (state.formError) {
+        ErrorDialog(
+            title =  "Error en el formulario",
+            desc = "Por favor, revisar la información ingresada",
+            onDismiss = {
+                onEvent(ConfigProfileEvents.onClick(TypeClick.DismissDialog))
+            },
+            textContentAccept = "Confirmar",
+            enabledCancelButton = false
+        )
+    }
+
     if (state.isErrorSubmitData) {
         ErrorDialog(
             title = stringResource(R.string.text_error),
@@ -1919,8 +1931,8 @@ private fun SportDataRecreationalActivity(
                 FeatOutlinedButton(
                     textContent = "Cancelar",
                     contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
                 ) {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
