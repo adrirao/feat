@@ -11,9 +11,7 @@ import com.unlam.feat.model.Player
 import com.unlam.feat.model.Qualification
 import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestQualifyPlayers
-import com.unlam.feat.repository.FeatRepositoryImp
-import com.unlam.feat.repository.FirebaseAuthRepository
-import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.*
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -27,7 +25,8 @@ class DetailEventHomeViewModel
 @Inject
 constructor(
     val featRepository: FeatRepositoryImp,
-    val firebaseAuthRepository: FirebaseAuthRepositoryImp
+    val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(DetailEventHomeState())
     val state: State<DetailEventHomeState> = _state
@@ -44,7 +43,7 @@ constructor(
                     success = false
                 )
             }
-            is DetailEventHomeEvent.ApplyEvent ->{
+            is DetailEventHomeEvent.ApplyEvent -> {
                 applyEvent()
             }
         }
@@ -65,18 +64,41 @@ constructor(
                 is Result.Success -> {
                     loadQualificationsDefault(result.data!!.playersConfirmed)
                     val players = result.data!!.players
-                    var playerId : String = ""
+                    var playerId: String = ""
 
                     players.forEach { player ->
-                        if(player.sport.id == result.data.event.sport.sportGeneric.id){
+                        if (player.sport.id == result.data.event.sport.sportGeneric.id) {
                             playerId = player.id.toString()
                         }
                     }
-                    _state.value = DetailEventHomeState(
-                        event = result.data!!.event,
-                        players = result.data.playersConfirmed,
-                        idPlayer = playerId
-                    )
+                    var playersConfirmed = result.data.playersConfirmed
+                    val playersUid = result.data.playersUids
+
+
+
+                    firebaseStorageRepository.getUris(playersUid) { listUris ->
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if(uri.contains(player.uId)){
+                                    playersConfirmed.forEach { playerConfirmed ->
+                                       if(player.playerId == playerConfirmed.id){
+                                           playerConfirmed.uri = uri
+                                       }
+
+                                    }
+                                }
+                            }
+                        }
+                        _state.value = DetailEventHomeState(
+                            event = result.data!!.event,
+                            players = playersConfirmed,
+                            idPlayer = playerId
+                        )
+                    }
+
+
+
+
                 }
             }
         }.launchIn(viewModelScope)
@@ -156,7 +178,7 @@ constructor(
             when (result) {
                 is Result.Error -> {
                     _state.value = _state.value.copy(
-                        error=result.message!!
+                        error = result.message!!
                     )
                 }
                 is Result.Loading -> {

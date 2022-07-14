@@ -12,5 +12,5 @@ data class DetailEventHomeState(
     val error: String = "",
     val loading: Boolean = false,
     val success: Boolean = false,
-    val idPlayer:String? = null
+    val idPlayer:String? = null,
 )

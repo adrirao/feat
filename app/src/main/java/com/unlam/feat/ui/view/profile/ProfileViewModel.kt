@@ -71,9 +71,7 @@ constructor(
                     _state.value = ProfileState(isLoading = true)
                 }
                 is Result.Success -> {
-//                    val uIds : List<String> = listOf("7Pjlj6cEIjcdsZgIrT0UkP2JXVm1","lcYocW3nbCTQD2XsmrpTYAkLRxB3")
-//                    val uris = firebaseStorageRepository.getUris(uIds)
-                    firebaseStorageRepository.getFile(uId, isSuccess = {uri ->
+                    firebaseStorageRepository.getFile(uId, isSuccess = { uri ->
                         _state.value = ProfileState(
                             person = result.data!!.person,
                             availabilities = result.data.person.availabilities,
@@ -87,7 +85,7 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    private  fun uploadImage(image: Bitmap) {
+    private fun uploadImage(image: Bitmap) {
         viewModelScope.launch {
             val uId = firebaseAuthRepository.getUserId()
             firebaseStorageRepository.putFile(image, uId)

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import coil.request.ImageRequest
 import com.google.firebase.storage.FirebaseStorage
+import com.unlam.feat.model.response.ResponseUids
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -25,21 +26,21 @@ constructor(
         val data = baos.toByteArray()
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.putBytes(data)
-
     }
 
-     override suspend fun getUris(uIds:List<String>,isSuccess: (List<Uri>) -> Unit){
+     override suspend fun getUris(uIds:List<ResponseUids>,isSuccess: (List<String>) -> Unit){
         var uris:MutableList<String> = mutableListOf()
         firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
             uIds.forEach { uId ->
                 listUriResult.items.forEach { reference ->
-                    if(reference.name.contains(uId)){
+                    if(reference.name.contains(uId.uId)){
                         reference.downloadUrl.await().also {
                             uris.add(it.toString())
                         }
                     }
                 }
             }
+            isSuccess(uris.toList())
         }
     }
 

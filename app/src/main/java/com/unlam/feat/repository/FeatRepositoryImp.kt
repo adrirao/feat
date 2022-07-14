@@ -572,6 +572,22 @@ constructor(
         }
     }
 
+    override fun getUidsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponseUids>>> = flow {
+        try {
+            emit(Result.Loading())
+            val response = featProvider.getUidsByPlayers(personsId)
+            if (response.code() in 200..299) {
+                emit(Result.Success(data = response.body()))
+            } else {
+                logging(request = personsId, response = response)
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
+        } catch (e: Exception) {
+            logging(e.localizedMessage!!.toString())
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
     override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
         try{
             emit(Result.Loading())
@@ -976,25 +992,46 @@ constructor(
             try {
                 emit(Result.Loading())
 
+                val listPlayersId: MutableList<Int> = mutableListOf()
                 val responseEvent = featProvider.getEventById(idEvent)
                 val responsePlayersConfirmed = featProvider.getAllPlayersConfirmedByEvent(idEvent)
                 val responsePlayersApplied = featProvider.getAllPlayersAppliedByEvent(idEvent)
-                val responsePlayersSuggested =
-                    featProvider.getAllPlayersSuggestedForEvent(idEvent)
+                val responsePlayersSuggested = featProvider.getAllPlayersSuggestedForEvent(idEvent)
                 val responsePlayer = featProvider.getPlayersByUser(uId)
 
+
+
                 if (responsePlayer.code() in 200..299 && responseEvent.code() in 200..299 && responsePlayersConfirmed.code() in 200..299 && responsePlayersApplied.code() in 200..299 && responsePlayersSuggested.code() in 200..299) {
-                    emit(
-                        Result.Success(
-                            data = ResponseDetailEvent(
-                                event = responseEvent.body()!!,
-                                playersSuggested = responsePlayersSuggested.body() ?: listOf(),
-                                playersApplied = responsePlayersApplied.body() ?: listOf(),
-                                playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
-                                players = responsePlayer.body() ?: listOf()
+                    responsePlayersSuggested.body()?.forEach { player ->
+                            listPlayersId.add(player.id)
+                    }
+                    responsePlayersApplied.body()?.forEach { player ->
+                        if(!listPlayersId.contains(player.id)){
+                            listPlayersId.add(player.id)
+                        }
+                    }
+                    responsePlayersConfirmed.body()?.forEach { player ->
+                        if(!listPlayersId.contains(player.id)){
+                            listPlayersId.add(player.id)
+                        }
+                    }
+                    val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
+                    val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
+                    if(responseUid.code() in 200..299){
+                        emit(
+                            Result.Success(
+                                data = ResponseDetailEvent(
+                                    event = responseEvent.body()!!,
+                                    playersSuggested = responsePlayersSuggested.body() ?: listOf(),
+                                    playersApplied = responsePlayersApplied.body() ?: listOf(),
+                                    playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
+                                    players = responsePlayer.body() ?: listOf(),
+                                    playersUids = responseUid.body() ?:  listOf()
+                                )
                             )
                         )
-                    )
+                    }
+
                 } else {
                     loggingSingle(message = "Request", obj = uId)
                     loggingSingle(message = "Request", obj = idEvent)

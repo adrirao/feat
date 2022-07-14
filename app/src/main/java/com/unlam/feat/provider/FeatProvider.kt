@@ -2,6 +2,7 @@ package com.unlam.feat.provider
 
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
+import com.unlam.feat.model.response.ResponseUids
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -124,6 +125,10 @@ interface FeatProvider {
 
     @POST("/players/create")
     suspend fun createPlayer(@Body req: RequestPlayer): Response<String>
+
+    @Headers("Content-type: application/json")
+    @POST("/players/getUidsByPlayers")
+    suspend fun getUidsByPlayers(@Body req: RequestPlayerId): Response<List<ResponseUids>>
 
     @Headers("Content-type: application/json")
     @POST("/players/setDismissedFromList")
