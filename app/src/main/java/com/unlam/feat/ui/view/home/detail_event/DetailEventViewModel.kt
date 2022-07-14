@@ -84,7 +84,6 @@ constructor(
                                        if(player.playerId == playerConfirmed.id){
                                            playerConfirmed.uri = uri
                                        }
-
                                     }
                                 }
                             }

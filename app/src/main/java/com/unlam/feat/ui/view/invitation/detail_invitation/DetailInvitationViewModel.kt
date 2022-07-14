@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.repository.FirebaseStorageRepositoryImp
+import com.unlam.feat.ui.view.home.detail_event.DetailEventHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -19,7 +21,8 @@ class DetailInvitationViewModel
 @Inject
 constructor(
     val featRepository: FeatRepositoryImp,
-    val firebaseAuthRepository: FirebaseAuthRepositoryImp
+    val firebaseAuthRepository: FirebaseAuthRepositoryImp,
+    val firebaseStorageRepository: FirebaseStorageRepositoryImp
 ) : ViewModel() {
     private val _state = mutableStateOf(DetailInvitationState())
     val state: State<DetailInvitationState> = _state
@@ -128,12 +131,31 @@ constructor(
                         }
                     }
 
-                    _state.value = DetailInvitationState(
-                        event = result.data!!.event,
-                        playersConfirmed = result.data.playersConfirmed,
-                        idPlayer = playerId
+                    var playersConfirmed = result.data.playersConfirmed
+                    val playersUid = result.data.playersUids
 
-                    )
+                    firebaseStorageRepository.getUris(playersUid) { listUris ->
+                        playersUid.forEach { player ->
+                            listUris.forEach { uri ->
+                                if(uri.contains(player.uId)){
+                                    playersConfirmed.forEach { playerConfirmed ->
+                                        if(player.playerId == playerConfirmed.id){
+                                            playerConfirmed.uri = uri
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                        _state.value = DetailInvitationState(
+                            event = result.data!!.event,
+                            playersConfirmed = result.data.playersConfirmed,
+                            idPlayer = playerId
+
+                        )
+                    }
+
+
                 }
             }
         }.launchIn(viewModelScope)
