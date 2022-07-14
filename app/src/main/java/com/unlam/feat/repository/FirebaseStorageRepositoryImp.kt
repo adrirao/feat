@@ -28,20 +28,19 @@ constructor(
 
     }
 
-     suspend fun getUris(uIds:List<String>):List<String>{
+     override suspend fun getUris(uIds:List<String>,isSuccess: (List<Uri>) -> Unit){
         var uris:MutableList<String> = mutableListOf()
-        val listUri = firebaseStorage.getReference("images/").listAll()
-        listUri.result.items.forEach {reference ->
+        firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
             uIds.forEach { uId ->
-                if(reference.name.contains(uId)){
-                    reference.downloadUrl.await().also {
-                        uris.add(it.toString())
+                listUriResult.items.forEach { reference ->
+                    if(reference.name.contains(uId)){
+                        reference.downloadUrl.await().also {
+                            uris.add(it.toString())
+                        }
                     }
                 }
             }
-
         }
-        return uris.toList()
     }
 
     override fun getFile(uId: String, isSuccess: (Uri) -> Unit) {

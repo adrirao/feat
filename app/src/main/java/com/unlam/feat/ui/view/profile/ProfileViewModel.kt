@@ -71,8 +71,8 @@ constructor(
                     _state.value = ProfileState(isLoading = true)
                 }
                 is Result.Success -> {
-                    val uIds : List<String> = listOf("7Pjlj6cEIjcdsZgIrT0UkP2JXVm1","lcYocW3nbCTQD2XsmrpTYAkLRxB3")
-                    firebaseStorageRepository.getUris(uIds)
+//                    val uIds : List<String> = listOf("7Pjlj6cEIjcdsZgIrT0UkP2JXVm1","lcYocW3nbCTQD2XsmrpTYAkLRxB3")
+//                    val uris = firebaseStorageRepository.getUris(uIds)
                     firebaseStorageRepository.getFile(uId, isSuccess = {uri ->
                         _state.value = ProfileState(
                             person = result.data!!.person,
