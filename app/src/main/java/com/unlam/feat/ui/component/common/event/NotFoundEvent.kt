@@ -39,3 +39,18 @@ fun NotFoundPlayer() {
         )
     }
 }
+
+@Composable
+fun NotFoundInvitation() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        FeatText(
+            text = "No se encontraron invitaciones.",
+            fontSize = MaterialTheme.typography.body1.fontSize,
+            color = PurpleMedium
+        )
+    }
+}

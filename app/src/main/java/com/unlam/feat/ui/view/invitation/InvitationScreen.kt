@@ -12,6 +12,7 @@ import com.unlam.feat.ui.component.FeatCircularProgress
 import com.unlam.feat.ui.component.FeatText
 import com.unlam.feat.ui.component.common.event.FeatEventCard
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
+import com.unlam.feat.ui.component.common.event.NotFoundInvitation
 import com.unlam.feat.ui.util.TypeClick
 
 
@@ -46,7 +47,7 @@ fun InvitationScreen(
                 }
             )
         } else {
-            NotFoundEvent()
+            NotFoundInvitation()
         }
     }
     if (state.error.isNotEmpty()) {

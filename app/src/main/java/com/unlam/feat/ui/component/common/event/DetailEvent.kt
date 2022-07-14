@@ -266,7 +266,7 @@ fun FeatEventDetail(
                                 }
                                 StateEvent.PLAYER_PENDING_APPLY -> {
                                     CancelButton(
-                                        textContent = "Cancelar invitacion",
+                                        textContent = "Cancelar participacion",
                                         onClick = onClick
                                     )
                                 }
@@ -282,7 +282,7 @@ fun FeatEventDetail(
                                 }
                                 StateEvent.PLAYER_CONFIRMED -> {
                                     CancelButton(
-                                        textContent = "Cancelar invitacion",
+                                        textContent = "Cancelar participacion",
                                         onClick = onClick
                                     )
                                 }
