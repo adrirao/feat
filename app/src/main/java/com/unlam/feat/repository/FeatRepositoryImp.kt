@@ -968,7 +968,7 @@ constructor(
 
     //<editor-fold desc="Addresses">
     //<editor-fold desc="EventApplies">
-    override fun setAcceptedApply(req: RequestEventApply): Flow<Result<String>> = flow {
+    override fun setAcceptedApply(req: RequestEventApply): Flow<Result<ResponseCapacity>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.setAcceptedApply(req)
@@ -1433,26 +1433,26 @@ constructor(
                 val responseGetSportList = featProvider.getGenericsSports()
                 val responseGetPerson = featProvider.getPerson(uId)
 
-                if (responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299 && responseGetPerson.code() in 200..299) {
-                    emit(
-                        Result.Success(
-                            data = ResponsePlayersUserSportList(
-                                players = responseGetPlayer.body()!!,
-                                sportGenericList = responseGetSportList.body()!!,
-                                person = responseGetPerson.body()!!
-                            )
+            if(responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299){
+                emit(
+                    Result.Success(
+                        data = ResponsePlayersUserSportList(
+                            players = responseGetPlayer.body()!!,
+                            sportGenericList = responseGetSportList.body()!!,
+                            person = responseGetPerson.body()!!
                         )
                     )
-                } else {
-                    emit(Result.Error(message = "Unknown Error"))
-                }
-
-
-            } catch (e: Exception) {
-                logging(e.localizedMessage)
-                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+                )
+            }else{
+                emit(Result.Error(message = "Unknown Error"))
             }
+
+
+        }catch (e: Exception) {
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
+    }
 
 
 

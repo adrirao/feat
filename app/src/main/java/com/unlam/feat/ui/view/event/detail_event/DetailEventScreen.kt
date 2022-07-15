@@ -319,7 +319,7 @@ fun PageTree(
                     }
                 )
             } else {
-                NotFoundEvent()
+                NotFoundPlayer()
             }
         }
     }

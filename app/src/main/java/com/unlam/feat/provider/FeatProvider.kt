@@ -225,7 +225,7 @@ interface FeatProvider {
     //<editor-fold desc="EventApplies">
     @Headers("Content-type: application/json")
     @POST("/eventApplies/setAcceptedApply")
-    suspend fun setAcceptedApply(@Body requestEventApply: RequestEventApply): Response<String>
+    suspend fun setAcceptedApply(@Body requestEventApply: RequestEventApply): Response<ResponseCapacity>
 
     @Headers("Content-type: application/json")
     @POST("/eventApplies/setDeniedApply")

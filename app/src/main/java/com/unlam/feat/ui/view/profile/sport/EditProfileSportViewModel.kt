@@ -9,10 +9,6 @@ import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
-import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
-import com.unlam.feat.ui.view.profile.address.EditProfileAddressState
-import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesEvent
-import com.unlam.feat.ui.view.search.SearchState
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -46,17 +42,17 @@ constructor(
                     }
                     TypeValueChange.OnValueChangePositionSport -> {
                         _state.value = _state.value.copy(
-                            positionIdSport = event.value.toInt()
+                            positionIdSport = event.value
                         )
                     }
                     TypeValueChange.OnValueChangeLevelSport -> {
                         _state.value = _state.value.copy(
-                            levelIdSport = event.value.toInt()
+                            levelIdSport = event.value
                         )
                     }
                     TypeValueChange.OnValueChangeValuationSport -> {
                         _state.value = _state.value.copy(
-                            valuationIdSport = event.value.toInt()
+                            valuationIdSport = event.value
                         )
                     }
                     TypeValueChange.OnValueChangeAbilitiesSport -> {
