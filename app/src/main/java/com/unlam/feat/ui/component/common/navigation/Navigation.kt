@@ -381,6 +381,17 @@ private fun NavGraphBuilder.addRouteEvent(navController: NavHostController) {
             eventViewModel.state
         }
 
+        if (state.eventsError != null) {
+            ErrorDialog(
+                title = "Error mis eventos",
+                desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
+                onDismiss = {
+                    eventViewModel.onEvent(EventEvents.DismissDialog)
+                },
+                enabledCancelButton = false
+            )
+        }
+
         EventScreen(
             state = state,
             onEvent = eventViewModel::onEvent,
@@ -420,7 +431,7 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
 
         if (state.isLoading) {
             FeatCircularProgress()
-        }else {
+        } else {
             SuggestedPlayers(
                 state,
                 onClick = suggestedPlayerViewModel::onEvent
@@ -438,7 +449,6 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
                 enabledCancelButton = false
             )
         }
-
 
 
     }
@@ -568,7 +578,7 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
                         navController.navigate(Screen.Login.route)
                     } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToAddress) {
                         navController.navigate(Screen.EditProfileAddress.route + "/${state.person!!.id}")
-                    }else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToSports) {
+                    } else if (typeNavigate == ProfileEvent.NavigateTo.TypeNavigate.NavigateToSports) {
                         navController.navigate(Screen.EditProfileSports.route)
                     }
                 },
@@ -670,6 +680,19 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
                 navController.popBackStack()
                 navController.navigate(Screen.Events.route)
             }
+        }
+
+        if (state.completeCapacity) {
+            InfoDialog(
+                title = state.completeTitle,
+                desc = state.completeDescription,
+                onDismiss = {
+                    detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+                    navController.popBackStack()
+                    navController.navigate(Screen.Events.route)
+                },
+                enabledCancelButton = false,
+            )
         }
 
         if (state.error.isNotEmpty()) {
@@ -799,6 +822,19 @@ private fun NavGraphBuilder.addRouteDetailInvitation(
             SuccessDialog(
                 title = state.successTitle,
                 desc = state.successDescription,
+                onDismiss = {
+                    detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
+                    navController.popBackStack()
+                    navController.navigate(Screen.Invitation.route)
+                },
+                enabledCancelButton = false,
+            )
+        }
+
+        if (state.completeCapacity) {
+            InfoDialog(
+                title = state.completeTitle,
+                desc = state.completeDescription,
                 onDismiss = {
                     detailInvitation.onEvent(DetailInvitationEvent.DismissDialog)
                     navController.popBackStack()

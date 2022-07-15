@@ -112,7 +112,7 @@ interface FeatRepository {
 
     //</editor-fold desc="Addresses">
     //</editor-fold desc="EventApplies">
-    fun setAcceptedApply(req: RequestEventApply): Flow<Result<String>> //@PUT("/eventApplies/setAcceptedApply")
+    fun setAcceptedApply(req: RequestEventApply): Flow<Result<ResponseCapacity>> //@PUT("/eventApplies/setAcceptedApply")
     fun setDeniedApply(req: RequestEventApply): Flow<Result<String>> //@PUT("/eventApplies/setDeniedApply")
 
     fun createInvitation(req: RequestCreateInvitation): Flow<Result<String>> //@POST("/eventApplies/createInvitation")

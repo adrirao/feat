@@ -177,11 +177,19 @@ constructor(
         featRepository.setAcceptedApply(requestEventApply).onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _state.value = _state.value.copy(
-                        successPlayer = true,
-                        successTitle = "Jugador aceptado",
-                        successDescription = "El jugador ha sido aceptado con exito",
-                    )
+                    if (result.data!!.isComplete) {
+                        _state.value = _state.value.copy(
+                            completeCapacity = true,
+                            completeTitle = "Cupo lleno",
+                            completeDescription = "Se alcanzo la cantidad maxima del cupo disponible."
+                        )
+                    } else {
+                        _state.value = _state.value.copy(
+                            successPlayer = true,
+                            successTitle = "Jugador aceptado",
+                            successDescription = "El jugador ha sido aceptado con exito",
+                        )
+                    }
                 }
                 is Result.Loading -> {
                     _state.value = _state.value.copy(
@@ -297,6 +305,7 @@ constructor(
                     var playersConfirmed = result.data!!.playersConfirmed
                     var playersApplied = result.data!!.playersApplied
                     val playersPhotoUrl = result.data!!.playersPhotoUrl
+
 
 
                     playersPhotoUrl.forEach { player ->

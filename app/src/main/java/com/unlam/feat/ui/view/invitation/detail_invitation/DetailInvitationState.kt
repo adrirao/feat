@@ -12,5 +12,8 @@ data class DetailInvitationState(
     val success: Boolean = false,
     val successTitle: String = "",
     val successDescription: String = "",
-    val idPlayer: String? = null
+    val idPlayer: String? = null,
+    val completeCapacity: Boolean = false,
+    val completeTitle: String = "",
+    val completeDescription: String = ""
 )

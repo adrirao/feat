@@ -3,6 +3,7 @@ package com.unlam.feat.provider
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
 import com.unlam.feat.model.response.ResponsePhotoUrl
+import com.unlam.feat.model.response.ResponseCapacity
 import com.unlam.feat.util.Result
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response

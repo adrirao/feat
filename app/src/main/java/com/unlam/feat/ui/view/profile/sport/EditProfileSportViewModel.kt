@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.model.request.RequestPlayer
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.ui.util.TypeClick
@@ -38,24 +39,24 @@ constructor(
                     TypeValueChange.OnValueChangeSelectSport -> {
                         getDataSportScreen(event.value.toInt())
                     }
-                    TypeValueChange.OnValueChangeSelectSport -> {
+                    TypeValueChange.OnValueChangeTypeSport -> {
                         _state.value = _state.value.copy(
                             sportId = event.value
                         )
                     }
                     TypeValueChange.OnValueChangePositionSport -> {
                         _state.value = _state.value.copy(
-                            positionIdSport = event.value
+                            positionIdSport = event.value.toInt()
                         )
                     }
                     TypeValueChange.OnValueChangeLevelSport -> {
                         _state.value = _state.value.copy(
-                            levelIdSport = event.value
+                            levelIdSport = event.value.toInt()
                         )
                     }
                     TypeValueChange.OnValueChangeValuationSport -> {
                         _state.value = _state.value.copy(
-                            valuationIdSport = event.value
+                            valuationIdSport = event.value.toInt()
                         )
                     }
                     TypeValueChange.OnValueChangeAbilitiesSport -> {
@@ -65,21 +66,14 @@ constructor(
                     }
                 }
             }
-            EditProfileSportEvent.onClick(TypeClick.Submit) -> {
-                _state.value = _state.value.copy(
-                    sportIdError = validateNoEmptyField(_state.value.sportId),
-                    abilitiesSportError = validateNoEmptyField(_state.value.abilitiesSport),
-                    positionIdSportError = validateNoEmptyField(_state.value.positionIdSport),
-                    levelIdSportError = validateNoEmptyField(_state.value.levelIdSport),
-                    valuationIdSportError = validateNoEmptyField(_state.value.valuationIdSport),
-                )
-                addSport()
+            is EditProfileSportEvent.onClick -> {
+                when (event.typeClick) {
+                    TypeClick.Submit -> {
+                        createPlayer()
+                    }
+                }
             }
         }
-    }
-
-    private fun addSport() {
-        TODO("Not yet implemented")
     }
 
 
@@ -91,7 +85,8 @@ constructor(
                 is Result.Success -> {
                     _state.value = EditProfileSportState(
                         playersUser = result.data?.players,
-                        sportsList = result.data?.sportGenericList
+                        sportsList = result.data?.sportGenericList,
+                        personId = result.data?.person?.id
                     )
 
                 }
@@ -133,14 +128,34 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-
-    private fun validateNoEmptyField(
-        field: String?,
-    ): EditProfileSportState.GenericError? {
-            val trimmedField = field?.trim() ?: ""
-            if (trimmedField.isBlank()) {
-                return EditProfileSportState.GenericError.FieldEmpty
+    private fun createPlayer() {
+        val req = RequestPlayer(
+            abilities = _state.value.abilitiesSport,
+            sport = _state.value.sportId.toInt(),
+            person = _state.value.personId!!,
+            level = _state.value.levelIdSport,
+            position = _state.value.positionIdSport,
+            valuation = _state.value.valuationIdSport!!.toInt()
+        )
+        featRepository.createPlayer(req).onEach { result ->
+            when (result) {
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = EditProfileSportState(
+                        isSuccessSubmitData = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        isErrorSubmitData = true
+                    )
+                }
             }
-        return null
+        }.launchIn(viewModelScope)
     }
+
 }

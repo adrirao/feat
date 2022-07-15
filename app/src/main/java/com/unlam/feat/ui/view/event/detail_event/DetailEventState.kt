@@ -13,7 +13,9 @@ data class DetailEventState(
     val successConfirmEvent: Boolean = false,
     val successTitle:String = "",
     val successDescription:String = "",
-
+    val completeCapacity: Boolean = false,
+    val completeTitle: String = "",
+    val completeDescription: String = "",
 
     val event: Event? = null,
     val playersSuggested: List<Player>? = null,
