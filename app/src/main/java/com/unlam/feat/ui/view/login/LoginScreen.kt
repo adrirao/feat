@@ -49,7 +49,7 @@ fun LoginScreen(
                 FeatForm {
                     FeatOutlinedTextField(
                         text = state.textEmail,
-                        textLabel = "Email",
+                        textLabel = stringResource(R.string.text_email),
                         maxLines = 1,
                         unFocusedColor = PurpleLight,
                         onValueChange = {
@@ -74,7 +74,7 @@ fun LoginScreen(
                         text = state.textPassword,
                         unFocusedColor = PurpleLight,
                         keyboardType = KeyboardType.Password,
-                        textLabel = "Password",
+                        textLabel = stringResource(R.string.text_password),
                         maxLines = 1,
                         onValueChange = {
                             onValueChange(
