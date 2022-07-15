@@ -107,7 +107,7 @@ fun DetailEventHomeScreen(
                 contentColor = PurpleMedium,
                 backgroundColor = PurpleMedium20
             )
-        } else if (pagerState.currentPage == 1 && descOrigen == Constants.StateEvent.FINALIZED) {
+        } else if (pagerState.currentPage == 1 && descOrigen.uppercase() == StateEvent.FINALIZED) {
             FeatOutlinedButtonIcon(
                 modifier = Modifier.align(Alignment.BottomEnd),
                 icon = Icons.Outlined.Add,
@@ -155,7 +155,7 @@ fun PageTwo(
             modifier = Modifier.fillMaxSize()
         ) {
             FeatText(
-                text = if (descOrigen != Constants.StateEvent.FINALIZED)
+                text = if (descOrigen.uppercase() != StateEvent.FINALIZED)
                     "Participantes del evento:" else "Califica a los perticipantes:",
                 fontSize = MaterialTheme.typography.h6.fontSize,
                 separator = true,
@@ -166,7 +166,7 @@ fun PageTwo(
                     modifier = Modifier
                         .padding(10.dp),
                     content = {
-                        if (descOrigen != Constants.StateEvent.FINALIZED) {
+                        if (descOrigen.uppercase() != StateEvent.FINALIZED) {
                             items(players) { player ->
                                 CardPlayer(
                                     player = player,

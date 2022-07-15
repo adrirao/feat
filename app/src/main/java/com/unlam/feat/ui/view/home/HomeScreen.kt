@@ -112,7 +112,7 @@ fun HomeScreen(
                                     HomeEvents.onClick(
                                         TypeClick.GoToDetailEvent,
                                         event.id,
-                                        event.origen.trim().uppercase(),
+                                        event.stateDesc,
                                         event.isOrganizer
                                     )
                                 )
