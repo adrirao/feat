@@ -1111,7 +1111,7 @@ constructor(
                                         playersConfirmed = responsePlayersConfirmed.body()
                                             ?: listOf(),
                                         players = responsePlayer.body() ?: listOf(),
-                                        playersPhotoUrl = responsePhotoUrl.body() ?: listOf()
+                                        playersPhotoUrl = listOf()
                                     )
                                 )
                             )
@@ -1389,13 +1389,26 @@ constructor(
             val responseEventOfTheWeek = featProvider.getAllEventsOfTheWeek(uId)
             val responseEventConfirmedOrApplied =
                 featProvider.getAllConfirmedOrAppliedByUser(uId)
+            val responsePlayer = featProvider.getPlayersByUser(uId)
 
 
-            if (responseEventOfTheWeek.code() in 200..299 && responseEventConfirmedOrApplied.code() in 200..299) {
+            if (responseEventOfTheWeek.code() in 200..299 && responseEventConfirmedOrApplied.code() in 200..299 && responsePlayer.code() in 200..299) {
+                val players = responsePlayer.body()
+                val eventWeek = responseEventOfTheWeek.body()
+                var eventOfWeek: MutableList<Event> = mutableListOf()
+
+                players?.forEach { player ->
+                    eventWeek?.forEach { event ->
+                        if (event.sport.description.contains(player.sport.description )) {
+                            eventOfWeek.add(event)
+                        }
+                    }
+                }
+
                 emit(
                     Result.Success(
                         data = ResponseDataHomeEvent(
-                            eventOfTheWeek = responseEventOfTheWeek.body()!!,
+                            eventOfTheWeek =  eventOfWeek.toList(),
                             eventConfirmedOrApplied = responseEventConfirmedOrApplied.body()!!,
                         )
                     )

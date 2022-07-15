@@ -669,9 +669,8 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                         DetailEventHomeEvent.ApplyEvent, DetailEventHomeEvent.CancelApplyEvent -> detailEventHomeViewModel.onEvent(
                             event
                         )
-                        is DetailEventHomeEvent.QualificationApplyEvent -> {
-                            detailEventHomeViewModel.onEvent(event)
-                        }
+                        DetailEventHomeEvent.onClick(TypeClick.QualifyPlayers) -> detailEventHomeViewModel.qualifyPlayers()
+                        else -> detailEventHomeViewModel.qualifyPlayers()
                     }
                 },
                 changeQualification = {

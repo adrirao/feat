@@ -118,6 +118,9 @@ constructor(
     fun qualifyPlayers() {
         val idEvent = _state.value.event!!.id
         val qualifications = qualifications
+        if(qualifications.isNotEmpty()){
+
+
         val requestQualify = RequestQualifyPlayers(
             eventId = idEvent.toString(),
             players = qualifications.toList()
@@ -138,6 +141,7 @@ constructor(
                 }
             }
         }.launchIn(viewModelScope)
+        }
     }
 
     private fun loadQualificationsDefault(
