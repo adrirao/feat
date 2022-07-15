@@ -190,7 +190,7 @@ interface FeatProvider {
 
     //<editor-fold desc="Persons">
     @GET("/persons/getPersonByPlayerId/{id}")
-    suspend fun getPersonByPlayerId(@Path("id") id: String): Response<ResponsePerson>
+    suspend fun getPersonByPlayerId(@Path("id") id: String): Response<List<ResponsePerson>>
 
     @GET("/persons/getPersonById/{id}")
     suspend fun getPerson(@Path("id") id: String): Response<Person>

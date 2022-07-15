@@ -96,7 +96,7 @@ interface FeatRepository {
     fun updatePersonPersonalInformation(req: RequestUpdatePersonPersonalInformation): Flow<Result<String>>
     fun createPersonTransaction(req: RequestPersonTransaction): Flow<Result<String>>
     fun updateUriImage(req: RequestUriImage): Flow<Result<String>> // @PUT("/persons/setProfileImageUrl")
-    fun getPersonByPlayerId(id: String): Flow<Result<ResponsePerson>>// @GET("/persons/getPersonByPlayerId/{id}")
+    fun getPersonByPlayerId(id: String): Flow<Result<List<ResponsePerson>>>// @GET("/persons/getPersonByPlayerId/{id}")
     //</editor-fold desc="Persons">
 
     //<editor-fold desc="SportsGenerics">

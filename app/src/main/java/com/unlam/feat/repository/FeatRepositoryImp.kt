@@ -830,7 +830,7 @@ constructor(
     //</editor-fold desc="Users">
 
     //<editor-fold desc="Persons">
-    override fun getPersonByPlayerId(id: String): Flow<Result<ResponsePerson>> = flow {
+    override fun getPersonByPlayerId(id: String): Flow<Result<List<ResponsePerson>>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.getPersonByPlayerId(id)
@@ -1344,7 +1344,7 @@ constructor(
                         Result.Success(
                             data = ResponseInfoPlayer(
                                 qualifications = responseQualifications.body(),
-                                person = responsePerson.body()
+                                person = responsePerson.body()?.first()
                             )
                         )
                     )
