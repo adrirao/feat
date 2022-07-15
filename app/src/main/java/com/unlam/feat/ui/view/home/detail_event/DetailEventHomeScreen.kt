@@ -114,7 +114,7 @@ fun DetailEventHomeScreen(
                 height = 50.dp,
                 width = 50.dp,
                 onClick = {
-                    onClick(DetailEventHomeEvent.OnClick)
+                    onClick(DetailEventHomeEvent.QualificationApplyEvent)
                 },
                 contentColor = YellowColor,
                 backgroundColor = YellowColor90

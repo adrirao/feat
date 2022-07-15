@@ -643,6 +643,18 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
             )
         }
 
+        if(state.successQualifyApply){
+            SuccessDialog(
+                title = "Calificados con exito",
+                desc = "Se ha calificado con exito los participantes. Muchas gracias!!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Home.route)
+                },
+                enabledCancelButton = false
+            )
+        }
+
         if (state.event != null && state.players != null) {
             DetailEventHomeScreen(
                 state = state,
@@ -657,7 +669,9 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                         DetailEventHomeEvent.ApplyEvent, DetailEventHomeEvent.CancelApplyEvent -> detailEventHomeViewModel.onEvent(
                             event
                         )
-                        else -> detailEventHomeViewModel.qualifyPlayers()
+                        is DetailEventHomeEvent.QualificationApplyEvent -> {
+                            detailEventHomeViewModel.onEvent(event)
+                        }
                     }
                 },
                 changeQualification = {

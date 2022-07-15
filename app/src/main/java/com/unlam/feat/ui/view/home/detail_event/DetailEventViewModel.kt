@@ -42,7 +42,8 @@ constructor(
                     loading = false,
                     error = "",
                     successApply = false,
-                    successCancelApply = false
+                    successCancelApply = false,
+                    successQualifyApply = false
                 )
             }
             is DetailEventHomeEvent.ApplyEvent -> {
@@ -50,6 +51,9 @@ constructor(
             }
             is DetailEventHomeEvent.CancelApplyEvent -> {
                 cancelApplyEvent()
+            }
+            is DetailEventHomeEvent.QualificationApplyEvent -> {
+                qualifyPlayers()
             }
         }
     }
@@ -128,7 +132,9 @@ constructor(
                     _state.value = DetailEventHomeState(loading = true)
                 }
                 is Result.Success -> {
-                    Log.d("FeatLog", "Actualizado con exito.")
+                    _state.value = DetailEventHomeState(
+                        successQualifyApply = true
+                    )
                 }
             }
         }.launchIn(viewModelScope)

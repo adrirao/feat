@@ -7,6 +7,7 @@ import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
 sealed class DetailEventHomeEvent {
     object ApplyEvent: DetailEventHomeEvent()
     object CancelApplyEvent: DetailEventHomeEvent()
+    object QualificationApplyEvent: DetailEventHomeEvent()
     object DismissDialog : DetailEventHomeEvent()
     object OnClick: DetailEventHomeEvent()
     data class OnClickCardPlayer(val idPlayer: Int) : DetailEventHomeEvent()
