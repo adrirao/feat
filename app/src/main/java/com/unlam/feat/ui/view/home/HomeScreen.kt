@@ -53,7 +53,7 @@ fun HomeScreen(
                     }
                 }
                 FeatText(
-                    text = "Eventos Sugeridos de la semana:",
+                    text = "Eventos de la semana:",
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     separator = true,
                     verticalPadding = true
