@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import com.unlam.feat.util.Result
+import com.unlam.feat.util.logging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -91,6 +92,8 @@ constructor(
             val uId = firebaseAuthRepository.getUserId()
             firebaseStorageRepository.putFile(image, uId)
             firebaseStorageRepository.getFile(uId, isSuccess = {
+                logging("uId : ${uId}")
+                logging("photoUrl : ${it.toString()}")
                 featRepository.updateUriImage(RequestUriImage(uId, it.toString()))
                     .onEach { result ->
                     }.launchIn(viewModelScope)
