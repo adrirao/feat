@@ -65,30 +65,22 @@ constructor(
                     }
 
                     var playersConfirmed = result.data.playersConfirmed
-                    val playersUid = result.data.playersUids
+                    val playersPhotoUrl = result.data!!.playersPhotoUrl
 
-                    firebaseStorageRepository.getUris(playersUid) { listUris ->
-                        playersUid.forEach { player ->
-                            listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
-                                    playersConfirmed.forEach { playerConfirmed ->
-                                        if(player.playerId == playerConfirmed.id){
-                                            playerConfirmed.uri = uri
-                                        }
-
-                                    }
-                                }
+                    playersPhotoUrl.forEach { player ->
+                        playersConfirmed?.forEach { playersConfirmed ->
+                            if (player.playerId == playersConfirmed.id) {
+                                playersConfirmed.photoUrl = player.photoUrl
                             }
                         }
+                    }
+
                         _state.value = SearchEventDetailState(
                             event = result.data!!.event,
                             playersConfirmed = result.data.playersConfirmed,
                             idPlayer = playerId
 
                         )
-                    }
-
-
                 }
             }
         }.launchIn(viewModelScope)

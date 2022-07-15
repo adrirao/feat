@@ -283,7 +283,7 @@ constructor(
 
     fun getDataDetailEvent(idEvent: Int) {
         val uId = firebaseAuthRepository.getUserId()
-        featRepository.getDataDetailEvent(idEvent,uId).onEach { result ->
+        featRepository.getDataDetailEvent(idEvent, uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -296,41 +296,34 @@ constructor(
 
                     var playersConfirmed = result.data!!.playersConfirmed
                     var playersApplied = result.data!!.playersApplied
-                    val playersUid = result.data!!.playersUids
+                    val playersPhotoUrl = result.data!!.playersPhotoUrl
 
-                    firebaseStorageRepository.getUris(playersUid) { listUris ->
-                        playersUid.forEach { player ->
-                            listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
-                                    playersConfirmed.forEach { playerConfirmed ->
-                                        if(player.playerId == playerConfirmed.id){
-                                            playerConfirmed.uri = uri
-                                        }
-                                    }
-                                }
+
+                    playersPhotoUrl.forEach { player ->
+                        playersConfirmed.forEach { playerConfirmed ->
+                            if (player.playerId == playerConfirmed.id) {
+                                playerConfirmed.photoUrl = player.photoUrl
                             }
                         }
-                        playersUid.forEach { player ->
-                            listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
-                                    playersApplied.forEach { playersApplied ->
-                                        if(player.playerId == playersApplied.id){
-                                            playersApplied.uri = uri
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        _state.value = DetailEventState(
-                            event = result.data!!.event,
-                            playersApplied = result.data.playersApplied,
-                            playersConfirmed = result.data.playersConfirmed,
-                            playersSuggested = result.data.playersSuggested
-                        )
                     }
 
+                        playersPhotoUrl.forEach { player ->
+                            playersApplied.forEach { playersApplied ->
+                                if (player.playerId == playersApplied.id) {
+                                    playersApplied.photoUrl = player.photoUrl
+                                }
+                            }
+                        }
+
+                            _state.value = DetailEventState(
+                                event = result.data!!.event,
+                                playersApplied = result.data.playersApplied,
+                                playersConfirmed = result.data.playersConfirmed,
+                                playersSuggested = result.data.playersSuggested
+                            )
+                        }
+                    }
                 }
+                    .launchIn(viewModelScope)
             }
-        }.launchIn(viewModelScope)
-    }
-}
+        }

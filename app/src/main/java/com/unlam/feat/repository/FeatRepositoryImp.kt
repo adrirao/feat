@@ -515,16 +515,25 @@ constructor(
                     listPlayersId.add(player.id)
                 }
                 val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
-                val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
+                val responsePhotoUrl = featProvider.getPhotoUrlsByPlayers(requestPlayerId)
 
-                if(responseUid.code() in 200..299){
+                if(responsePhotoUrl.code() in 200..299){
                     emit(
                         Result.Success(
                             data = ResponseDataSuggestedPlayers(
                             players = response.body() ?:  listOf(),
                             person = person,
-                            playersUids = responseUid.body() ?:  listOf(),
+                            playersPhotoUrl = responsePhotoUrl.body() ?:  listOf(),
                         ))
+                    )
+                }else if(responsePhotoUrl.code() in 400..499){
+                    emit(
+                        Result.Success(
+                            data = ResponseDataSuggestedPlayers(
+                                players = response.body() ?:  listOf(),
+                                person = person,
+                                playersPhotoUrl = listOf(),
+                            ))
                     )
                 }
             } else {
@@ -586,10 +595,10 @@ constructor(
         }
     }
 
-    override fun getUidsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponseUids>>> = flow {
+    override fun getPhotoUrlsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponsePhotoUrl>>> = flow {
         try {
             emit(Result.Loading())
-            val response = featProvider.getUidsByPlayers(personsId)
+            val response = featProvider.getPhotoUrlsByPlayers(personsId)
             if (response.code() in 200..299) {
                 emit(Result.Success(data = response.body()))
             } else {
@@ -1048,8 +1057,8 @@ constructor(
                         }
                     }
                     val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
-                    val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
-                    if(responseUid.code() in 200..299){
+                    val responsePhotoUrl = featProvider.getPhotoUrlsByPlayers(requestPlayerId)
+                    if(responsePhotoUrl.code() in 200..299){
                         emit(
                             Result.Success(
                                 data = ResponseDetailEvent(
@@ -1058,9 +1067,22 @@ constructor(
                                     playersApplied = responsePlayersApplied.body() ?: listOf(),
                                     playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
                                     players = responsePlayer.body() ?: listOf(),
-                                    playersUids = responseUid.body() ?:  listOf()
+                                    playersPhotoUrl = responsePhotoUrl.body() ?:  listOf()
                                 )
                             )
+                        )
+                    }else if(responsePhotoUrl.code() in 400..499){
+                        emit(
+                            Result.Success(
+                                data = ResponseDetailEvent(
+                                    event = responseEvent.body()!!,
+                                    playersSuggested = responsePlayersSuggested.body() ?: listOf(),
+                                    playersApplied = responsePlayersApplied.body() ?: listOf(),
+                                    playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
+                                    players = responsePlayer.body() ?: listOf(),
+                                    playersPhotoUrl = responsePhotoUrl.body() ?:  listOf()
+                                )
+                        )
                         )
                     }
 

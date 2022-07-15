@@ -63,27 +63,23 @@ constructor(
                 }
                 is Result.Success -> {
 
-                    var playersApplied = result.data!!.players
-                    val playersUid = result.data!!.playersUids
+                    var playersSuggested = result.data!!.players
+                    val playersPhotoUrl = result.data!!.playersPhotoUrl
 
-                    firebaseStorageRepository.getUris(playersUid) { listUris ->
-                        playersUid.forEach { player ->
-                            listUris.forEach { uri ->
-                                if (uri.contains(player.uId)) {
-                                    playersApplied?.forEach { playersApplied ->
-                                        if (player.playerId == playersApplied.id) {
-                                            playersApplied.uri = uri
-                                        }
-                                    }
-                                }
+
+                    playersPhotoUrl.forEach { player ->
+                        playersSuggested?.forEach { playersSuggested ->
+                            if (player.playerId == playersSuggested.id) {
+                                playersSuggested.photoUrl = player.photoUrl
                             }
                         }
+                    }
+
                         _state.value = _state.value.copy(
                             idEvent = idEvent,
                             players = result.data?.players!!,
                             isLoading = false
                         )
-                    }
                 }
             }
         }.launchIn(viewModelScope)

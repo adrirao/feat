@@ -71,29 +71,24 @@ constructor(
                             playerId = player.id.toString()
                         }
                     }
-                    var playersConfirmed = result.data.playersConfirmed
-                    val playersUid = result.data.playersUids
 
-                    firebaseStorageRepository.getUris(playersUid) { listUris ->
-                        playersUid.forEach { player ->
-                            val uri = listUris.find { uriFilter -> uriFilter.contains(player.uId) }
-                            if(uri != null){
-                                playersConfirmed.forEach { playerConfirmed ->
-                                    if(player.playerId == playerConfirmed.id){
-                                        playerConfirmed.uri = uri
-                                    }
-                                }
+                    var playersConfirmed = result.data.playersConfirmed
+                    val playersPhotoUrl = result.data.playersPhotoUrl
+
+
+                    playersPhotoUrl.forEach { player ->
+                        playersConfirmed.forEach { playerConfirmed ->
+                            if (player.playerId == playerConfirmed.id) {
+                                playerConfirmed.photoUrl = player.photoUrl
                             }
                         }
-                        _state.value = DetailEventHomeState(
-                            event = result.data!!.event,
-                            players = playersConfirmed,
-                            idPlayer = playerId
-                        )
                     }
 
-
-
+                    _state.value = DetailEventHomeState(
+                        event = result.data!!.event,
+                        players = playersConfirmed,
+                        idPlayer = playerId
+                    )
 
                 }
             }

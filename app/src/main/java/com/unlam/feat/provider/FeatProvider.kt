@@ -2,7 +2,7 @@ package com.unlam.feat.provider
 
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
-import com.unlam.feat.model.response.ResponseUids
+import com.unlam.feat.model.response.ResponsePhotoUrl
 import com.unlam.feat.util.Result
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -129,8 +129,8 @@ interface FeatProvider {
     suspend fun createPlayer(@Body req: RequestPlayer): Response<String>
 
     @Headers("Content-type: application/json")
-    @POST("/players/getUidsByPlayers")
-    suspend fun getUidsByPlayers(@Body req: RequestPlayerId): Response<List<ResponseUids>>
+    @POST("/players/getPhotoUrlsByPlayers")
+    suspend fun getPhotoUrlsByPlayers(@Body req: RequestPlayerId): Response<List<ResponsePhotoUrl>>
 
     @Headers("Content-type: application/json")
     @POST("/players/setDismissedFromList")

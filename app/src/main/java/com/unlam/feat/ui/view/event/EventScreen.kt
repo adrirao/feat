@@ -68,7 +68,7 @@ fun EventScreen(
             title = "Error mis eventos",
             desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
             onDismiss = {
-                onEvent(EventEvents.onClick(TypeClick.DismissDialog))
+                onEvent(EventEvents.DismissDialog)
             },
             enabledCancelButton = false
         )

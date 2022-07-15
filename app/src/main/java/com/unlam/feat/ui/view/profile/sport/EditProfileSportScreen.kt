@@ -101,6 +101,10 @@ fun EditProfileSportScreen(
                         }
                     }
                 },
+                error = when (state.sportIdError) {
+                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                },
             )
 
 
@@ -150,10 +154,10 @@ fun EditProfileSportScreen(
                         }
                     }
                 },
-//                error = when (state.) {
-//                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
-//                    else -> ""
-//                },
+                error = when (state.levelIdSportError) {
+                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                },
             )
 
 
@@ -176,10 +180,10 @@ fun EditProfileSportScreen(
                         }
                     }
                 },
-//                error = when (state.) {
-//                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
-//                    else -> ""
-//                },
+                error = when (state.valuationIdSportError) {
+                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                },
             )
 
 
@@ -194,11 +198,11 @@ fun EditProfileSportScreen(
                         )
                     )
                 },
-//                maxLines = 4,
-//                error = when (state.abilitiesSoccerError) {
-//                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
-//                    else -> ""
-//                }
+                maxLines = 4,
+                error = when (state.abilitiesSportError) {
+                    EditProfileSportState.GenericError.FieldEmpty -> stringResource(R.string.text_field_empty)
+                    else -> ""
+                }
             )
 
             FeatSpacerSmall()

@@ -10,6 +10,6 @@ data class ResponseDetailEvent(
     val playersApplied : List<PlayerApplyDetail>,
     val playersConfirmed: List<Player>,
     val players : List<Player>,
-    val playersUids : List<ResponseUids>
+    val playersPhotoUrl : List<ResponsePhotoUrl>
 )
 

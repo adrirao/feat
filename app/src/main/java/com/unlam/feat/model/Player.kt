@@ -9,5 +9,5 @@ data class Player(
     val position: Position,
     val level : Level,
     val valuation : Valuation,
-    var uri : String = ""
+    var photoUrl : String = ""
 )

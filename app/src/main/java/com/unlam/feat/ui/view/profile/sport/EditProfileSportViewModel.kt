@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressState
+import com.unlam.feat.ui.view.profile.preferences.EditProfilePreferencesEvent
+import com.unlam.feat.ui.view.search.SearchState
 import com.unlam.feat.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -35,9 +38,48 @@ constructor(
                     TypeValueChange.OnValueChangeSelectSport -> {
                         getDataSportScreen(event.value.toInt())
                     }
+                    TypeValueChange.OnValueChangeSelectSport -> {
+                        _state.value = _state.value.copy(
+                            sportId = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangePositionSport -> {
+                        _state.value = _state.value.copy(
+                            positionIdSport = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelSport -> {
+                        _state.value = _state.value.copy(
+                            levelIdSport = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationSport -> {
+                        _state.value = _state.value.copy(
+                            valuationIdSport = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesSport -> {
+                        _state.value = _state.value.copy(
+                            abilitiesSport = event.value
+                        )
+                    }
                 }
             }
+            EditProfileSportEvent.onClick(TypeClick.Submit) -> {
+                _state.value = _state.value.copy(
+                    sportIdError = validateNoEmptyField(_state.value.sportId),
+                    abilitiesSportError = validateNoEmptyField(_state.value.abilitiesSport),
+                    positionIdSportError = validateNoEmptyField(_state.value.positionIdSport),
+                    levelIdSportError = validateNoEmptyField(_state.value.levelIdSport),
+                    valuationIdSportError = validateNoEmptyField(_state.value.valuationIdSport),
+                )
+                addSport()
+            }
         }
+    }
+
+    private fun addSport() {
+        TODO("Not yet implemented")
     }
 
 
@@ -91,4 +133,14 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
+
+    private fun validateNoEmptyField(
+        field: String?,
+    ): EditProfileSportState.GenericError? {
+            val trimmedField = field?.trim() ?: ""
+            if (trimmedField.isBlank()) {
+                return EditProfileSportState.GenericError.FieldEmpty
+            }
+        return null
+    }
 }

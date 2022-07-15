@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import coil.request.ImageRequest
 import com.google.firebase.storage.FirebaseStorage
-import com.unlam.feat.model.response.ResponseUids
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -28,15 +27,15 @@ constructor(
         ref.putBytes(data)
     }
 
-     override suspend fun getUris(uIds:List<ResponseUids>,isSuccess: (List<String>) -> Unit){
-        val uris:MutableList<String> = mutableListOf()
-        firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
-            uIds.forEach { uId ->
-                listUriResult.items.map { ref -> if(ref.name.contains(uId.uId)) ref.downloadUrl.await().also { uri -> uris.add(uri.toString()) }}
-            }
-            isSuccess(uris.toList())
-        }
-    }
+//     override suspend fun getUris(uIds:List<ResponseUids>,isSuccess: (List<String>) -> Unit){
+//        val uris:MutableList<String> = mutableListOf()
+//        firebaseStorage.getReference("images/").listAll().await().also { listUriResult ->
+//            uIds.forEach { uId ->
+//                listUriResult.items.map { ref -> if(ref.name.contains(uId.uId)) ref.downloadUrl.await().also { uri -> uris.add(uri.toString()) }}
+//            }
+//            isSuccess(uris.toList())
+//        }
+//    }
 
     override fun getFile(uId: String, isSuccess: (Uri) -> Unit) {
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")

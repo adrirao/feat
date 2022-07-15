@@ -18,10 +18,11 @@ data class EditProfileSportState (
 
     val sportId: String = "",
     val abilitiesSport:String = "",
-    val positionIdSport:Int? = null,
-    val levelIdSport:Int? = null,
-    val valuationIdSport:Int? = null,
+    val positionIdSport:String? = null,
+    val levelIdSport:String? = null,
+    val valuationIdSport:String? = null,
 
+    val sportIdError: GenericError? = null,
     val abilitiesSportError:GenericError? = null,
     val positionIdSportError:GenericError? = null,
     val levelIdSportError:GenericError? = null,

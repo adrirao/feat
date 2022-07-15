@@ -41,7 +41,7 @@ fun CardPlayer(
                     .size(200.dp)
                     .clip(RoundedCornerShape(20)),
                 contentScale= ContentScale.Crop,
-                model = player.uri,
+                model = player.photoUrl,
                 contentDescription = "",
                 loading = { FeatCircularProgress() })
             Column(
@@ -131,7 +131,7 @@ fun CardPlayerDetail(
                         .size(200.dp)
                         .clip(RoundedCornerShape(20)),
                     contentScale= ContentScale.Crop,
-                    model = player.uri,
+                    model = player.photoUrl,
                     contentDescription = "",
                     loading = { FeatCircularProgress() })
                 Column(

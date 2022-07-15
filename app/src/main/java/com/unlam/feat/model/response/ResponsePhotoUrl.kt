@@ -1,6 +1,6 @@
 package com.unlam.feat.model.response
 
-data class ResponseUids(
+data class ResponsePhotoUrl(
     val playerId: Int,
-    val uId: String
+    val photoUrl: String
 )

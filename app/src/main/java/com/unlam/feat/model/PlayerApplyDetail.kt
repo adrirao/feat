@@ -19,5 +19,5 @@ data class PlayerApplyDetail(
     @SerializedName("level_desc")
     val level: String,
     val origin: String,
-    var uri: String = ""
+    var photoUrl: String = ""
     )
