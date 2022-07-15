@@ -252,7 +252,10 @@ constructor(
         }
     }
 
-    override fun getfilterEventForUser(uId: String, req: RequestFilterEvent): Flow<Result<List<Event>>> = flow{
+    override fun getfilterEventForUser(
+        uId: String,
+        req: RequestFilterEvent
+    ): Flow<Result<List<Event>>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.getfilterEventForUser(req)
@@ -503,7 +506,10 @@ constructor(
         }
     }
 
-    override fun getAllPlayersSuggestedForEvent(eventId: Int, uId: String): Flow<Result<ResponseDataSuggestedPlayers>> = flow {
+    override fun getAllPlayersSuggestedForEvent(
+        eventId: Int,
+        uId: String
+    ): Flow<Result<ResponseDataSuggestedPlayers>> = flow {
         try {
             emit(Result.Loading())
             val listPlayersId: MutableList<Int> = mutableListOf()
@@ -517,14 +523,15 @@ constructor(
                 val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
                 val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
 
-                if(responseUid.code() in 200..299){
+                if (responseUid.code() in 200..299) {
                     emit(
                         Result.Success(
                             data = ResponseDataSuggestedPlayers(
-                            players = response.body() ?:  listOf(),
-                            person = person,
-                            playersUids = responseUid.body() ?:  listOf(),
-                        ))
+                                players = response.body() ?: listOf(),
+                                person = person,
+                                playersUids = responseUid.body() ?: listOf(),
+                            )
+                        )
                     )
                 }
             } else {
@@ -586,42 +593,44 @@ constructor(
         }
     }
 
-    override fun getUidsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponseUids>>> = flow {
-        try {
-            emit(Result.Loading())
-            val response = featProvider.getUidsByPlayers(personsId)
-            if (response.code() in 200..299) {
-                emit(Result.Success(data = response.body()))
-            } else {
-                logging(request = personsId, response = response)
-                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+    override fun getUidsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponseUids>>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.getUidsByPlayers(personsId)
+                if (response.code() in 200..299) {
+                    emit(Result.Success(data = response.body()))
+                } else {
+                    logging(request = personsId, response = response)
+                    emit(Result.Error(message = Messages.UNKNOW_ERROR))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage!!.toString())
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-        } catch (e: Exception) {
-            logging(e.localizedMessage!!.toString())
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
 
-    override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> = flow{
-        try{
-            emit(Result.Loading())
-            val response = featProvider.filterPlayersForEvent(requestFilterPlayers)
-            if (response.code() in 200..299){
-                emit(
-                     Result.Success(
-                         data = ResponseFilterPlayers(
-                             players = response.body()!!
-                         )
-                     )
-                )
-            } else {
-                emit(Result.Error(message = "Unknown Error"))
+    override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.filterPlayersForEvent(requestFilterPlayers)
+                if (response.code() in 200..299) {
+                    emit(
+                        Result.Success(
+                            data = ResponseFilterPlayers(
+                                players = response.body()!!
+                            )
+                        )
+                    )
+                } else {
+                    emit(Result.Error(message = "Unknown Error"))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage)
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-        }catch (e: Exception){
-            logging(e.localizedMessage)
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
     //</editor-fold desc="Players">
     //<editor-fold desc="Positions">
 
@@ -878,18 +887,18 @@ constructor(
         }
 
     override fun updateUriImage(req: RequestUriImage): Flow<Result<String>> = flow {
-        try{
+        try {
             emit(Result.Loading())
             val response = featProvider.updateUriImage(req)
-            if(response.code() in 200..299){
-                logging(request = req,response = response)
+            if (response.code() in 200..299) {
+                logging(request = req, response = response)
 
                 emit(Result.Success(data = response.body()))
-            }else{
-                logging(request = req,response = response)
+            } else {
+                logging(request = req, response = response)
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             logging(e.localizedMessage!!.toString())
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
@@ -1035,21 +1044,21 @@ constructor(
 
                 if (responsePlayer.code() in 200..299 && responseEvent.code() in 200..299 && responsePlayersConfirmed.code() in 200..299 && responsePlayersApplied.code() in 200..299 && responsePlayersSuggested.code() in 200..299) {
                     responsePlayersSuggested.body()?.forEach { player ->
-                            listPlayersId.add(player.id)
+                        listPlayersId.add(player.id)
                     }
                     responsePlayersApplied.body()?.forEach { player ->
-                        if(!listPlayersId.contains(player.id)){
+                        if (!listPlayersId.contains(player.id)) {
                             listPlayersId.add(player.id)
                         }
                     }
                     responsePlayersConfirmed.body()?.forEach { player ->
-                        if(!listPlayersId.contains(player.id)){
+                        if (!listPlayersId.contains(player.id)) {
                             listPlayersId.add(player.id)
                         }
                     }
                     val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
                     val responseUid = featProvider.getUidsByPlayers(requestPlayerId)
-                    if(responseUid.code() in 200..299){
+                    if (responseUid.code() in 200..299) {
                         emit(
                             Result.Success(
                                 data = ResponseDetailEvent(
@@ -1058,7 +1067,7 @@ constructor(
                                     playersApplied = responsePlayersApplied.body() ?: listOf(),
                                     playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
                                     players = responsePlayer.body() ?: listOf(),
-                                    playersUids = responseUid.body() ?:  listOf()
+                                    playersUids = responseUid.body() ?: listOf()
                                 )
                             )
                         )
@@ -1348,7 +1357,7 @@ constructor(
             val responseGetPlayer = featProvider.getPlayersByUser(uId)
             val responseListSport = featProvider.getGenericsSports()
 
-            if(responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299 && responseListSport.code() in 200..299){
+            if (responseGetPlayer.code() in 200..299 && responseGetSuggestedEvent.code() in 200..299 && responseListSport.code() in 200..299) {
                 emit(
                     Result.Success(
                         data = ResponseDataSearch(
@@ -1358,23 +1367,26 @@ constructor(
                         )
                     )
                 )
-            }else{
+            } else {
                 emit(Result.Error(message = "Unknown Error"))
             }
 
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
 
-    override fun getFilterSearchEvent(uId: String, req: RequestFilterEvent): Flow<Result<ResponseDataFilterSearch>> = flow{
+    override fun getFilterSearchEvent(
+        uId: String,
+        req: RequestFilterEvent
+    ): Flow<Result<ResponseDataFilterSearch>> = flow {
         try {
             emit(Result.Loading())
             val filterEvents = featProvider.getfilterEventForUser(req)
 
-            if(filterEvents.code() in 200..299){
+            if (filterEvents.code() in 200..299) {
                 emit(
                     Result.Success(
                         data = ResponseDataFilterSearch(
@@ -1382,43 +1394,45 @@ constructor(
                         )
                     )
                 )
-            }else{
+            } else {
                 emit(Result.Error(message = "Unknown Error"))
             }
 
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
     }
 
-    override fun getPlayersUserAndSportList(uId: String): Flow<Result<ResponsePlayersUserSportList>> = flow{
-        try {
-            emit(Result.Loading())
-            val responseGetPlayer = featProvider.getPlayersByUser(uId)
-            val responseGetSportList = featProvider.getGenericsSports()
+    override fun getPlayersUserAndSportList(uId: String): Flow<Result<ResponsePlayersUserSportList>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val responseGetPlayer = featProvider.getPlayersByUser(uId)
+                val responseGetSportList = featProvider.getGenericsSports()
+                val responseGetPerson = featProvider.getPerson(uId)
 
-            if(responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299){
-                emit(
-                    Result.Success(
-                        data = ResponsePlayersUserSportList(
-                            players = responseGetPlayer.body()!!,
-                            sportGenericList = responseGetSportList.body()!!
+                if (responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299 && responseGetPerson.code() in 200..299) {
+                    emit(
+                        Result.Success(
+                            data = ResponsePlayersUserSportList(
+                                players = responseGetPlayer.body()!!,
+                                sportGenericList = responseGetSportList.body()!!,
+                                person = responseGetPerson.body()!!
+                            )
                         )
                     )
-                )
-            }else{
-                emit(Result.Error(message = "Unknown Error"))
+                } else {
+                    emit(Result.Error(message = "Unknown Error"))
+                }
+
+
+            } catch (e: Exception) {
+                logging(e.localizedMessage)
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-
-
-        }catch (e: Exception) {
-            logging(e.localizedMessage)
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
-
 
 
 //</editor-fold desc="Multiple EndPoints">

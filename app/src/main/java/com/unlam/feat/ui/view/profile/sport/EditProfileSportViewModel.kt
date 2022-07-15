@@ -4,8 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unlam.feat.model.request.RequestPlayer
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
+import com.unlam.feat.ui.util.TypeClick
 import com.unlam.feat.ui.util.TypeValueChange
 import com.unlam.feat.ui.view.config_profile.ConfigProfileEvents
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressState
@@ -35,6 +37,38 @@ constructor(
                     TypeValueChange.OnValueChangeSelectSport -> {
                         getDataSportScreen(event.value.toInt())
                     }
+                    TypeValueChange.OnValueChangeTypeSport -> {
+                        _state.value = _state.value.copy(
+                            sportId = event.value
+                        )
+                    }
+                    TypeValueChange.OnValueChangePositionSport -> {
+                        _state.value = _state.value.copy(
+                            positionIdSport = event.value.toInt()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeLevelSport -> {
+                        _state.value = _state.value.copy(
+                            levelIdSport = event.value.toInt()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeValuationSport -> {
+                        _state.value = _state.value.copy(
+                            valuationIdSport = event.value.toInt()
+                        )
+                    }
+                    TypeValueChange.OnValueChangeAbilitiesSport -> {
+                        _state.value = _state.value.copy(
+                            abilitiesSport = event.value
+                        )
+                    }
+                }
+            }
+            is EditProfileSportEvent.onClick -> {
+                when (event.typeClick) {
+                    TypeClick.Submit -> {
+                        createPlayer()
+                    }
                 }
             }
         }
@@ -49,7 +83,8 @@ constructor(
                 is Result.Success -> {
                     _state.value = EditProfileSportState(
                         playersUser = result.data?.players,
-                        sportsList = result.data?.sportGenericList
+                        sportsList = result.data?.sportGenericList,
+                        personId = result.data?.person?.id
                     )
 
                 }
@@ -85,6 +120,36 @@ constructor(
                         positionList = result.data.positionList,
                         valuationList = result.data.valuationList,
                         isLoading = false
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun createPlayer() {
+        val req = RequestPlayer(
+            abilities = _state.value.abilitiesSport,
+            sport = _state.value.sportId.toInt(),
+            person = _state.value.personId!!,
+            level = _state.value.levelIdSport,
+            position = _state.value.positionIdSport,
+            valuation = _state.value.valuationIdSport!!.toInt()
+        )
+        featRepository.createPlayer(req).onEach { result ->
+            when (result) {
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Success -> {
+                    _state.value = EditProfileSportState(
+                        isSuccessSubmitData = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        isErrorSubmitData = true
                     )
                 }
             }
