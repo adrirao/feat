@@ -169,7 +169,7 @@ constructor(
             eventId = state.value.event!!.id
         )
 
-        featRepository.setKickApply(requestEventApply).onEach { result ->
+        featRepository.setDeniedApply(requestEventApply).onEach { result ->
             when (result) {
                 is Result.Success -> {
                     _state.value = _state.value.copy(
