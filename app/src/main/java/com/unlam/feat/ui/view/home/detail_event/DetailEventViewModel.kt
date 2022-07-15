@@ -68,7 +68,6 @@ constructor(
                     _state.value = DetailEventHomeState(loading = true)
                 }
                 is Result.Success -> {
-                    loadQualificationsDefault(result.data!!.playersConfirmed)
                     val players = result.data!!.players
                     var playerId: String = ""
 
@@ -80,6 +79,17 @@ constructor(
 
                     var playersConfirmed = result.data.playersConfirmed
                     val playersPhotoUrl = result.data.playersPhotoUrl
+                    var playerFiltered: MutableList<Player> = mutableListOf()
+
+                    if (result.data.event.state.description == "Evento Terminado") {
+                        loadQualificationsDefault(result.data!!.playersConfirmed, playerId.toInt())
+
+                        playersConfirmed.forEach { player ->
+                            if (player.id != playerId.toInt()) {
+                                playerFiltered.add(player)
+                            }
+                        }
+                    }
 
 
                     playersPhotoUrl.forEach { player ->
@@ -92,7 +102,7 @@ constructor(
 
                     _state.value = DetailEventHomeState(
                         event = result.data!!.event,
-                        players = playersConfirmed,
+                        players = if (result.data.event.state.description == "Evento Terminado") playerFiltered.toList() else playersConfirmed,
                         idPlayer = playerId
                     )
 
@@ -124,9 +134,14 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun loadQualificationsDefault(players: List<Player>): SnapshotStateList<Qualification> {
+    private fun loadQualificationsDefault(
+        players: List<Player>,
+        playerId: Int
+    ): SnapshotStateList<Qualification> {
         players.forEach {
-            _qualifications.add(Qualification(id = it.id))
+            if (playerId != it.id) {
+                _qualifications.add(Qualification(id = it.id))
+            }
         }
         return _qualifications
     }

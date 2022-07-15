@@ -271,17 +271,17 @@ constructor(
         }
     }
 
-    override fun setFinalized(req : RequestSetFinalized): Flow<Result<String>>  = flow {
+    override fun setFinalized(req: RequestSetFinalized): Flow<Result<String>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.setFinalized(req)
-            if(response.code() in 200..299){
+            if (response.code() in 200..299) {
                 emit(Result.Success(data = response.body()))
-            }else{
+            } else {
                 logging(request = req, response = response)
                 emit(Result.Error(message = Messages.UNKNOW_ERROR))
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             logging(e.localizedMessage)
             emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
@@ -539,23 +539,25 @@ constructor(
                 val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
                 val responsePhotoUrl = featProvider.getPhotoUrlsByPlayers(requestPlayerId)
 
-                if(responsePhotoUrl.code() in 200..299){
+                if (responsePhotoUrl.code() in 200..299) {
                     emit(
                         Result.Success(
                             data = ResponseDataSuggestedPlayers(
-                            players = response.body() ?:  listOf(),
-                            person = person,
-                            playersPhotoUrl = responsePhotoUrl.body() ?:  listOf(),
-                        ))
+                                players = response.body() ?: listOf(),
+                                person = person,
+                                playersPhotoUrl = responsePhotoUrl.body() ?: listOf(),
+                            )
+                        )
                     )
-                }else if(responsePhotoUrl.code() in 400..499){
+                } else if (responsePhotoUrl.code() in 400..499) {
                     emit(
                         Result.Success(
                             data = ResponseDataSuggestedPlayers(
-                                players = response.body() ?:  listOf(),
+                                players = response.body() ?: listOf(),
                                 person = person,
                                 playersPhotoUrl = listOf(),
-                            ))
+                            )
+                        )
                     )
                 }
             } else {
@@ -617,21 +619,22 @@ constructor(
         }
     }
 
-    override fun getPhotoUrlsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponsePhotoUrl>>> = flow {
-        try {
-            emit(Result.Loading())
-            val response = featProvider.getPhotoUrlsByPlayers(personsId)
-            if (response.code() in 200..299) {
-                emit(Result.Success(data = response.body()))
-            } else {
-                logging(request = personsId, response = response)
-                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+    override fun getPhotoUrlsByPlayers(personsId: RequestPlayerId): Flow<Result<List<ResponsePhotoUrl>>> =
+        flow {
+            try {
+                emit(Result.Loading())
+                val response = featProvider.getPhotoUrlsByPlayers(personsId)
+                if (response.code() in 200..299) {
+                    emit(Result.Success(data = response.body()))
+                } else {
+                    logging(request = personsId, response = response)
+                    emit(Result.Error(message = Messages.UNKNOW_ERROR))
+                }
+            } catch (e: Exception) {
+                logging(e.localizedMessage!!.toString())
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-        } catch (e: Exception) {
-            logging(e.localizedMessage!!.toString())
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
 
     override fun filterPlayersForEvent(requestFilterPlayers: RequestFilterPlayers): Flow<Result<ResponseFilterPlayers>> =
         flow {
@@ -1079,22 +1082,41 @@ constructor(
                             listPlayersId.add(player.id)
                         }
                     }
-                    val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
-                    val responsePhotoUrl = featProvider.getPhotoUrlsByPlayers(requestPlayerId)
-                    if(responsePhotoUrl.code() in 200..299){
-                        emit(
-                            Result.Success(
-                                data = ResponseDetailEvent(
-                                    event = responseEvent.body()!!,
-                                    playersSuggested = responsePlayersSuggested.body() ?: listOf(),
-                                    playersApplied = responsePlayersApplied.body() ?: listOf(),
-                                    playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
-                                    players = responsePlayer.body() ?: listOf(),
-                                    playersPhotoUrl = responsePhotoUrl.body() ?:  listOf()
+                    if (listPlayersId.isNotEmpty()) {
+                        val requestPlayerId = RequestPlayerId(idPlayers = listPlayersId.toList())
+                        val responsePhotoUrl = featProvider.getPhotoUrlsByPlayers(requestPlayerId)
+                        if (responsePhotoUrl.code() in 200..299) {
+                            emit(
+                                Result.Success(
+                                    data = ResponseDetailEvent(
+                                        event = responseEvent.body()!!,
+                                        playersSuggested = responsePlayersSuggested.body()
+                                            ?: listOf(),
+                                        playersApplied = responsePlayersApplied.body() ?: listOf(),
+                                        playersConfirmed = responsePlayersConfirmed.body()
+                                            ?: listOf(),
+                                        players = responsePlayer.body() ?: listOf(),
+                                        playersPhotoUrl = responsePhotoUrl.body() ?: listOf()
+                                    )
                                 )
                             )
-                        )
-                    }else if(responsePhotoUrl.code() in 400..499){
+                        } else if (responsePhotoUrl.code() in 400..499) {
+                            emit(
+                                Result.Success(
+                                    data = ResponseDetailEvent(
+                                        event = responseEvent.body()!!,
+                                        playersSuggested = responsePlayersSuggested.body()
+                                            ?: listOf(),
+                                        playersApplied = responsePlayersApplied.body() ?: listOf(),
+                                        playersConfirmed = responsePlayersConfirmed.body()
+                                            ?: listOf(),
+                                        players = responsePlayer.body() ?: listOf(),
+                                        playersPhotoUrl = responsePhotoUrl.body() ?: listOf()
+                                    )
+                                )
+                            )
+                        }
+                    } else {
                         emit(
                             Result.Success(
                                 data = ResponseDetailEvent(
@@ -1103,11 +1125,12 @@ constructor(
                                     playersApplied = responsePlayersApplied.body() ?: listOf(),
                                     playersConfirmed = responsePlayersConfirmed.body() ?: listOf(),
                                     players = responsePlayer.body() ?: listOf(),
-                                    playersPhotoUrl = responsePhotoUrl.body() ?:  listOf()
+                                    playersPhotoUrl = listOf()
                                 )
                             )
                         )
                     }
+
 
                 } else {
                     loggingSingle(message = "Request", obj = uId)
@@ -1449,27 +1472,26 @@ constructor(
                 val responseGetSportList = featProvider.getGenericsSports()
                 val responseGetPerson = featProvider.getPerson(uId)
 
-            if(responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299){
-                emit(
-                    Result.Success(
-                        data = ResponsePlayersUserSportList(
-                            players = responseGetPlayer.body()!!,
-                            sportGenericList = responseGetSportList.body()!!,
-                            person = responseGetPerson.body()!!
+                if (responseGetPlayer.code() in 200..299 && responseGetSportList.code() in 200..299) {
+                    emit(
+                        Result.Success(
+                            data = ResponsePlayersUserSportList(
+                                players = responseGetPlayer.body()!!,
+                                sportGenericList = responseGetSportList.body()!!,
+                                person = responseGetPerson.body()!!
+                            )
                         )
                     )
-                )
-            }else{
-                emit(Result.Error(message = "Unknown Error"))
+                } else {
+                    emit(Result.Error(message = "Unknown Error"))
+                }
+
+
+            } catch (e: Exception) {
+                logging(e.localizedMessage)
+                emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
             }
-
-
-        }catch (e: Exception) {
-            logging(e.localizedMessage)
-            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
         }
-    }
-
 
 
 //</editor-fold desc="Multiple EndPoints">

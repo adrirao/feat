@@ -124,10 +124,10 @@ fun FeatEventCardHome(
                 var colorStateEvent: Color = Color.Transparent
                 if (stateUser.isNotEmpty()) {
                     if (stateUser == stringResource(R.string.value_aplicated)) {
-                        infoStateUser = "Pendiente aplicacion"
+                        infoStateUser = "Pendiente Aplicacion"
                         color = YellowColor
                     } else if (stateUser == "CONFIRMADO") {
-                        infoStateUser = "Confirmado"
+                        infoStateUser = "Participacion Confirmada"
                         color = GreenColor
                     }
                     if (event.stateDesc.isNotEmpty()) {

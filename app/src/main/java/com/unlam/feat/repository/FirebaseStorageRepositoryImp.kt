@@ -21,7 +21,7 @@ constructor(
 ) : FirebaseStorageRepository {
     override fun putFile(image: Bitmap, uId: String) {
         val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 5, baos)
+        image.compress(Bitmap.CompressFormat.JPEG, 60, baos)
         val data = baos.toByteArray()
         val ref = firebaseStorage.getReference("images/${uId}.jpeg")
         ref.putBytes(data)
