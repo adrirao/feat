@@ -51,6 +51,7 @@ object StateEvent {
     const val CREATED = "EVENTO CREADO"
     const val CONFIRMED = "EVENTO CONFIRMADO"
     const val FINALIZED = "EVENTO TERMINADO"
+    const val COMPLETED = "EVENTO COMPLETO"
     const val INVITED = "INVITADO"
     const val PLAYER_CONFIRMED = "CONFIRMADO"
     const val PLAYER_PENDING_APPLY = "APLICADO"

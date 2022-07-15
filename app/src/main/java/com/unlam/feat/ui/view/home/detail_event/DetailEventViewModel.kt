@@ -163,7 +163,8 @@ constructor(
         _qualifications[index] = _qualifications[index].copy(
             qualification.id,
             qualification.liked,
-            qualification.observation
+            qualification.observation,
+            qualifier = _state.value.idPlayer!!.toInt()
         )
     }
 

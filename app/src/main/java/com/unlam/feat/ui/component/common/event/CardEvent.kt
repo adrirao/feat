@@ -144,6 +144,10 @@ fun FeatEventCardHome(
                                 infoStateEvent = "Evento Creado"
                                 colorStateEvent = YellowColor
                             }
+                            StateEvent.COMPLETED -> {
+                                infoStateEvent = "Evento Completo"
+                                colorStateEvent = RedColor
+                            }
                         }
                     }
                     if (infoStateUser.isNotEmpty()) {
@@ -339,6 +343,10 @@ fun FeatEventCard(
                         StateEvent.CREATED -> {
                             infoState = "Evento Creado"
                             color = YellowColor
+                        }
+                        StateEvent.COMPLETED -> {
+                            infoState = "Evento Completo"
+                            color = RedColor
                         }
                     }
                 }
