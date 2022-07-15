@@ -302,6 +302,15 @@ constructor(
                 }
                 is Result.Success -> {
 
+                    val players = result.data!!.players
+                    var playerId: String = ""
+
+                    players.forEach { player ->
+                        if (player.sport.id == result.data.event.sport.sportGeneric.id) {
+                            playerId = player.id.toString()
+                        }
+                    }
+
                     var playersConfirmed = result.data!!.playersConfirmed
                     var playersApplied = result.data!!.playersApplied
                     val playersPhotoUrl = result.data!!.playersPhotoUrl
@@ -328,8 +337,9 @@ constructor(
                                 event = result.data!!.event,
                                 playersApplied = result.data.playersApplied,
                                 playersConfirmed = result.data.playersConfirmed,
-                                playersSuggested = result.data.playersSuggested
-                            )
+                                playersSuggested = result.data.playersSuggested,
+                                idPlayer =  playerId
+                                    )
                         }
                     }
                 }

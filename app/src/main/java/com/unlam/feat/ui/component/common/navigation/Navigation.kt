@@ -619,10 +619,21 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                 enabledCancelButton = false
             )
         }
-        if (state.success) {
+        if (state.successApply) {
             SuccessDialog(
                 title = "Enhorabuena",
                 desc = "Solicitud Enviada Correctamente!!",
+                onDismiss = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Home.route)
+                },
+                enabledCancelButton = false
+            )
+        }
+        if (state.successCancelApply) {
+            SuccessDialog(
+                title = "Enhorabuena",
+                desc = "Se ha cancelado la participación!!",
                 onDismiss = {
                     navController.popBackStack()
                     navController.navigate(Screen.Home.route)
@@ -641,7 +652,7 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
                         is DetailEventHomeEvent.OnClickCardPlayer -> {
                             navController.navigate(Screen.InfoPlayer.route + "/${event.idPlayer}")
                         }
-                        DetailEventHomeEvent.ApplyEvent -> detailEventHomeViewModel.onEvent(event)
+                        DetailEventHomeEvent.ApplyEvent,DetailEventHomeEvent.CancelApplyEvent -> detailEventHomeViewModel.onEvent(event)
                         else -> detailEventHomeViewModel.qualifyPlayers()
                     }
                 },

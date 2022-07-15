@@ -307,7 +307,7 @@ fun RowScope.CancelButton(
             onClick(TypeClick.Event.TypleClickEvent.Cancel)
         },
         contentColor = RedColor,
-        backgroundColor = RedColor90,
+        backgroundColor = RedColor,
         textColor = PurpleDark,
     )
 }

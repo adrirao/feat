@@ -9,7 +9,6 @@ import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.repository.FirebaseStorageRepositoryImp
-import com.unlam.feat.ui.view.invitation.detail_invitation.DetailInvitationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

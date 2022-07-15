@@ -52,7 +52,7 @@ fun DetailEventMyEventScreen(
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
-                count = if(state.event!!.state.description != StateEvent.CONFIRMED) 3 else 2,
+                count = if (state.event!!.state.description != StateEvent.CONFIRMED) 3 else 2,
                 state = pagerState
             ) { position ->
                 when (position) {
@@ -61,12 +61,12 @@ fun DetailEventMyEventScreen(
                         onClick = onClick
                     )
                     1 -> {
-                        if(state.event.state.description != StateEvent.CONFIRMED){
+                        if (state.event.state.description != StateEvent.CONFIRMED) {
                             PageTwoNotConfirmed(
                                 state,
                                 onClick = onClick
                             )
-                        }else{
+                        } else {
                             PageTwoConfirmed(
                                 state,
                                 onClick = onClick
@@ -74,7 +74,7 @@ fun DetailEventMyEventScreen(
                         }
                     }
                     2 -> {
-                        if(state.event!!.state.description != StateEvent.CONFIRMED) {
+                        if (state.event!!.state.description != StateEvent.CONFIRMED) {
                             PageTree(
                                 state,
                                 onClick = onClick
@@ -92,14 +92,14 @@ fun DetailEventMyEventScreen(
             )
 
             if (pagerState.currentPage != 0) {
-                if(state.event!!.state.description != StateEvent.CONFIRMED){
+                if (state.event!!.state.description != StateEvent.CONFIRMED) {
                     FeatOutlinedButtonIcon(
                         modifier = Modifier.align(Alignment.BottomEnd),
                         icon = Icons.Outlined.PersonAdd,
                         onClick = {
                             navigateTo(
                                 DetailEventEvent.NavigateTo.TypeNavigate.NavigateToSuggestedPlayers(
-                                    state.event?.id
+                                    state.event?.id.toString()
                                 )
                             )
                         },
@@ -183,20 +183,22 @@ fun PageTwoNotConfirmed(
                     content = {
                         items(players) { player ->
                             CardPlayer(player = player) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
-                                ) {
-                                    FeatOutlinedButton(
-                                        textContent = "Expulsar",
-                                        height = 40.dp,
-                                        onClick = {
-                                            onClick(DetailEventEvent.KickPlayer(player.id))
-                                        },
-                                        contentColor = RedColor,
-                                        backgroundColor = RedColor90,
-                                        textColor = PurpleDark
-                                    )
+                                if (player.id.toString() != state.idPlayer) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        FeatOutlinedButton(
+                                            textContent = "Expulsar",
+                                            height = 40.dp,
+                                            onClick = {
+                                                onClick(DetailEventEvent.KickPlayer(player.id.toString()))
+                                            },
+                                            contentColor = RedColor,
+                                            backgroundColor = RedColor,
+                                            textColor = PurpleDark
+                                        )
+                                    }
                                 }
                             }
 
@@ -283,7 +285,7 @@ fun PageTree(
                                             textContent = "Rechazar",
                                             height = 40.dp,
                                             onClick = {
-                                                onClick(DetailEventEvent.RejectPlayer(player.id))
+                                                onClick(DetailEventEvent.RejectPlayer(player.id.toString()))
                                             },
                                             contentColor = RedColor,
                                             backgroundColor = RedColor90,
@@ -293,7 +295,7 @@ fun PageTree(
                                             textContent = "Aceptar",
                                             height = 40.dp,
                                             onClick = {
-                                                onClick(DetailEventEvent.AcceptPlayer(player.id))
+                                                onClick(DetailEventEvent.AcceptPlayer(player.id.toString()))
                                             },
                                             contentColor = GreenColor,
                                             backgroundColor = GreenColor90,
@@ -304,7 +306,7 @@ fun PageTree(
                                             textContent = "Cancelar",
                                             height = 40.dp,
                                             onClick = {
-                                                onClick(DetailEventEvent.RejectPlayer(player.id))
+                                                onClick(DetailEventEvent.RejectPlayer(player.id.toString()))
                                             },
                                             contentColor = RedColor,
                                             backgroundColor = RedColor90,

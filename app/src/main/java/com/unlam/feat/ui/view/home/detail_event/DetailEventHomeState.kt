@@ -11,6 +11,7 @@ data class DetailEventHomeState(
     var qualifications: MutableState<MutableList<Qualification>>? = null,
     val error: String = "",
     val loading: Boolean = false,
-    val success: Boolean = false,
+    val successApply: Boolean = false,
+    val successCancelApply: Boolean = false,
     val idPlayer:String? = null,
 )

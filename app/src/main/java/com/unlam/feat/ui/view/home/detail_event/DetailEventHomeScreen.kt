@@ -28,6 +28,9 @@ import com.unlam.feat.ui.component.common.event.NotFoundEvent
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerCalification
 import com.unlam.feat.ui.theme.*
+import com.unlam.feat.ui.util.Screen
+import com.unlam.feat.ui.util.TypeClick
+import com.unlam.feat.ui.view.event.new_event.NewEventEvents
 import com.unlam.feat.util.Constants
 import com.unlam.feat.util.StateEvent
 
@@ -64,8 +67,15 @@ fun DetailEventHomeScreen(
                 0 -> PageOne(
                     state = state,
                     descOrigen = descOrigen,
-                    onClick = {
-                        onClick(DetailEventHomeEvent.ApplyEvent)
+                    onClick = { event ->
+                        when (event) {
+                            TypeClick.Event.TypleClickEvent.Confirm -> {
+                                onClick(DetailEventHomeEvent.ApplyEvent)
+                            }
+                            TypeClick.Event.TypleClickEvent.Cancel -> {
+                                onClick(DetailEventHomeEvent.CancelApplyEvent)
+                            }
+                        }
                     }
                 )
                 1 -> PageTwo(
@@ -116,13 +126,13 @@ fun DetailEventHomeScreen(
 fun PageOne(
     state: DetailEventHomeState,
     descOrigen: String,
-    onClick: () -> Unit
+    onClick: (TypeClick.Event.TypleClickEvent) -> Unit
 ) {
     val event = state.event!!
     FeatEventDetail(
         event = event,
         stateEvent = descOrigen,
-        onClick = { onClick() }
+        onClick = onClick
     )
 }
 
@@ -165,7 +175,7 @@ fun PageTwo(
                                     qualifications.find { qualificationFiltered -> qualificationFiltered.id == player.id }
                                 CardPlayerCalification(
                                     modifier = Modifier.clickable {
-                                          onClick(player.id)
+                                        onClick(player.id)
                                     },
                                     player = player,
                                     content = {

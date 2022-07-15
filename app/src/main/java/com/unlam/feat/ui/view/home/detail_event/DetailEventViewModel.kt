@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.Player
 import com.unlam.feat.model.Qualification
 import com.unlam.feat.model.request.RequestCreateInvitation
+import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.model.request.RequestQualifyPlayers
 import com.unlam.feat.repository.*
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailEvent
@@ -40,14 +41,19 @@ constructor(
                 _state.value = _state.value.copy(
                     loading = false,
                     error = "",
-                    success = false
+                    successApply = false,
+                    successCancelApply = false
                 )
             }
             is DetailEventHomeEvent.ApplyEvent -> {
                 applyEvent()
             }
+            is DetailEventHomeEvent.CancelApplyEvent -> {
+                cancelApplyEvent()
+            }
         }
     }
+
 
     fun getDataDetailEvent(idEvent: Int) {
 
@@ -157,6 +163,33 @@ constructor(
         }
     }
 
+    private fun cancelApplyEvent() {
+        val requestEventApply = RequestEventApply(
+            playerId = state.value.idPlayer.toString(),
+            eventId = state.value.event!!.id
+        )
+
+        featRepository.setKickApply(requestEventApply).onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _state.value = _state.value.copy(
+                        successCancelApply = true
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        loading = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        error = result.message!!
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     private fun applyEvent() {
 
         val request = RequestCreateInvitation(
@@ -179,7 +212,7 @@ constructor(
                 }
                 is Result.Success -> {
                     _state.value = _state.value.copy(
-                        success = true
+                        successApply = true
                     )
                 }
             }
