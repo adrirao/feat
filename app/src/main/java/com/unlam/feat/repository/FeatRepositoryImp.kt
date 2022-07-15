@@ -952,7 +952,7 @@ constructor(
 
     //<editor-fold desc="Addresses">
     //<editor-fold desc="EventApplies">
-    override fun setAcceptedApply(req: RequestEventApply): Flow<Result<String>> = flow {
+    override fun setAcceptedApply(req: RequestEventApply): Flow<Result<ResponseCapacity>> = flow {
         try {
             emit(Result.Loading())
             val response = featProvider.setAcceptedApply(req)

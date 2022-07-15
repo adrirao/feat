@@ -46,7 +46,7 @@ constructor(
     }
 
 
-  private  fun confirmInvitation() {
+    private fun confirmInvitation() {
         val requestEventApply = RequestEventApply(
             playerId = _state.value.idPlayer.toString(),
             eventId = state.value.event!!.id
@@ -55,11 +55,19 @@ constructor(
         featRepository.setAcceptedApply(requestEventApply).onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _state.value = _state.value.copy(
-                        success = true,
-                        successTitle = "Invitacion aceptada",
-                        successDescription = "La invitacion se ha aceptado con exito",
-                    )
+                    if (result.data!!.isComplete) {
+                        _state.value = _state.value.copy(
+                            completeCapacity = true,
+                            completeTitle = "Cupo lleno",
+                            completeDescription = "Se alcanzo la cantidad maxima del cupo disponible."
+                        )
+                    } else {
+                        _state.value = _state.value.copy(
+                            success = true,
+                            successTitle = "Invitacion aceptada",
+                            successDescription = "La invitacion se ha aceptado con exito",
+                        )
+                    }
                 }
                 is Result.Loading -> {
                     _state.value = _state.value.copy(
@@ -109,10 +117,10 @@ constructor(
 
     }
 
-     fun getDataDetailEvent(idEvent: Int) {
-         val uId = firebaseAuthRepository.getUserId()
+    fun getDataDetailEvent(idEvent: Int) {
+        val uId = firebaseAuthRepository.getUserId()
 
-         featRepository.getDataDetailEvent(idEvent, uId = uId).onEach { result ->
+        featRepository.getDataDetailEvent(idEvent, uId = uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -123,10 +131,10 @@ constructor(
                 }
                 is Result.Success -> {
                     val players = result.data!!.players
-                    var playerId : String = ""
+                    var playerId: String = ""
 
                     players.forEach { player ->
-                        if(player.sport.id == result.data.event.sport.sportGeneric.id){
+                        if (player.sport.id == result.data.event.sport.sportGeneric.id) {
                             playerId = player.id.toString()
                         }
                     }
@@ -137,9 +145,9 @@ constructor(
                     firebaseStorageRepository.getUris(playersUid) { listUris ->
                         playersUid.forEach { player ->
                             listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
+                                if (uri.contains(player.uId)) {
                                     playersConfirmed.forEach { playerConfirmed ->
-                                        if(player.playerId == playerConfirmed.id){
+                                        if (player.playerId == playerConfirmed.id) {
                                             playerConfirmed.uri = uri
                                         }
 

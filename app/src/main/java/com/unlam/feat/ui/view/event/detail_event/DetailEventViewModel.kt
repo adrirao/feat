@@ -177,11 +177,19 @@ constructor(
         featRepository.setAcceptedApply(requestEventApply).onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _state.value = _state.value.copy(
-                        successPlayer = true,
-                        successTitle = "Jugador aceptado",
-                        successDescription = "El jugador ha sido aceptado con exito",
-                    )
+                    if (result.data!!.isComplete) {
+                        _state.value = _state.value.copy(
+                            completeCapacity = true,
+                            completeTitle = "Cupo lleno",
+                            completeDescription = "Se alcanzo la cantidad maxima del cupo disponible."
+                        )
+                    } else {
+                        _state.value = _state.value.copy(
+                            successPlayer = true,
+                            successTitle = "Jugador aceptado",
+                            successDescription = "El jugador ha sido aceptado con exito",
+                        )
+                    }
                 }
                 is Result.Loading -> {
                     _state.value = _state.value.copy(
@@ -283,7 +291,7 @@ constructor(
 
     fun getDataDetailEvent(idEvent: Int) {
         val uId = firebaseAuthRepository.getUserId()
-        featRepository.getDataDetailEvent(idEvent,uId).onEach { result ->
+        featRepository.getDataDetailEvent(idEvent, uId).onEach { result ->
             when (result) {
                 is Result.Error -> {
                     _state.value =
@@ -301,9 +309,9 @@ constructor(
                     firebaseStorageRepository.getUris(playersUid) { listUris ->
                         playersUid.forEach { player ->
                             listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
+                                if (uri.contains(player.uId)) {
                                     playersConfirmed.forEach { playerConfirmed ->
-                                        if(player.playerId == playerConfirmed.id){
+                                        if (player.playerId == playerConfirmed.id) {
                                             playerConfirmed.uri = uri
                                         }
                                     }
@@ -312,9 +320,9 @@ constructor(
                         }
                         playersUid.forEach { player ->
                             listUris.forEach { uri ->
-                                if(uri.contains(player.uId)){
+                                if (uri.contains(player.uId)) {
                                     playersApplied.forEach { playersApplied ->
-                                        if(player.playerId == playersApplied.id){
+                                        if (player.playerId == playersApplied.id) {
                                             playersApplied.uri = uri
                                         }
                                     }

@@ -2,6 +2,7 @@ package com.unlam.feat.provider
 
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
+import com.unlam.feat.model.response.ResponseCapacity
 import com.unlam.feat.model.response.ResponseUids
 import com.unlam.feat.util.Result
 import kotlinx.coroutines.flow.Flow
@@ -224,7 +225,7 @@ interface FeatProvider {
     //<editor-fold desc="EventApplies">
     @Headers("Content-type: application/json")
     @POST("/eventApplies/setAcceptedApply")
-    suspend fun setAcceptedApply(@Body requestEventApply: RequestEventApply): Response<String>
+    suspend fun setAcceptedApply(@Body requestEventApply: RequestEventApply): Response<ResponseCapacity>
 
     @Headers("Content-type: application/json")
     @POST("/eventApplies/setDeniedApply")

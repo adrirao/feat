@@ -63,16 +63,6 @@ fun EventScreen(
             }
         )
     }
-    if (state.eventsError != null) {
-        ErrorDialog(
-            title = "Error mis eventos",
-            desc = "Error al obtener mis eventos, por favor pruebe nuevamente o contactese con el administrador",
-            onDismiss = {
-                onEvent(EventEvents.onClick(TypeClick.DismissDialog))
-            },
-            enabledCancelButton = false
-        )
-    }
     if (state.isLoading) {
         FeatCircularProgress()
     }
