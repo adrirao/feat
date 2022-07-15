@@ -1255,8 +1255,8 @@ private fun SportDataSoccer(
                 FeatOutlinedButton(
                     textContent = "Cancelar",
                     contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
                 ) {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
@@ -1425,8 +1425,8 @@ private fun SportDataBasketball(
                 FeatOutlinedButton(
                     textContent = "Cancelar",
                     contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
                 ) {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
@@ -1593,8 +1593,8 @@ private fun SportDataPadel(
                 FeatOutlinedButton(
                     textContent = "Cancelar",
                     contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
                 ) {
                     onEvent(
                         ConfigProfileEvents.onValueChange(
@@ -1761,8 +1761,8 @@ private fun SportDataTennis(
                 FeatOutlinedButton(
                     textContent = "Cancelar",
                     contentColor = RedColor,
-                    backgroundColor = RedColor20,
-                    textColor = RedColor
+                    backgroundColor = RedColor,
+                    textColor = PurpleDark
                 ) {
                     onEvent(
                         ConfigProfileEvents.onValueChange(

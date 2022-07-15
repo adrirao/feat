@@ -7,8 +7,8 @@
     <string name="text_re_email">Verificar Email</string>
     <string name="text_password">Contraseña</string>
     <string name="text_re_password">Verificar Contraseña</string>
-    <string name="text_password_visible_content_description">Password Visible</string>
-    <string name="text_password_hidden_content_description">Password Hidden</string>
+    <string name="text_password_visible_content_description">Contraseña visible</string>
+    <string name="text_password_hidden_content_description">Contraseña oculta</string>
     <string name="text_user_already_exist">Usuario Existente</string>
     <string name="desc_user_already_exist">El usuario ya existe, por favor ingresar un email nuevo.</string>
     <string name="text_user_created">Usuario Creado</string>
