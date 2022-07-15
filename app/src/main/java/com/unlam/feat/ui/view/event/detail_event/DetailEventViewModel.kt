@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.unlam.feat.model.request.RequestCreateInvitation
 import com.unlam.feat.model.request.RequestEventApply
 import com.unlam.feat.model.request.RequestEventState
+import com.unlam.feat.model.request.RequestSetFinalized
 import com.unlam.feat.repository.FeatRepositoryImp
 import com.unlam.feat.repository.FirebaseAuthRepositoryImp
 import com.unlam.feat.repository.FirebaseFirestoreRepositoryImp
@@ -49,6 +50,9 @@ constructor(
             is DetailEventEvent.ConfirmEvent -> {
                 confirmEvent()
             }
+            is DetailEventEvent.FinalizeEvent -> {
+                finalizeEvent()
+            }
             is DetailEventEvent.KickPlayer -> {
                 _state.value = _state.value.copy(
                     idPlayer = event.userId
@@ -73,8 +77,32 @@ constructor(
                 )
                 invitePlayer()
             }
-
         }
+    }
+
+    private fun finalizeEvent() {
+        val req = RequestSetFinalized(
+            id = _state.value.event!!.id
+        )
+        featRepository.setFinalized(req).onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _state.value = DetailEventState(
+                        successFinalizedEvent = true
+                    )
+                }
+                is Result.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+                is Result.Error -> {
+                    _state.value = _state.value.copy(
+                        error = result.message!!
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun kickPlayer() {
@@ -325,24 +353,24 @@ constructor(
                         }
                     }
 
-                        playersPhotoUrl.forEach { player ->
-                            playersApplied.forEach { playersApplied ->
-                                if (player.playerId == playersApplied.id) {
-                                    playersApplied.photoUrl = player.photoUrl
-                                }
+                    playersPhotoUrl.forEach { player ->
+                        playersApplied.forEach { playersApplied ->
+                            if (player.playerId == playersApplied.id) {
+                                playersApplied.photoUrl = player.photoUrl
                             }
                         }
-
-                            _state.value = DetailEventState(
-                                event = result.data!!.event,
-                                playersApplied = result.data.playersApplied,
-                                playersConfirmed = result.data.playersConfirmed,
-                                playersSuggested = result.data.playersSuggested,
-                                idPlayer =  playerId
-                                    )
-                        }
                     }
+
+                    _state.value = DetailEventState(
+                        event = result.data!!.event,
+                        playersApplied = result.data.playersApplied,
+                        playersConfirmed = result.data.playersConfirmed,
+                        playersSuggested = result.data.playersSuggested,
+                        idPlayer =  playerId
+                    )
                 }
-                    .launchIn(viewModelScope)
             }
         }
+            .launchIn(viewModelScope)
+    }
+}

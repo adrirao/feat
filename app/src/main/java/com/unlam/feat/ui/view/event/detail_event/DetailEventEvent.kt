@@ -9,6 +9,7 @@ sealed class DetailEventEvent {
 
     object CancelEvent : DetailEventEvent()
     object ConfirmEvent : DetailEventEvent()
+    object FinalizeEvent: DetailEventEvent()
 
 //    object KickPlayer : DetailEventEvent()
     data class KickPlayer(val userId: String) : DetailEventEvent()

@@ -74,7 +74,7 @@ fun DetailEventMyEventScreen(
                         }
                     }
                     2 -> {
-                        if (state.event!!.state.description != StateEvent.CONFIRMED) {
+                        if(state.event!!.state.description != StateEvent.CONFIRMED) {
                             PageTree(
                                 state,
                                 onClick = onClick
@@ -302,16 +302,21 @@ fun PageTree(
                                             textColor = PurpleDark
                                         )
                                     } else if (player.origin.uppercase() == StateEvent.INVITED) {
-                                        FeatOutlinedButton(
-                                            textContent = "Cancelar",
-                                            height = 40.dp,
-                                            onClick = {
-                                                onClick(DetailEventEvent.RejectPlayer(player.id.toString()))
-                                            },
-                                            contentColor = RedColor,
-                                            backgroundColor = RedColor90,
-                                            textColor = PurpleDark
-                                        )
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.End
+                                        ){
+                                            FeatOutlinedButton(
+                                                textContent = "Cancelar",
+                                                height = 40.dp,
+                                                onClick = {
+                                                    onClick(DetailEventEvent.RejectPlayer(player.id.toString()))
+                                                },
+                                                contentColor = RedColor,
+                                                backgroundColor = RedColor90,
+                                                textColor = PurpleDark
+                                            )
+                                        }
                                     }
 
                                 }

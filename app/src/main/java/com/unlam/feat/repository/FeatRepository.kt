@@ -32,7 +32,7 @@ interface FeatRepository {
         uId: String,
         req: RequestFilterEvent
     ): Flow<Result<List<Event>>>// @POST("events/getfilterEventForUser/{uid}")
-
+    fun setFinalized(req : RequestSetFinalized): Flow<Result<String>> // @PUT /events/setFinalized
     //</editor-fold">
     //<editor-fold desc="Availabilities">
     fun getAvailabilities(): Flow<Result<List<Availability>>> // @GET("/availabilities/")
