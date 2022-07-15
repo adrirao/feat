@@ -25,6 +25,7 @@ import com.unlam.feat.ui.component.*
 import com.unlam.feat.ui.component.common.event.DetailEvent
 import com.unlam.feat.ui.component.common.event.FeatEventDetail
 import com.unlam.feat.ui.component.common.event.NotFoundEvent
+import com.unlam.feat.ui.component.common.event.NotFoundPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayer
 import com.unlam.feat.ui.component.common.player.CardPlayerCalification
 import com.unlam.feat.ui.theme.*
@@ -114,7 +115,7 @@ fun DetailEventHomeScreen(
                 height = 50.dp,
                 width = 50.dp,
                 onClick = {
-                    onClick(DetailEventHomeEvent.OnClick)
+                    onClick(DetailEventHomeEvent.onClick(TypeClick.QualifyPlayers))
                 },
                 contentColor = YellowColor,
                 backgroundColor = YellowColor90
@@ -253,7 +254,7 @@ fun PageTwo(
                     }
                 )
             } else {
-                NotFoundEvent()
+                NotFoundPlayer()
             }
 
 

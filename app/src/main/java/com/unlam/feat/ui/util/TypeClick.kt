@@ -10,6 +10,7 @@ sealed class TypeClick {
     object GoToEvent:TypeClick()
     object GoToDetailEvent:TypeClick()
     object GoToSuggestedPlayers:TypeClick()
+    object QualifyPlayers:TypeClick()
 
     object Login : TypeClick()
     object Register : TypeClick()
