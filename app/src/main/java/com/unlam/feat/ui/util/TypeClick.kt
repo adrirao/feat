@@ -30,6 +30,7 @@ sealed class TypeClick {
         sealed class TypleClickEvent{
             object Confirm : TypleClickEvent()
             object Cancel : TypleClickEvent()
+            object Finalize : TypleClickEvent()
         }
     }
 }

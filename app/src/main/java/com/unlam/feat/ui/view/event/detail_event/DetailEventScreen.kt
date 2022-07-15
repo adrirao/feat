@@ -152,6 +152,9 @@ fun PageOne(
                     TypeClick.Event.TypleClickEvent.Cancel -> {
                         onClick(DetailEventEvent.CancelEvent)
                     }
+                    TypeClick.Event.TypleClickEvent.Finalize -> {
+                        onClick(DetailEventEvent.FinalizeEvent)
+                    }
                 }
             }
         )

@@ -271,6 +271,22 @@ constructor(
         }
     }
 
+    override fun setFinalized(req : RequestSetFinalized): Flow<Result<String>>  = flow {
+        try {
+            emit(Result.Loading())
+            val response = featProvider.setFinalized(req)
+            if(response.code() in 200..299){
+                emit(Result.Success(data = response.body()))
+            }else{
+                logging(request = req, response = response)
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
+        }catch (e:Exception){
+            logging(e.localizedMessage)
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
 
     //</editor-fold desc="Events">
     //<editor-fold desc="Availabilities">

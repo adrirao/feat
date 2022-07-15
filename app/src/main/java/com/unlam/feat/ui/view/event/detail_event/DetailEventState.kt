@@ -6,13 +6,14 @@ import com.unlam.feat.model.PlayerApplyDetail
 
 data class DetailEventState(
     val loading: Boolean = false,
-    val isLoading:Boolean = false,
+    val isLoading: Boolean = false,
     val error: String = "",
     val successPlayer: Boolean = false,
     val successCancelEvent: Boolean = false,
     val successConfirmEvent: Boolean = false,
-    val successTitle:String = "",
-    val successDescription:String = "",
+    val successFinalizedEvent: Boolean = false,
+    val successTitle: String = "",
+    val successDescription: String = "",
     val completeCapacity: Boolean = false,
     val completeTitle: String = "",
     val completeDescription: String = "",
@@ -21,5 +22,5 @@ data class DetailEventState(
     val playersSuggested: List<Player>? = null,
     val playersConfirmed: List<Player>? = null,
     val playersApplied: List<PlayerApplyDetail>? = null,
-    val idPlayer : Int? = null
+    val idPlayer: Int? = null
 )

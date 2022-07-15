@@ -682,6 +682,18 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
             }
         }
 
+        if(state.successFinalizedEvent){
+            SuccessDialog(
+                title = "Evento finalizado",
+                desc = "El evento fue finalizado con exito, por favor no te olvides de calificar a los participantes ;)",
+                enabledCancelButton = false
+            ) {
+                detailEventViewModel.onEvent(DetailEventEvent.DismissDialog)
+                navController.popBackStack()
+                navController.navigate(Screen.Events.route)
+            }
+        }
+
         if (state.completeCapacity) {
             InfoDialog(
                 title = state.completeTitle,

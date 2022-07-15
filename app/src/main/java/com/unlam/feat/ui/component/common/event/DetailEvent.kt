@@ -260,6 +260,7 @@ fun FeatEventDetail(
                                 }
                                 StateEvent.CONFIRMED -> {
                                     CancelButton(onClick = onClick)
+                                    FinalizeButton(onClick = onClick)
                                 }
                                 StateEvent.SUGGESTED -> {
                                     ApplyButton(onClick = onClick)
@@ -308,6 +309,23 @@ fun RowScope.CancelButton(
         },
         contentColor = RedColor,
         backgroundColor = RedColor90,
+        textColor = PurpleDark,
+    )
+}
+
+@Composable
+fun RowScope.FinalizeButton(
+    textContent: String = "Finalizar",
+    onClick: (TypeClick.Event.TypleClickEvent) -> Unit
+) {
+    FeatOutlinedButton(
+        modifier = Modifier.weight(1f),
+        textContent = textContent,
+        onClick = {
+            onClick(TypeClick.Event.TypleClickEvent.Finalize)
+        },
+        contentColor = YellowColor,
+        backgroundColor = YellowColor90,
         textColor = PurpleDark,
     )
 }

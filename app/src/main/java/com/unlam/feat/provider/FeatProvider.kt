@@ -1,5 +1,6 @@
 package com.unlam.feat.provider
 
+import com.google.gson.annotations.SerializedName
 import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
 import com.unlam.feat.model.response.ResponsePhotoUrl
@@ -59,6 +60,10 @@ interface FeatProvider {
     @Headers("Content-type: application/json")
     @POST("/events/getfilterEventForUser")
     suspend fun getfilterEventForUser(@Body requestFilterEvent: RequestFilterEvent): Response<List<Event>>
+
+    @Headers("Content-type: application/json")
+    @PUT("/events/setFinalized")
+    suspend fun setFinalized(@Body req : RequestSetFinalized): Response<String>
 
     //</editor-fold>
     //<editor-fold desc="Availabilities">
