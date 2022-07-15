@@ -150,6 +150,7 @@ fun DetailEvent(
 fun FeatEventDetail(
     event: Event,
     stateEvent: String,
+    isOrganizer : Int= 0,
     onClick: (TypeClick.Event.TypleClickEvent) -> Unit
 ) {
     val context = LocalContext.current
@@ -282,10 +283,15 @@ fun FeatEventDetail(
                                     )
                                 }
                                 StateEvent.PLAYER_CONFIRMED -> {
-                                    CancelButton(
-                                        textContent = "Cancelar participacion",
-                                        onClick = onClick
-                                    )
+                                    if(isOrganizer == 0){
+                                        CancelButton(
+                                            textContent = "Cancelar participacion",
+                                            onClick = onClick
+                                        )
+                                    }
+                                }
+                                StateEvent.FINALIZED -> {
+
                                 }
                             }
                         }

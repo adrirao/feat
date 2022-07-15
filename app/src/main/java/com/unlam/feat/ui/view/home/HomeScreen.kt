@@ -77,7 +77,8 @@ fun HomeScreen(
                                         HomeEvents.onClick(
                                             TypeClick.GoToDetailEvent,
                                             event.id,
-                                            descOrigen = StateEvent.SUGGESTED
+                                            descOrigen = StateEvent.SUGGESTED,
+                                            0
                                         )
                                     )
                                 }
@@ -111,7 +112,8 @@ fun HomeScreen(
                                     HomeEvents.onClick(
                                         TypeClick.GoToDetailEvent,
                                         event.id,
-                                        event.origen.trim().uppercase()
+                                        event.origen.trim().uppercase(),
+                                        event.isOrganizer
                                     )
                                 )
                             },

@@ -52,7 +52,7 @@ fun DetailEventMyEventScreen(
             contentAlignment = Alignment.Center
         ) {
             HorizontalPager(
-                count = if (state.event!!.state.description != StateEvent.CONFIRMED) 3 else 2,
+                count = if (state.event!!.state.description.uppercase() != StateEvent.CONFIRMED) 3 else 2,
                 state = pagerState
             ) { position ->
                 when (position) {
@@ -61,7 +61,7 @@ fun DetailEventMyEventScreen(
                         onClick = onClick
                     )
                     1 -> {
-                        if (state.event.state.description != StateEvent.CONFIRMED) {
+                        if (state.event.state.description.uppercase() != StateEvent.CONFIRMED) {
                             PageTwoNotConfirmed(
                                 state,
                                 onClick = onClick
@@ -74,7 +74,7 @@ fun DetailEventMyEventScreen(
                         }
                     }
                     2 -> {
-                        if(state.event!!.state.description != StateEvent.CONFIRMED) {
+                        if(state.event!!.state.description.uppercase() != StateEvent.CONFIRMED) {
                             PageTree(
                                 state,
                                 onClick = onClick
@@ -92,7 +92,7 @@ fun DetailEventMyEventScreen(
             )
 
             if (pagerState.currentPage != 0) {
-                if (state.event!!.state.description != StateEvent.CONFIRMED) {
+                if (state.event!!.state.description.uppercase() != StateEvent.CONFIRMED) {
                     FeatOutlinedButtonIcon(
                         modifier = Modifier.align(Alignment.BottomEnd),
                         icon = Icons.Outlined.PersonAdd,
@@ -143,7 +143,7 @@ fun PageOne(
         )
         FeatEventDetail(
             event = event,
-            stateEvent = if (event.state.description == StateEvent.CREATED) StateEvent.CREATED else StateEvent.CONFIRMED,
+            stateEvent = event.state.description.uppercase(),
             onClick = {
                 when (it) {
                     TypeClick.Event.TypleClickEvent.Confirm -> {
@@ -151,6 +151,9 @@ fun PageOne(
                     }
                     TypeClick.Event.TypleClickEvent.Cancel -> {
                         onClick(DetailEventEvent.CancelEvent)
+                    }
+                    TypeClick.Event.TypleClickEvent.Finalize -> {
+                        onClick(DetailEventEvent.FinalizeEvent)
                     }
                 }
             }

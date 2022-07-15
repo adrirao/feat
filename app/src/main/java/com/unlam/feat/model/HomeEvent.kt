@@ -17,4 +17,6 @@ data class HomeEvent(
     @SerializedName("sport_desc")
     val sportDesc: String,
     val origen: String,
+    @SerializedName("is_organizer")
+    val isOrganizer: Int,
 )

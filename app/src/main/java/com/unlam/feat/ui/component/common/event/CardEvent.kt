@@ -46,7 +46,7 @@ fun FeatEventCardHome(
         DateTimeFormatter.ofPattern("dd/MM/yyyy")
     )
     val day = "${event.startTime.substring(0, 5)} - ${event.endTime.substring(0, 5)}"
-    val stateEvent = event.origen.trim().uppercase()
+    val stateUser = event.origen.trim().uppercase()
 
     FeatCard(
         modifier = modifier,
@@ -55,7 +55,9 @@ fun FeatEventCardHome(
                 modifier = Modifier.clickable { onClick() }
             ) {
                 FeatText(
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 20.dp),
                     text = event.name.uppercase(),
                     fontSize = MaterialTheme.typography.h5.fontSize,
                     color = GreenColor,
@@ -113,57 +115,97 @@ fun FeatEventCardHome(
                                 overflow = TextOverflow.Ellipsis
                             )
                             FeatSpacerSmall()
-                            var infoState = ""
-                            var color: Color = Color.Transparent
-                            if (stateEvent.isNotEmpty()) {
-                                if (stateEvent == stringResource(R.string.value_aplicated)) {
-                                    infoState = "Pendiente aplicacion"
-                                    color = YellowColor
-                                } else if (stateEvent == "CONFIRMADO") {
-                                    infoState = "Confirmado"
-                                    color = GreenColor
-                                }
-                                if (infoState.isNotEmpty()) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = if(!showChat) Arrangement.Center else Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Card(
-                                            modifier = Modifier
-                                                .clickable {
-                                                    goToChat(event.id)
-                                                },
-                                            shape = RoundedCornerShape(30),
-                                            backgroundColor = color,
-                                            content = {
-                                                Text(
-                                                    modifier = Modifier.padding(5.dp),
-                                                    text = infoState,
-                                                    color = PurpleDark,
-                                                    fontWeight = FontWeight.Bold
-                                                )
-                                            }
-                                        )
-                                        if (showChat) {
-                                            FeatOutlinedButton(
-                                                modifier = Modifier.height(50.dp),
-                                                textContent = "Chat",
-                                                fontSize = 12.sp,
-                                                textColor = PurpleDark,
-                                                contentColor = PurpleLight,
-                                                backgroundColor = PurpleLight,
-                                                onClick = {
-                                                    goToChat(event.id)
-                                                }
-                                            )
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 )
+                var infoStateUser = ""
+                var color: Color = Color.Transparent
+                var infoStateEvent = ""
+                var colorStateEvent: Color = Color.Transparent
+                if (stateUser.isNotEmpty()) {
+                    if (stateUser == stringResource(R.string.value_aplicated)) {
+                        infoStateUser = "Pendiente aplicacion"
+                        color = YellowColor
+                    } else if (stateUser == "CONFIRMADO") {
+                        infoStateUser = "Confirmado"
+                        color = GreenColor
+                    }
+                    if (event.stateDesc.isNotEmpty()) {
+                        when (event.stateDesc.uppercase()) {
+                            StateEvent.FINALIZED -> {
+                                infoStateEvent = "Evento Finalizado"
+                                colorStateEvent = IndigoColor
+                            }
+                            StateEvent.CONFIRMED -> {
+                                infoStateEvent = "Evento Confirmado"
+                                colorStateEvent = GreenColor
+                            }
+                            StateEvent.CREATED -> {
+                                infoStateEvent = "Evento Creado"
+                                colorStateEvent = YellowColor
+                            }
+                        }
+                    }
+                    if (infoStateUser.isNotEmpty()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = if (!showChat) Arrangement.Center else Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Card(
+                                    modifier = Modifier
+                                        .padding(vertical = 3.dp)
+                                        .clickable {
+                                            goToChat(event.id)
+                                        },
+                                    shape = RoundedCornerShape(30),
+                                    backgroundColor = color,
+                                    content = {
+                                        Text(
+                                            modifier = Modifier.padding(5.dp),
+                                            text = infoStateUser,
+                                            color = PurpleDark,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                )
+                                if (infoStateEvent.isNotEmpty()) {
+                                    Card(
+                                        modifier = Modifier
+                                            .padding(vertical = 3.dp)
+                                            .clickable {
+                                                goToChat(event.id)
+                                            },
+                                        shape = RoundedCornerShape(30),
+                                        backgroundColor = colorStateEvent,
+                                        content = {
+                                            Text(
+                                                modifier = Modifier.padding(5.dp),
+                                                text = infoStateEvent,
+                                                color = if (colorStateEvent == IndigoColor) PurpleLight else PurpleDark,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            if (showChat) {
+                                FeatOutlinedButton(
+                                    modifier = Modifier.height(50.dp),
+                                    textContent = "Chat",
+                                    fontSize = 12.sp,
+                                    textColor = PurpleDark,
+                                    contentColor = PurpleLight,
+                                    backgroundColor = PurpleLight,
+                                    onClick = {
+                                        goToChat(event.id)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     )
@@ -194,7 +236,9 @@ fun FeatEventCard(
                 modifier = Modifier.clickable { onClick() }
             ) {
                 FeatText(
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 20.dp),
                     text = event.name.uppercase(),
                     fontSize = MaterialTheme.typography.h5.fontSize,
                     color = GreenColor,
@@ -252,23 +296,6 @@ fun FeatEventCard(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            if (showChat) {
-                                FeatOutlinedButton(
-                                    modifier = Modifier
-                                        .height(50.dp)
-                                        .align(Alignment.End),
-                                    textContent = "Chat",
-                                    fontSize = 12.sp,
-                                    textColor = PurpleDark,
-                                    contentColor = PurpleLight,
-                                    backgroundColor = PurpleLight,
-                                    onClick = {
-                                        goToChat(event.id)
-                                    }
-                                )
-                            }
-//                            var infoState = ""
-//                            var color: Color = Color.Transparent
 //                            if (stateEvent.isNotEmpty()) {
 //                                FeatSpacerSmall()
 //                                if (stateEvent == stringResource(R.string.value_aplicated)) {
@@ -280,7 +307,7 @@ fun FeatEventCard(
 //                                }
 //                                if (infoState.isNotEmpty()) {
 //                                    Card(
-//                                        modifier = Modifier.align(Alignment.End),
+//                                        modifier = Modifier.align(Alignment.Start),
 //                                        shape = RoundedCornerShape(30),
 //                                        backgroundColor = color,
 //                                        content = {
@@ -296,6 +323,59 @@ fun FeatEventCard(
                         }
                     }
                 )
+                var infoState = ""
+                var color: Color = Color.Transparent
+                if (stateEvent.isNotEmpty()) {
+
+                    when (stateEvent) {
+                        StateEvent.FINALIZED -> {
+                            infoState = "Evento Finalizado"
+                            color = IndigoColor
+                        }
+                        StateEvent.CONFIRMED -> {
+                            infoState = "Evento Confirmado"
+                            color = GreenColor
+                        }
+                        StateEvent.CREATED -> {
+                            infoState = "Evento Creado"
+                            color = YellowColor
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = if (showChat) Arrangement.SpaceBetween else Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (infoState.isNotEmpty()) {
+                        Card(
+                            shape = RoundedCornerShape(30),
+                            backgroundColor = color,
+                            content = {
+                                Text(
+                                    modifier = Modifier.padding(5.dp),
+                                    text = infoState,
+                                    color = if (color == IndigoColor) PurpleLight else PurpleDark,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        )
+                    }
+                    if (showChat) {
+                        FeatOutlinedButton(
+                            modifier = Modifier
+                                .height(50.dp),
+                            textContent = "Chat",
+                            fontSize = 12.sp,
+                            textColor = PurpleDark,
+                            contentColor = PurpleLight,
+                            backgroundColor = PurpleLight,
+                            onClick = {
+                                goToChat(event.id)
+                            }
+                        )
+                    }
+                }
             }
         }
     )

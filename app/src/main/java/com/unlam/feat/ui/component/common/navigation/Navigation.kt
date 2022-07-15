@@ -192,7 +192,7 @@ private fun NavGraphBuilder.addRouteHome(navController: NavHostController) {
                         is HomeEvents.onClick -> {
                             if (event.typeClick == TypeClick.GoToDetailEvent) {
                                 navController.navigate(
-                                    route = Screen.DetailEventHome.route + "/${event.idEvent}/${event.descOrigen}"
+                                    route = Screen.DetailEventHome.route + "/${event.idEvent}/${event.descOrigen}/${event.isOrganizer}"
                                 )
                             }
                         }
@@ -592,11 +592,12 @@ private fun NavGraphBuilder.addRouteProfile(navController: NavHostController) {
 
 private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostController) {
     composable(
-        route = Screen.DetailEventHome.route + "/{idEvent}/{descOrigen}",
+        route = Screen.DetailEventHome.route + "/{idEvent}/{descOrigen}/{isOrganizer}",
         arguments = Screen.DetailEventHome.arguments ?: listOf()
     ) {
         val idEvent = it.arguments?.getString("idEvent") ?: ""
         val descOrigen = it.arguments?.getString("descOrigen") ?: ""
+        val isOrganizer = it.arguments?.getInt("isOrganizer") ?: 0
         val detailEventHomeViewModel: DetailEventHomeViewModel = hiltViewModel()
         val state by remember { detailEventHomeViewModel.state }
         val qualifications = detailEventHomeViewModel.qualifications
@@ -644,15 +645,18 @@ private fun NavGraphBuilder.addRouteDetailEventHome(navController: NavHostContro
 
         if (state.event != null && state.players != null) {
             DetailEventHomeScreen(
-                state,
-                qualifications,
+                state = state,
+                qualifications = qualifications,
                 descOrigen = descOrigen,
+                isOrganizer = isOrganizer,
                 onClick = { event ->
                     when (event) {
                         is DetailEventHomeEvent.OnClickCardPlayer -> {
                             navController.navigate(Screen.InfoPlayer.route + "/${event.idPlayer}")
                         }
-                        DetailEventHomeEvent.ApplyEvent,DetailEventHomeEvent.CancelApplyEvent -> detailEventHomeViewModel.onEvent(event)
+                        DetailEventHomeEvent.ApplyEvent, DetailEventHomeEvent.CancelApplyEvent -> detailEventHomeViewModel.onEvent(
+                            event
+                        )
                         else -> detailEventHomeViewModel.qualifyPlayers()
                     }
                 },
@@ -693,7 +697,7 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
             }
         }
 
-        if(state.successFinalizedEvent){
+        if (state.successFinalizedEvent) {
             SuccessDialog(
                 title = "Evento finalizado",
                 desc = "El evento fue finalizado con exito, por favor no te olvides de calificar a los participantes ;)",

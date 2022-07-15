@@ -39,6 +39,7 @@ import com.unlam.feat.util.StateEvent
 fun DetailEventHomeScreen(
     state: DetailEventHomeState,
     qualifications: List<Qualification>,
+    isOrganizer: Int = 0,
     descOrigen: String,
     onClick: (DetailEventHomeEvent) -> Unit,
     changeQualification: (Qualification) -> Unit
@@ -67,6 +68,7 @@ fun DetailEventHomeScreen(
                 0 -> PageOne(
                     state = state,
                     descOrigen = descOrigen,
+                    isOrganizer=isOrganizer,
                     onClick = { event ->
                         when (event) {
                             TypeClick.Event.TypleClickEvent.Confirm -> {
@@ -126,12 +128,14 @@ fun DetailEventHomeScreen(
 fun PageOne(
     state: DetailEventHomeState,
     descOrigen: String,
+    isOrganizer: Int = 0,
     onClick: (TypeClick.Event.TypleClickEvent) -> Unit
 ) {
     val event = state.event!!
     FeatEventDetail(
         event = event,
         stateEvent = descOrigen,
+        isOrganizer = isOrganizer,
         onClick = onClick
     )
 }

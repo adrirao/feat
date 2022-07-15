@@ -1365,15 +1365,15 @@ constructor(
             emit(Result.Loading())
             val responseEventOfTheWeek = featProvider.getAllEventsOfTheWeek(uId)
             val responseEventConfirmedOrApplied =
-                featProvider.getAllConfirmedOrAppliedByUser(uId).body()
+                featProvider.getAllConfirmedOrAppliedByUser(uId)
 
 
-            if (responseEventOfTheWeek.code() in 200..299 && responseEventConfirmedOrApplied != null) {
+            if (responseEventOfTheWeek.code() in 200..299 && responseEventConfirmedOrApplied.code() in 200..299) {
                 emit(
                     Result.Success(
                         data = ResponseDataHomeEvent(
                             eventOfTheWeek = responseEventOfTheWeek.body()!!,
-                            eventConfirmedOrApplied = responseEventConfirmedOrApplied,
+                            eventConfirmedOrApplied = responseEventConfirmedOrApplied.body()!!,
                         )
                     )
                 )

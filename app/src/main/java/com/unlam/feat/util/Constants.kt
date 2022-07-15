@@ -48,9 +48,9 @@ object Messages {
 
 object StateEvent {
     const val SUGGESTED = "SUGERIDO"
-    const val CREATED = "Evento Creado"
-    const val CONFIRMED = "Evento Confirmado"
-    const val FINALIZED = "Evento Finalizado"
+    const val CREATED = "EVENTO CREADO"
+    const val CONFIRMED = "EVENTO CONFIRMADO"
+    const val FINALIZED = "EVENTO TERMINADO"
     const val INVITED = "INVITADO"
     const val PLAYER_CONFIRMED = "CONFIRMADO"
     const val PLAYER_PENDING_APPLY = "APLICADO"

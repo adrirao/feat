@@ -34,7 +34,8 @@ sealed class Screen(
     object NewEvent : Screen("event_new_screen")
     object DetailEventHome : Screen("event_detail_home_screen", listOf(
         navArgument("idEvent") { type = NavType.StringType },
-        navArgument("descOrigen") { type = NavType.StringType }
+        navArgument("descOrigen") { type = NavType.StringType },
+        navArgument("isOrganizer") { type = NavType.IntType },
     ))
 
     object DetailEventMyEvent : Screen("event_detail_my_event_screen", listOf(
