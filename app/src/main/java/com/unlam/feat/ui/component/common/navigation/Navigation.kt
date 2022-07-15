@@ -11,8 +11,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.unlam.feat.R
 import com.unlam.feat.ui.view.search.event_detail.SearchEventDetailViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventViewModel
@@ -530,7 +532,7 @@ private fun NavGraphBuilder.addRouteSearch(navController: NavHostController) {
 private fun NavGraphBuilder.addRouteInfoPlayer(navController: NavHostController) {
     composable(
         route = Screen.InfoPlayer.route + "/{idPlayer}",
-        arguments = Screen.InfoPlayer.arguments ?: listOf()
+        arguments = listOf(navArgument("idPlayer") { type = NavType.StringType })
     ) {
         val idPlayer = it.arguments?.getString("idPlayer")
         val infoPlayerViewModel: InfoPlayerViewModel = hiltViewModel()

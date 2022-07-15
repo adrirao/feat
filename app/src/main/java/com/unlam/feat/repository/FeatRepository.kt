@@ -96,6 +96,7 @@ interface FeatRepository {
     fun updatePersonPersonalInformation(req: RequestUpdatePersonPersonalInformation): Flow<Result<String>>
     fun createPersonTransaction(req: RequestPersonTransaction): Flow<Result<String>>
     fun updateUriImage(req: RequestUriImage): Flow<Result<String>> // @PUT("/persons/setProfileImageUrl")
+    fun getPersonByPlayerId(id: String): Flow<Result<ResponsePerson>>// @GET("/persons/getPersonByPlayerId/{id}")
     //</editor-fold desc="Persons">
 
     //<editor-fold desc="SportsGenerics">
@@ -146,7 +147,7 @@ interface FeatRepository {
 
     //<editor-fold desc="Qualifications">
     fun qualifyPlayers(requestQualifyPlayers: RequestQualifyPlayers): Flow<Result<String>>
-    fun findAllQualificationsByPlayer(id: String, uId: String): Flow<Result<ResponseInfoPlayer>>
+    fun findAllQualificationsByPlayer(id: String): Flow<Result<ResponseInfoPlayer>>
     fun findAllQualificationsByUser(id: String): Flow<Result<List<Qualification>>>
 
     //</editor-fold desc="Qualifications">

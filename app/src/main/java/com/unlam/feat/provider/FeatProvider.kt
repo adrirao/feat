@@ -5,6 +5,7 @@ import com.unlam.feat.model.*
 import com.unlam.feat.model.request.*
 import com.unlam.feat.model.response.ResponsePhotoUrl
 import com.unlam.feat.model.response.ResponseCapacity
+import com.unlam.feat.model.response.ResponsePerson
 import com.unlam.feat.util.Result
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -188,6 +189,9 @@ interface FeatProvider {
     //</editor-fold>
 
     //<editor-fold desc="Persons">
+    @GET("/persons/getPersonByPlayerId/{id}")
+    suspend fun getPersonByPlayerId(@Path("id") id: String): Response<ResponsePerson>
+
     @GET("/persons/getPersonById/{id}")
     suspend fun getPerson(@Path("id") id: String): Response<Person>
 

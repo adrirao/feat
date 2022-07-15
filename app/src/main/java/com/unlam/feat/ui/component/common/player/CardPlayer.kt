@@ -86,14 +86,16 @@ fun CardPlayerCalification(
             .padding(vertical = 10.dp),
     ) {
         Row {
-            Icon(
+            SubcomposeAsyncImage(
                 modifier = Modifier
                     .weight(1f)
-                    .align(Alignment.CenterVertically),
-                imageVector = Icons.Outlined.Person,
-                contentDescription = null,
-                tint = PurpleLight
-            )
+                    .align(Alignment.CenterVertically)
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(20)),
+                contentScale= ContentScale.Crop,
+                model = player.photoUrl,
+                contentDescription = "",
+                loading = { FeatCircularProgress() })
             Column(
                 modifier = Modifier.weight(3f)
             ) {

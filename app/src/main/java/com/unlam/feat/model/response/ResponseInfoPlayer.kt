@@ -5,5 +5,5 @@ import com.unlam.feat.model.Qualification
 
 data class ResponseInfoPlayer(
     val qualifications: List<Qualification>? = null,
-    val person: Person? = null
+    val person: ResponsePerson? = null
 )

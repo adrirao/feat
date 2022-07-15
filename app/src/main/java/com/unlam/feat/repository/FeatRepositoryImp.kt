@@ -830,6 +830,22 @@ constructor(
     //</editor-fold desc="Users">
 
     //<editor-fold desc="Persons">
+    override fun getPersonByPlayerId(id: String): Flow<Result<ResponsePerson>> = flow {
+        try {
+            emit(Result.Loading())
+            val response = featProvider.getPersonByPlayerId(id)
+            if (response.code() in 200..299) {
+                emit(Result.Success(data = response.body()))
+            } else {
+                logging(request = id, response = response)
+                emit(Result.Error(message = Messages.UNKNOW_ERROR))
+            }
+        } catch (e: Exception) {
+            logging(e.localizedMessage!!.toString())
+            emit(Result.Error(message = e.localizedMessage ?: Messages.UNKNOW_ERROR))
+        }
+    }
+
     override fun getPerson(uId: String): Flow<Result<Person>> = flow {
         try {
             emit(Result.Loading())
@@ -1316,28 +1332,26 @@ constructor(
         }
 
     override fun findAllQualificationsByPlayer(
-        id: String,
-        uId: String
+        id: String
     ): Flow<Result<ResponseInfoPlayer>> =
         flow {
             try {
                 emit(Result.Loading())
                 val responseQualifications = featProvider.findAllQualificationsByPlayer(id)
-                val responseUser = featProvider.getPerson(uId)
-                if (responseQualifications.code() in 200..299 && responseUser.code() in 200..299) {
+                val responsePerson = featProvider.getPersonByPlayerId(id)
+                if (responseQualifications.code() in 200..299 && responsePerson.code() in 200..299) {
                     emit(
                         Result.Success(
                             data = ResponseInfoPlayer(
                                 qualifications = responseQualifications.body(),
-                                person = responseUser.body()
+                                person = responsePerson.body()
                             )
                         )
                     )
                 } else {
                     loggingSingle("Request", id)
-                    loggingSingle("Request", uId)
                     loggingSingle("Response", responseQualifications.raw())
-                    loggingSingle("Response", responseUser.raw())
+                    loggingSingle("Response", responsePerson.raw())
                     emit(Result.Error(Messages.UNKNOW_ERROR))
                 }
             } catch (e: Exception) {

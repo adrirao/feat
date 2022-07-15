@@ -88,18 +88,17 @@ constructor(
                     if (result.data.event.state.description == "Evento Terminado") {
                         loadQualificationsDefault(result.data!!.playersConfirmed, playerId.toInt())
 
+                        playersPhotoUrl.forEach { player ->
+                            playersConfirmed.forEach { playerConfirmed ->
+                                if (player.playerId == playerConfirmed.id) {
+                                    playerConfirmed.photoUrl = player.photoUrl
+                                }
+                            }
+                        }
+
                         playersConfirmed.forEach { player ->
                             if (player.id != playerId.toInt()) {
                                 playerFiltered.add(player)
-                            }
-                        }
-                    }
-
-
-                    playersPhotoUrl.forEach { player ->
-                        playersConfirmed.forEach { playerConfirmed ->
-                            if (player.playerId == playerConfirmed.id) {
-                                playerConfirmed.photoUrl = player.photoUrl
                             }
                         }
                     }

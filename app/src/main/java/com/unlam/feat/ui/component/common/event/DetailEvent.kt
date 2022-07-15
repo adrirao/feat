@@ -259,7 +259,7 @@ fun FeatEventDetail(
                                     CancelButton(onClick = onClick)
                                     ConfirmButton(onClick = onClick)
                                 }
-                                StateEvent.CONFIRMED -> {
+                                StateEvent.CONFIRMED,StateEvent.COMPLETED -> {
                                     CancelButton(onClick = onClick)
                                     FinalizeButton(onClick = onClick)
                                 }
@@ -290,6 +290,7 @@ fun FeatEventDetail(
                                         )
                                     }
                                 }
+
                                 StateEvent.FINALIZED -> {
 
                                 }

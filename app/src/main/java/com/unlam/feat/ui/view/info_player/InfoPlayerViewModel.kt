@@ -26,11 +26,10 @@ constructor(
     val state: State<InfoPlayerState> = _state
 
     fun getInfoPlayer(idPlayer: String) {
-        val uId = firebaseAuthRepository.getUserId()
-        featRepository.findAllQualificationsByPlayer(idPlayer, uId).onEach { result ->
+        featRepository.findAllQualificationsByPlayer(idPlayer).onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    firebaseStorageRepository.getFile(uId, isSuccess = { uri ->
+                    firebaseStorageRepository.getFile(result.data?.person?.userUid!!, isSuccess = { uri ->
                         _state.value = InfoPlayerState(
                             qualifications = result.data!!.qualifications,
                             person = result.data.person,
