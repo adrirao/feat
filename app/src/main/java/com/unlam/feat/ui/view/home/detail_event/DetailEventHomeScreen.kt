@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -69,7 +70,7 @@ fun DetailEventHomeScreen(
                 0 -> PageOne(
                     state = state,
                     descOrigen = descOrigen,
-                    isOrganizer=isOrganizer,
+                    isOrganizer = isOrganizer,
                     onClick = { event ->
                         when (event) {
                             TypeClick.Event.TypleClickEvent.Confirm -> {
@@ -176,6 +177,7 @@ fun PageTwo(
                             }
                         } else {
                             items(players) { player ->
+                                var textObservation = remember { mutableStateOf(TextFieldValue()) }
                                 val qualification =
                                     qualifications.find { qualificationFiltered -> qualificationFiltered.id == player.id }
                                 CardPlayerCalification(
@@ -201,7 +203,7 @@ fun PageTwo(
                                                             Qualification(
                                                                 player.id,
                                                                 liked = true,
-                                                                ""
+                                                                observation = textObservation.value.text
                                                             )
                                                         )
                                                     },
@@ -230,7 +232,7 @@ fun PageTwo(
                                                             Qualification(
                                                                 player.id,
                                                                 liked = false,
-                                                                ""
+                                                                textObservation.value.text
                                                             )
                                                         )
                                                     },
@@ -247,6 +249,13 @@ fun PageTwo(
                                                 )
                                             }
                                         }
+                                        FeatOutlinedTextField(
+                                            text = textObservation.value.text,
+                                            textLabel = "Observacion",
+                                            onValueChange = {
+                                                textObservation.value = TextFieldValue(it)
+                                            }
+                                        )
                                     }
                                 )
                             }

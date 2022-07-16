@@ -19,4 +19,5 @@ data class HomeEvent(
     val origen: String,
     @SerializedName("is_organizer")
     val isOrganizer: Int,
+    val eventQualified : Int
 )

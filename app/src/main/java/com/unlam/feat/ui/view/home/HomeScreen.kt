@@ -101,26 +101,28 @@ fun HomeScreen(
             if (eventsConfirmed.isNotEmpty()) {
                 LazyColumn(content = {
                     items(eventsConfirmed) { event ->
-                        FeatEventCardHome(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 10.dp, vertical = 10.dp),
-                            event = event,
-                            showChat = event.origen.uppercase() != StateEvent.PLAYER_PENDING_APPLY,
-                            onClick = {
-                                onClick(
-                                    HomeEvents.onClick(
-                                        TypeClick.GoToDetailEvent,
-                                        event.id,
-                                        event.stateDesc,
-                                        event.isOrganizer
+                        if(event.eventQualified ==0){
+                            FeatEventCardHome(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 10.dp, vertical = 10.dp),
+                                event = event,
+                                showChat = event.origen.uppercase() != StateEvent.PLAYER_PENDING_APPLY,
+                                onClick = {
+                                    onClick(
+                                        HomeEvents.onClick(
+                                            TypeClick.GoToDetailEvent,
+                                            event.id,
+                                            event.stateDesc,
+                                            event.isOrganizer
+                                        )
                                     )
-                                )
-                            },
-                            goToChat = {
-                                goToChat(it)
-                            }
-                        )
+                                },
+                                goToChat = {
+                                    goToChat(it)
+                                }
+                            )
+                        }
                     }
                 })
             } else {
