@@ -15,4 +15,5 @@ data class DetailEventHomeState(
     val successCancelApply: Boolean = false,
     val successQualifyApply : Boolean = false,
     val idPlayer:String? = null,
+    val observation : String = ""
 )

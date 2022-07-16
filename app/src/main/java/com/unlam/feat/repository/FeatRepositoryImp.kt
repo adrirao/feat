@@ -1418,7 +1418,8 @@ constructor(
                         }
                     }
                 }
-
+                loggingSingle("eventOfWeek",eventOfWeek.toList())
+                loggingSingle("responseEventConfirmedOrApplied",responseEventConfirmedOrApplied)
                 emit(
                     Result.Success(
                         data = ResponseDataHomeEvent(
