@@ -157,7 +157,7 @@ fun PageTwo(
         ) {
             FeatText(
                 text = if (descOrigen.uppercase() != StateEvent.FINALIZED)
-                    "Participantes del evento:" else "Califica a los perticipantes:",
+                    "Participantes del evento:" else "Califica a los participantes:",
                 fontSize = MaterialTheme.typography.h6.fontSize,
                 separator = true,
                 verticalPadding = true
