@@ -70,6 +70,7 @@ import com.unlam.feat.ui.view.register.RegisterScreen
 import com.unlam.feat.ui.view.register.RegisterState
 import com.unlam.feat.ui.view.register.RegisterViewModel
 import com.unlam.feat.ui.view.event.detail_event.DetailEventMyEventScreen
+import com.unlam.feat.ui.view.event.detail_event.suggestedPlayers.SuggestedPlayersEvent
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressEvent
 import com.unlam.feat.ui.view.profile.address.EditProfileAddressViewModel
 import com.unlam.feat.ui.view.profile.sport.EditProfileSportEvent
@@ -436,7 +437,8 @@ private fun NavGraphBuilder.addRouteSuggestedPlayers(navController: NavHostContr
         } else {
             SuggestedPlayers(
                 state,
-                onClick = suggestedPlayerViewModel::onEvent
+                onClick = suggestedPlayerViewModel::onEvent,
+                onClickQualification= { navController.navigate(Screen.InfoPlayer.route + "/${it}")},
             )
         }
 
@@ -756,7 +758,8 @@ private fun NavGraphBuilder.addRouteDetailEventMyEvent(navController: NavHostCon
                 },
                 navigateTo = {
                     navController.navigate(Screen.SuggestedPlayers.route + "/${state.event.id}")
-                }
+                },
+                onClickQualification= { navController.navigate(Screen.InfoPlayer.route + "/${it}")},
             )
         }
     }

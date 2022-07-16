@@ -1,5 +1,6 @@
 package com.unlam.feat.ui.view.event.detail_event.suggestedPlayers
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,6 +30,7 @@ import com.unlam.feat.ui.view.event.detail_event.DetailEventEvent
 fun SuggestedPlayers(
     state: SuggestedPlayersState,
     onClick: (SuggestedPlayersEvent) -> Unit,
+    onClickQualification: (Int) -> Unit
 ) {
     val players = state.players!!
     Box {
@@ -50,6 +52,9 @@ fun SuggestedPlayers(
                     content = {
                         items(players) { player ->
                             CardPlayer(
+                                modifier = Modifier.clickable {
+                                    onClickQualification(player.id)
+                                },
                                 player = player
                             ) {
                                 Row(

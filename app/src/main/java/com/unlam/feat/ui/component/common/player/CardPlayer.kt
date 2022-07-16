@@ -116,11 +116,12 @@ fun CardPlayerCalification(
 
 @Composable
 fun CardPlayerDetail(
+    modifier: Modifier = Modifier,
     player: PlayerApplyDetail,
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
     FeatCard(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp),
     ) {

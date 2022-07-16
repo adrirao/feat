@@ -19,4 +19,6 @@ data class ResponsePerson(
     val notifications: String,
     @SerializedName("willing_distance")
     val willingDistance: Int,
+    @SerializedName("calification")
+    val qualification: String
 )

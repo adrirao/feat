@@ -263,7 +263,7 @@ fun PageTwo(
                     }
                 )
             } else {
-                NotFoundEvent()
+                NotFoundPlayer()
             }
 
 

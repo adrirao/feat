@@ -136,6 +136,12 @@ fun InfoPlayerScreen(
                     fontSize = MaterialTheme.typography.body2.fontSize,
                     fontStyle = FontStyle.Italic
                 )
+                FeatText(
+                    text = "Puntaje: ${person.qualification}",
+                    fontSize = MaterialTheme.typography.body2.fontSize,
+                    fontStyle = FontStyle.Italic,
+                    color = if(person.qualification.toInt() > 50) GreenColor else if (person.qualification.toInt() in 21..50) Color.Yellow else RedColor
+                )
             }
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
@@ -145,7 +151,7 @@ fun InfoPlayerScreen(
                 ) {
                     Column {
                         FeatText(
-                            text = "Observaciones:",
+                            text = "Comentarios:",
                             fontSize = MaterialTheme.typography.body1.fontSize,
                             fontWeight = FontWeight.Bold,
                             separator = true

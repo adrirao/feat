@@ -1,6 +1,7 @@
 package com.unlam.feat.ui.view.event.detail_event
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,7 +34,8 @@ import com.unlam.feat.util.StateEvent
 fun DetailEventMyEventScreen(
     state: DetailEventState,
     onClick: (DetailEventEvent) -> Unit,
-    navigateTo: (DetailEventEvent.NavigateTo.TypeNavigate) -> Unit
+    navigateTo: (DetailEventEvent.NavigateTo.TypeNavigate) -> Unit,
+    onClickQualification: (Int) -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -77,7 +79,8 @@ fun DetailEventMyEventScreen(
                         if(state.event!!.state.description.uppercase() != StateEvent.CONFIRMED) {
                             PageTree(
                                 state,
-                                onClick = onClick
+                                onClick = onClick,
+                                onClickQualification = onClickQualification
                             )
                         }
                     }
@@ -255,7 +258,8 @@ fun PageTwoConfirmed(
 @Composable
 fun PageTree(
     state: DetailEventState,
-    onClick: (DetailEventEvent) -> Unit
+    onClick: (DetailEventEvent) -> Unit,
+    onClickQualification: (Int) -> Unit
 ) {
     val players = state.playersApplied!!
     Box {
@@ -277,6 +281,9 @@ fun PageTree(
                     content = {
                         items(players) { player ->
                             CardPlayerDetail(
+                                modifier = Modifier.clickable {
+                                    onClickQualification(player.id)
+                                },
                                 player = player
                             ) {
                                 Row(
