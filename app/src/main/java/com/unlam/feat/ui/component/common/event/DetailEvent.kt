@@ -255,11 +255,11 @@ fun FeatEventDetail(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             when (stateEvent) {
-                                StateEvent.CREATED -> {
+                                StateEvent.CREATED,StateEvent.COMPLETED -> {
                                     CancelButton(onClick = onClick)
                                     ConfirmButton(onClick = onClick)
                                 }
-                                StateEvent.CONFIRMED,StateEvent.COMPLETED -> {
+                                StateEvent.CONFIRMED -> {
                                     CancelButton(onClick = onClick)
                                     FinalizeButton(onClick = onClick)
                                 }
