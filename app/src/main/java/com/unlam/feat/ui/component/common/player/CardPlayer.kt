@@ -97,7 +97,7 @@ fun CardPlayerCalification(
                 contentDescription = "",
                 loading = { FeatCircularProgress() })
             Column(
-                modifier = Modifier.weight(3f)
+                modifier = Modifier.weight(2f)
             ) {
                 FeatInfo(
                     textInfo = "Nombre: ${player.person.names} ${player.person.lastname}",
