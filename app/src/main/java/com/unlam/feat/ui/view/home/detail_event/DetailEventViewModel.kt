@@ -81,26 +81,27 @@ constructor(
                         }
                     }
 
+
                     var playersConfirmed = result.data.playersConfirmed
                     val playersPhotoUrl = result.data.playersPhotoUrl
                     var playerFiltered: MutableList<Player> = mutableListOf()
 
+                    playersPhotoUrl.forEach { player ->
+                        playersConfirmed.forEach { playerConfirmed ->
+                            if (player.playerId == playerConfirmed.id) {
+                                playerConfirmed.photoUrl = player.photoUrl
+                            }
+                        }
+                    }
+
+                    playersConfirmed.forEach { player ->
+                        if (player.id != playerId.toInt()) {
+                            playerFiltered.add(player)
+                        }
+                    }
+
                     if (result.data.event.state.description == "Evento Terminado") {
                         loadQualificationsDefault(result.data!!.playersConfirmed, playerId.toInt())
-
-                        playersPhotoUrl.forEach { player ->
-                            playersConfirmed.forEach { playerConfirmed ->
-                                if (player.playerId == playerConfirmed.id) {
-                                    playerConfirmed.photoUrl = player.photoUrl
-                                }
-                            }
-                        }
-
-                        playersConfirmed.forEach { player ->
-                            if (player.id != playerId.toInt()) {
-                                playerFiltered.add(player)
-                            }
-                        }
                     }
 
                     _state.value = DetailEventHomeState(
